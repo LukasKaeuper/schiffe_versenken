@@ -1,7 +1,10 @@
 public class Spielfeld {
-private int groesse = 10;
+private int groesse;
 private char[][] spielfeld = new char[groesse][groesse];
 
+    public Spielfeld(int x){
+        this.groesse = x;
+    }
     public void erstelleSpielfeld(){
         for (int i = 0; i < groesse; i++){
             for (int j = 0; j < groesse; j++){
@@ -9,8 +12,6 @@ private char[][] spielfeld = new char[groesse][groesse];
             }
         }
     }
-
-
 
 
     public void setGroesse(int x){
