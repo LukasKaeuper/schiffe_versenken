@@ -5,7 +5,6 @@ public class SchiffeVersenken {
     public SchiffeVersenken(){
         controller = new Controller();
     }
-    public static void main(String[] args) {
-        new SchiffeVersenken();
+    public static void main(String[] args) {new SchiffeVersenken();
     }
 }
