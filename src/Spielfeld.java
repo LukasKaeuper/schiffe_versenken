@@ -18,7 +18,14 @@ public class Spielfeld {
         initialisiereSpielfeld();
         schiffePlazieren(5);
         schiffePlazieren(4);
+        schiffePlazieren(4);
         schiffePlazieren(3);
+        schiffePlazieren(3);
+        schiffePlazieren(3);
+        schiffePlazieren(2);
+        schiffePlazieren(2);
+        schiffePlazieren(2);
+        schiffePlazieren(2);
         anzeigen();
     }
 
@@ -32,22 +39,22 @@ public class Spielfeld {
 
     public void schiffePlazieren(int laenge){
         Random random = new Random();
-        boolean horizental = random.nextBoolean();
+        boolean horizontal = random.nextBoolean();
         int x;
         int y;
 
-        if(horizental){
-            x = random.nextInt(reihe);
-            y = random.nextInt(spalte - laenge + 1);
+        if(horizontal){
+            y = random.nextInt(reihe);
+            x = random.nextInt(spalte - laenge + 1);
         } else {
-            x = random.nextInt(reihe - laenge + 1);
-            y = random.nextInt(spalte);
+            y = random.nextInt(reihe - laenge + 1);
+            x = random.nextInt(spalte);
         }
-        if(checkPlazierung(x,y,laenge,horizental)){
-            Schiff neuesSchiff = new Schiff(horizental,laenge,x,y);
+        if(checkPlazierung(x,y,laenge, horizontal) && checkAbstand(x,y,laenge, horizontal)){
+            Schiff neuesSchiff = new Schiff(horizontal,laenge,x,y);
             schiffe.add(neuesSchiff);
 
-            if(horizental){
+            if(horizontal){
                 for(int i = 0; i < laenge; i++){
                     spielfeld[x][y + i] = schiff;
                 }
@@ -66,7 +73,7 @@ public class Spielfeld {
     private boolean checkPlazierung(int x, int y, int laenge, boolean horizontal){
         if(horizontal){
             for (int i = 0; i < laenge; i++){
-                if(y + i >= spalte || spielfeld[x][y + i] != leer){
+                if(y + i >= spalte || spielfeld[x][y + i] != leer) {
                     return false;
                 }
             }
@@ -80,13 +87,31 @@ public class Spielfeld {
         return true;
     }
 
-    public void anzeigen(){
-        System.out.println();
-        for(int i = 0; i < reihe; i++){
-            for(int j = 0; j < spalte; j++){
-                System.out.print(spielfeld[i][j] + " ");
+    private boolean checkAbstand(int x, int y, int laenge, boolean horizontal) {
+        int startReihe = Math.max(0, x - 1);
+        int endReihe = Math.min(reihe - 1, horizontal ? x + 1 : x + laenge);
+        int startSpalte = Math.max(0, y - 1);
+        int endSpalte = Math.min(spalte - 1, horizontal ? y + laenge : y + 1);
+
+        for (int i = startReihe; i <= endReihe; i++) {
+            for (int j = startSpalte; j <= endSpalte; j++) {
+                if (spielfeld[i][j] != leer) {
+                    return false;
+                }
             }
-            System.out.println();
         }
+        return true;
     }
+
+        public void anzeigen() {
+            System.out.println();
+            for (int i = 0; i < reihe; i++) {
+                for (int j = 0; j < spalte; j++) {
+                    System.out.print(spielfeld[i][j] + " ");
+                }
+                System.out.println();
+            }
+        }
+
 }
+
