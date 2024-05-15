@@ -7,6 +7,8 @@ public class Spielfeld {
     private int spalte = 10;
     private int leer = 0;
     private int schiff = 1;
+    private int leer_getroffen = 2;
+    private int schiff_getroffen = 3;
 
     private int[][] spielfeld;
     private List<Schiff> schiffe;
@@ -80,6 +82,24 @@ public class Spielfeld {
         return true;
     }
 
+    public String getWert(int x, int y) {
+        if (spielfeld[x][y] == schiff) {
+            return "Schiff";
+        }
+        else if (spielfeld[x][y] == leer) {
+            return "Wasser";
+        }
+        else if (spielfeld[x][y] == leer_getroffen) {
+            return "Wasser_getroffen";
+        }
+        else if (spielfeld[x][y] == schiff_getroffen) {
+            return "Schiff_getroffen";
+        }
+        else {
+            return null;
+        }
+    }
+
     public void anzeigen(){
         System.out.println();
         for(int i = 0; i < reihe; i++){
@@ -87,6 +107,15 @@ public class Spielfeld {
                 System.out.print(spielfeld[i][j] + " ");
             }
             System.out.println();
+        }
+    }
+
+    public void trefferMarkieren(int n, int m) {
+        if (spielfeld[n][m] == leer) {
+            spielfeld[n][m] = leer_getroffen;
+        }
+        if (spielfeld[n][m] == schiff) {
+            spielfeld[n][m] = schiff_getroffen;
         }
     }
 }

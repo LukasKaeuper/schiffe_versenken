@@ -16,7 +16,7 @@ public class View extends JFrame {
 
     private void fensterGenerieren() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(600,600);
+        setSize(1500,900);
         setLayout(new BorderLayout());
         status = new JTextField("Spieler 1");
         add(status,BorderLayout.NORTH);
@@ -36,7 +36,7 @@ public class View extends JFrame {
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             for (int i=0;i<10;i++) {
                 for (int j=0;j<10;j++) {
-                    if (spieler == "Eigen") {
+                    if (spieler.equals("Eigen")) {
                         buttonSpielfeldEigen[i][j] = new JButton();
                         add(buttonSpielfeldEigen[i][j]);
                     } else {
@@ -49,8 +49,8 @@ public class View extends JFrame {
     }
 
     public void erstelleListener(ActionListener al) {
-        for (int i=0;i<3;i++) {
-            for (int j=0;j<3;j++) {
+        for (int i=0;i<10;i++) {
+            for (int j=0;j<10;j++) {
                 this.buttonSpielfeldEigen[i][j].setActionCommand("" + i + j);
                 this.buttonSpielfeldEigen[i][j].addActionListener(al);
                 this.buttonSpielfeldGegner[i][j].setActionCommand("" + i + j);
@@ -59,4 +59,14 @@ public class View extends JFrame {
         }
     }
 
+    public void setButton(int i, int j, String temp, String spieler) {
+        if (spieler.equals("Eigen") && temp.equals("Schiff"))
+            buttonSpielfeldEigen[i][j].setText("X");
+        if (spieler.equals("Eigen") && temp.equals("Wasser"))
+            buttonSpielfeldEigen[i][j].setText("O");
+        if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen"))
+            buttonSpielfeldGegner[i][j].setText("X");
+        if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen"))
+            buttonSpielfeldGegner[i][j].setText("O");
+    }
 }
