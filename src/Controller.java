@@ -14,9 +14,7 @@ public class Controller {
 
     class MeinListener implements ActionListener {
         public MeinListener() {
-
-            //Muss später zum Rundenwächsel geschoben werden
-            eigenesFeldAktualisieren();
+            FeldAktualisieren("Eigen");
         }
 
         @Override
@@ -25,38 +23,26 @@ public class Controller {
             String dummy = e.getActionCommand();
             int n = Integer.parseInt(dummy.substring(0, 1));
             int m = Integer.parseInt(dummy.substring(dummy.length() - 1));
-            model.schießen(n, m);
-            gegnerFeldAktualisieren();
-            //int spieler = model.getSpieler();
-            // View aktualisieren
-            //view.setSpieler(spieler);
-            // Spiel beendet
-//            if (model.beendet()) {
-//                view.setGewonnen(spieler);
-//                model.zuruecksetzen();
-//            }
-//            spielStandAnzeigen();
-        }
-
-        private void eigenesFeldAktualisieren() {
-            String temp;
-            for (int i=0; i<10; i++) {
-                for (int j = 0; j < 10; j++) {
-                    temp = model.getWert(i, j, "Eigen");
-                    view.setButton(i, j, temp, "Eigen");
-                }
-//                if (temp.equals("Schiff") || temp.equals("Wasser")) {
-//                    view.setButton(i, j, temp);
-//                }
+            model.schiessen(n, m);
+            if (!model.getWert(n, m, "Gegner").equals("Schiff_getroffen")) {
+                model.spielerWechseln();
             }
+            int spieler = model.getSpieler();
+            view.setSpieler(spieler);
+            if (model.beendet()) {
+                view.setGewonnen(spieler);
+                //model.zuruecksetzen();
+            }
+            FeldAktualisieren("Eigen");
+            FeldAktualisieren("Gegner");
         }
 
-        private void gegnerFeldAktualisieren() {
+        private void FeldAktualisieren(String spieler) {
             String temp;
             for (int i=0; i<10; i++) {
                 for (int j = 0; j < 10; j++) {
-                    temp = model.getWert(i, j, "Gegner");
-                    view.setButton(i, j, temp, "Gegner");
+                    temp = model.getWert(i, j, spieler);
+                    view.setButton(i, j, temp, spieler);
                 }
             }
         }

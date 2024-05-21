@@ -124,13 +124,14 @@ public class Spielfeld {
     }
 
     public void anzeigen(){
-        System.out.println();
+        //System.out.println();
         for(int i = 0; i < reihe; i++){
             for(int j = 0; j < spalte; j++){
                 System.out.print(spielfeld[i][j] + " ");
             }
             System.out.println();
         }
+        System.out.println();
     }
 
     public void trefferMarkieren(int n, int m) {
