@@ -47,9 +47,9 @@ public class Spielfeld {
 
         if(horizontal){
             y = random.nextInt(reihe);
-            x = random.nextInt(spalte - laenge + 1);
+            x = random.nextInt(spalte);
         } else {
-            y = random.nextInt(reihe - laenge + 1);
+            y = random.nextInt(reihe);
             x = random.nextInt(spalte);
         }
         if(checkPlazierung(x,y,laenge, horizontal) && checkAbstand(x,y,laenge, horizontal)){
