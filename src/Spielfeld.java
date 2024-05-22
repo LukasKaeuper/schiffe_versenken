@@ -154,35 +154,22 @@ public class Spielfeld {
 
     public void ganzesSchiffGetroffen(int x, int y) {
         AtomicBoolean alleGetroffen = new AtomicBoolean(true);
-        ArrayList<Boolean> ergebnisse = new ArrayList<>();
         for (Schiff n : schiffe) {
-            ArrayList<Schiff.Koordinatenpaar> temp = n.getKoordinaten();
-            temp.forEach((m) -> {
+            n.getKoordinaten().forEach((m) -> {
                 if (m.x.equals(x) && m.y.equals(y)) {
                     //System.out.println("Schiff der Länge " + n.getLaenge() + " getroffen!");
-                    temp.forEach((k) -> {
+                    n.getKoordinaten().forEach((k) -> {
                         if (!(spielfeld[k.getX()][k.getY()] == schiff_getroffen)) {
                             alleGetroffen.set(false);
-                            //System.out.println("alle getroffen false");
-                            ergebnisse.add(false);
-                        } else {
-//                            alleGetroffen.set(true);
-//                            //System.out.println("alle getroffen true");
-//                            ergebnisse.add(true);
                         }
                     });
                     if (alleGetroffen.get()) {
-                        temp.forEach((l) -> {
+                        n.getKoordinaten().forEach((l) -> {
                             spielfeld[l.getX()][l.getY()] = komplettes_schiff_getroffen;
-                            //System.out.println("alle getroffen true");
                         });
                     }
                 }
             });
-//            if (!ergebnisse.contains(false)) {
-//                temp.forEach((l) -> {
-//                    spielfeld[l.getX()][l.getY()] = komplettes_schiff_getroffen;
-//                });
         }
     }
 }
