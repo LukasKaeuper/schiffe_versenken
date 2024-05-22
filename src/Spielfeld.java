@@ -166,20 +166,23 @@ public class Spielfeld {
                             //System.out.println("alle getroffen false");
                             ergebnisse.add(false);
                         } else {
-                            alleGetroffen.set(true);
-                            //System.out.println("alle getroffen true");
-                            ergebnisse.add(true);
-                            if (!ergebnisse.contains(false)) {
-                                temp.forEach((l) -> {
-                                    spielfeld[l.getX()][l.getY()] = komplettes_schiff_getroffen;
-                                });
-                            }
+//                            alleGetroffen.set(true);
+//                            //System.out.println("alle getroffen true");
+//                            ergebnisse.add(true);
                         }
                     });
-                } else {
-                    //ergebnisse.add(false);
+                    if (alleGetroffen.get()) {
+                        temp.forEach((l) -> {
+                            spielfeld[l.getX()][l.getY()] = komplettes_schiff_getroffen;
+                            //System.out.println("alle getroffen true");
+                        });
+                    }
                 }
             });
+//            if (!ergebnisse.contains(false)) {
+//                temp.forEach((l) -> {
+//                    spielfeld[l.getX()][l.getY()] = komplettes_schiff_getroffen;
+//                });
         }
     }
 }
