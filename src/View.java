@@ -64,47 +64,49 @@ public class View extends JFrame {
         if (spieler.equals("Eigen") && temp.equals("Schiff")) {
             buttonSpielfeldEigen[i][j].setText("X");
             buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
+            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
         }
         else if (spieler.equals("Eigen") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("X");
             buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
-            //buttonSpielfeldEigen[i][j].setForeground(Color.RED);
+            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
         }
         else if (spieler.equals("Eigen") && temp.equals("Wasser")) {
             buttonSpielfeldEigen[i][j].setText("O");
             buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
+            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
         }
         else if (spieler.equals("Eigen") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("O");
             buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
-            //buttonSpielfeldEigen[i][j].setForeground(Color.RED);
+            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
         }
         else if (spieler.equals("Eigen") && temp.equals("Komplettes_Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("X");
-            buttonSpielfeldEigen[i][j].setBackground(Color.RED);
-            //buttonSpielfeldEigen[i][j].setForeground(Color.RED);
+            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
+            buttonSpielfeldEigen[i][j].setForeground(Color.RED);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
         }
         else if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("X");
             buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
-            //buttonSpielfeldGegner[i][j].setForeground(Color.RED);
+            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
         }
         else if (spieler.equals("Gegner") && temp.equals("Komplettes_Schiff_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("X");
-            buttonSpielfeldGegner[i][j].setBackground(Color.RED);
-            //buttonSpielfeldEigen[i][j].setForeground(Color.RED);
+            buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
+            buttonSpielfeldGegner[i][j].setForeground(Color.RED);
             buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
         }
         else if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("O");
             buttonSpielfeldGegner[i][j].setBackground(Color.BLUE);
-            //buttonSpielfeldGegner[i][j].setForeground(Color.RED);
+            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
         }
         else {
