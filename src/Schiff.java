@@ -13,7 +13,7 @@ public class Schiff {
         this.reihe = reihe;
         this.spalte = spalte;
         koordinaten = new ArrayList<>();
-        System.out.println("\nneues Schiff \n");
+        System.out.println("neues Schiff \n");
 //        if (horizontal) {
 //            for (int i=0; i<laenge; i++) {
 //                koordinaten.add(new Koordinatenpaar(reihe+i, spalte));
