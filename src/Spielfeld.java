@@ -11,12 +11,12 @@ public class Spielfeld {
     private int schiff_getroffen = 3;
 
     private int[][] spielfeld;
-    private List<Schiff> schiffe;
+    private ArrayList<Schiff> schiffe;
 
 
     public Spielfeld() {
         spielfeld = new int[reihe][spalte];
-        schiffe = new ArrayList<>();
+        schiffe = new ArrayList<Schiff>();
         initialisiereSpielfeld();
         schiffePlazieren(5);
         schiffePlazieren(4);
@@ -54,22 +54,26 @@ public class Spielfeld {
         }
         if(checkPlazierung(x,y,laenge, horizontal) && checkAbstand(x,y,laenge, horizontal)){
             Schiff neuesSchiff = new Schiff(horizontal,laenge,x,y);
-            schiffe.add(neuesSchiff);
 
             if(horizontal){
                 for(int i = 0; i < laenge; i++){
                     spielfeld[x][y + i] = schiff;
+                    //System.out.println("neue Koordinate");
+                    neuesSchiff.neueKoordinate(x, y+i);
                 }
             } else {
                 for(int i = 0; i < laenge; i++){
                     spielfeld[x + i][y] = schiff;
+                    //System.out.println("neue Koordinate");
+                    neuesSchiff.neueKoordinate(x+i, y);
                 }
             }
+            schiffe.add(neuesSchiff);
+            neuesSchiff.ausgabe();
 
         } else {
             schiffePlazieren(laenge);
         }
-
     }
 
     private boolean checkPlazierung(int x, int y, int laenge, boolean horizontal){
