@@ -1,17 +1,18 @@
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Spielfeld {
-    private int reihe = 10;
-    private int spalte = 10;
-    private int leer = 0;
-    private int schiff = 1;
-    private int leer_getroffen = 2;
-    private int schiff_getroffen = 3;
+    private final int reihe = 10;
+    private final int spalte = 10;
+    private final int leer = 0;
+    private final int schiff = 1;
+    private final int leer_getroffen = 2;
+    private final int schiff_getroffen = 3;
+    private final int komplettes_schiff_getroffen = 4;
 
-    private int[][] spielfeld;
-    private ArrayList<Schiff> schiffe;
+    private final int[][] spielfeld;
+    private final ArrayList<Schiff> schiffe;
 
 
     public Spielfeld() {
@@ -122,6 +123,9 @@ public class Spielfeld {
         else if (spielfeld[x][y] == schiff_getroffen) {
             return "Schiff_getroffen";
         }
+        else if (spielfeld[x][y] == komplettes_schiff_getroffen) {
+            return "Komplettes_Schiff_getroffen";
+        }
         else {
             return null;
         }
@@ -138,12 +142,44 @@ public class Spielfeld {
         System.out.println();
     }
 
-    public void trefferMarkieren(int n, int m) {
-        if (spielfeld[n][m] == leer) {
-            spielfeld[n][m] = leer_getroffen;
+    public void trefferMarkieren(int x, int y) {
+        if (spielfeld[x][y] == leer) {
+            spielfeld[x][y] = leer_getroffen;
         }
-        if (spielfeld[n][m] == schiff) {
-            spielfeld[n][m] = schiff_getroffen;
+        if (spielfeld[x][y] == schiff) {
+            spielfeld[x][y] = schiff_getroffen;
+        }
+        ganzesSchiffGetroffen(x, y);
+    }
+
+    public void ganzesSchiffGetroffen(int x, int y) {
+        AtomicBoolean alleGetroffen = new AtomicBoolean(true);
+        ArrayList<Boolean> ergebnisse = new ArrayList<>();
+        for (Schiff n : schiffe) {
+            ArrayList<Schiff.Koordinatenpaar> temp = n.getKoordinaten();
+            temp.forEach((m) -> {
+                if (m.x.equals(x) && m.y.equals(y)) {
+                    //System.out.println("Schiff der Länge " + n.getLaenge() + " getroffen!");
+                    temp.forEach((k) -> {
+                        if (!(spielfeld[k.getX()][k.getY()] == schiff_getroffen)) {
+                            alleGetroffen.set(false);
+                            //System.out.println("alle getroffen false");
+                            ergebnisse.add(false);
+                        } else {
+                            alleGetroffen.set(true);
+                            //System.out.println("alle getroffen true");
+                            ergebnisse.add(true);
+                            if (!ergebnisse.contains(false)) {
+                                temp.forEach((l) -> {
+                                    spielfeld[l.getX()][l.getY()] = komplettes_schiff_getroffen;
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    //ergebnisse.add(false);
+                }
+            });
         }
     }
 }

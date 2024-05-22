@@ -83,10 +83,22 @@ public class View extends JFrame {
             //buttonSpielfeldEigen[i][j].setForeground(Color.RED);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
         }
+        else if (spieler.equals("Eigen") && temp.equals("Komplettes_Schiff_getroffen")) {
+            buttonSpielfeldEigen[i][j].setText("X");
+            buttonSpielfeldEigen[i][j].setBackground(Color.RED);
+            //buttonSpielfeldEigen[i][j].setForeground(Color.RED);
+            buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
+        }
         else if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("X");
             buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
             //buttonSpielfeldGegner[i][j].setForeground(Color.RED);
+            buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
+        }
+        else if (spieler.equals("Gegner") && temp.equals("Komplettes_Schiff_getroffen")) {
+            buttonSpielfeldGegner[i][j].setText("X");
+            buttonSpielfeldGegner[i][j].setBackground(Color.RED);
+            //buttonSpielfeldEigen[i][j].setForeground(Color.RED);
             buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
         }
         else if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen")) {

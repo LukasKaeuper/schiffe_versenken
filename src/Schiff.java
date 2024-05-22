@@ -12,7 +12,7 @@ public class Schiff {
         this.laenge = laenge;
         this.reihe = reihe;
         this.spalte = spalte;
-        koordinaten = new ArrayList<>();
+        this.koordinaten = new ArrayList<>();
         System.out.println("neues Schiff \n");
 //        if (horizontal) {
 //            for (int i=0; i<laenge; i++) {
@@ -38,16 +38,33 @@ public class Schiff {
         System.out.println();
     }
 
-//    public Schiff getSchiff(int n, int m) {
-//        return temp;
-//    }
+    public ArrayList<Koordinatenpaar> getKoordinaten() {
+        return koordinaten;
+    }
 
-    private class Koordinatenpaar<X, Y> {
+    public int getLaenge() {
+        return laenge;
+    }
+
+    public static class Koordinatenpaar<X, Y> {
         public final X x;
         public final Y y;
+
         public Koordinatenpaar(X x, Y y) {
             this.x = x;
             this.y = y;
+        }
+
+//        public boolean beinhaltetKoordinaten(int n, int m) {
+//            return (this.x == n && this.y == m);
+//        }
+
+        public int getX() {
+            return (Integer) x;
+        }
+
+        public int getY() {
+            return (Integer) y;
         }
 
         public String ausgabe() {

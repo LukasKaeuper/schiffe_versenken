@@ -24,7 +24,7 @@ public class Controller {
             int n = Integer.parseInt(dummy.substring(0, 1));
             int m = Integer.parseInt(dummy.substring(dummy.length() - 1));
             model.schiessen(n, m);
-            if (!model.getWert(n, m, "Gegner").equals("Schiff_getroffen")) {
+            if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen")) {
                 model.spielerWechseln();
             }
             int spieler = model.getSpieler();
