@@ -31,11 +31,10 @@ public class Schiff {
 
     public void neueKoordinate(int x, int y) {
         koordinaten.add(new Koordinatenpaar(x, y));
-
     }
 
     public void ausgabe() {
-        koordinaten.forEach((n) -> System.out.println(this.horizontal ? "horizontal" + n.ausgabe() : "vertikal" + n.ausgabe()));
+        koordinaten.forEach((n) -> System.out.println(this.horizontal ? "horizontal " + n.ausgabe() : "vertikal " + n.ausgabe()));
         System.out.println();
     }
 
