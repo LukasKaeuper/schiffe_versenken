@@ -14,19 +14,6 @@ public class Schiff {
         this.spalte = spalte;
         this.koordinaten = new ArrayList<>();
         System.out.println("neues Schiff \n");
-//        if (horizontal) {
-//            for (int i=0; i<laenge; i++) {
-//                koordinaten.add(new Koordinatenpaar(reihe+i, spalte));
-//                //System.out.println("horizontal" + "(" + reihe+i + ", " + spalte + ")");
-//                System.out.println("horizontal" + koordinaten.getFirst().ausgabe());
-//            }
-//        } else {
-//            for (int i=0; i<laenge; i++) {
-//                koordinaten.add(new Koordinatenpaar(reihe, spalte+i));
-//                //System.out.println("vertikal" + "(" + reihe + ", " + spalte+i + ")");
-//                System.out.println("vertikal" + koordinaten.getFirst().ausgabe());
-//            }
-//        }
     }
 
     public void neueKoordinate(int x, int y) {
@@ -42,10 +29,6 @@ public class Schiff {
         return koordinaten;
     }
 
-    public int getLaenge() {
-        return laenge;
-    }
-
     public static class Koordinatenpaar<X, Y> {
         public final X x;
         public final Y y;
@@ -54,10 +37,6 @@ public class Schiff {
             this.x = x;
             this.y = y;
         }
-
-//        public boolean beinhaltetKoordinaten(int n, int m) {
-//            return (this.x == n && this.y == m);
-//        }
 
         public int getX() {
             return (Integer) x;
