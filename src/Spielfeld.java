@@ -43,16 +43,9 @@ public class Spielfeld {
     public void schiffePlazieren(int laenge){
         Random random = new Random();
         boolean horizontal = random.nextBoolean();
-        int x;
-        int y;
+        int x = random.nextInt(spalte);;
+        int y = random.nextInt(reihe);;
 
-        if(horizontal){
-            y = random.nextInt(reihe);
-            x = random.nextInt(spalte);
-        } else {
-            y = random.nextInt(reihe);
-            x = random.nextInt(spalte);
-        }
         if(checkPlazierung(x,y,laenge, horizontal) && checkAbstand(x,y,laenge, horizontal)){
             Schiff neuesSchiff = new Schiff(horizontal,laenge,x,y);
 
