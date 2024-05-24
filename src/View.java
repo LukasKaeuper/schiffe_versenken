@@ -1,6 +1,11 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -12,31 +17,35 @@ public class View extends JFrame {
 
     public View() {
         super("Schiffe Versenken");
+        new Menu();
         fensterGenerieren();
     }
 
     private void fensterGenerieren() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1500,900);
+        setSize(1500, 900);
         setLayout(new BorderLayout());
         status = new JTextField("Spieler 1");
-        add(status,BorderLayout.NORTH);
+        add(status, BorderLayout.NORTH);
         JPanel container = new JPanel();
-        container.setLayout(new GridLayout(1,2));
+        container.setLayout(new GridLayout(1, 2));
         GamePanel panelSpielfeldEigen = new GamePanel("Eigen");
         GamePanel panelSpielfeldGegner = new GamePanel("Gegner");
         container.add(panelSpielfeldEigen);
         container.add(panelSpielfeldGegner);
         add(container, BorderLayout.CENTER);
+    }
+
+    private void spielFensterSichtbar(){
         setVisible(true);
     }
 
     class GamePanel extends JPanel {
         public GamePanel(String spieler) {
-            setLayout(new GridLayout(10,10));
+            setLayout(new GridLayout(10, 10));
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            for (int i=0;i<10;i++) {
-                for (int j=0;j<10;j++) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
                     if (spieler.equals("Eigen")) {
                         buttonSpielfeldEigen[i][j] = new JButton();
                         add(buttonSpielfeldEigen[i][j]);
@@ -50,8 +59,8 @@ public class View extends JFrame {
     }
 
     public void erstelleListener(ActionListener al) {
-        for (int i=0;i<10;i++) {
-            for (int j=0;j<10;j++) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
                 //this.buttonSpielfeldEigen[i][j].setActionCommand("" + i + j);
                 //this.buttonSpielfeldEigen[i][j].addActionListener(al);
                 this.buttonSpielfeldGegner[i][j].setActionCommand("" + i + j);
@@ -66,50 +75,42 @@ public class View extends JFrame {
             buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
             buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-        }
-        else if (spieler.equals("Eigen") && temp.equals("Schiff_getroffen")) {
+        } else if (spieler.equals("Eigen") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("X");
             buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
             buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
-        }
-        else if (spieler.equals("Eigen") && temp.equals("Wasser")) {
+        } else if (spieler.equals("Eigen") && temp.equals("Wasser")) {
             buttonSpielfeldEigen[i][j].setText("O");
             buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
             buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-        }
-        else if (spieler.equals("Eigen") && temp.equals("Wasser_getroffen")) {
+        } else if (spieler.equals("Eigen") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("O");
             buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
             buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
-        }
-        else if (spieler.equals("Eigen") && temp.equals("Komplettes_Schiff_getroffen")) {
+        } else if (spieler.equals("Eigen") && temp.equals("Komplettes_Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("X");
             buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
             buttonSpielfeldEigen[i][j].setForeground(Color.RED);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
-        }
-        else if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen")) {
+        } else if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("X");
             buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
             buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
-        }
-        else if (spieler.equals("Gegner") && temp.equals("Komplettes_Schiff_getroffen")) {
+        } else if (spieler.equals("Gegner") && temp.equals("Komplettes_Schiff_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("X");
             buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
             buttonSpielfeldGegner[i][j].setForeground(Color.RED);
             buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
-        }
-        else if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen")) {
+        } else if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("O");
             buttonSpielfeldGegner[i][j].setBackground(Color.BLUE);
             buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-        }
-        else {
+        } else {
             buttonSpielfeldGegner[i][j].setText("");
             buttonSpielfeldGegner[i][j].setBackground(null);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
@@ -149,5 +150,151 @@ public class View extends JFrame {
             g.setColor(color);
             g.drawRect(x, y, width - 1, height - 1);
         }
+    }
+
+    public class Menu extends JFrame {
+
+        public Menu() {
+            // Fenster initialisieren
+            setTitle("Schiffe Versenken");
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(800, 600);
+            setLocationRelativeTo(null);
+            setLayout(new BorderLayout());
+
+            // Hintergrundbild
+            final BufferedImage backgroundImage;
+            try {
+                backgroundImage = ImageIO.read(new File("Bilder/Logo/SchiffeVersenkenLogo.png"));
+            } catch (IOException e) {
+                throw new RuntimeException("Background image not found", e);
+            }
+
+            JPanel background = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                }
+            };
+            setContentPane(background);
+            background.setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+
+            // Logo/Icon hinzufügen
+            ImageIcon icon = new ImageIcon("Bilder/Logo/SchiffeVersenkenLogo.png");
+            setIconImage(icon.getImage());
+
+            // Panel für die Buttons
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setOpaque(false);  // Macht das Panel transparent
+            buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+            // Einzelspieler Button
+            JButton singlePlayerButton = new JButton("Einzelspieler");
+            singlePlayerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(singlePlayerButton);
+            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
+
+            // Mehrspieler Button
+            JButton multiPlayerButton = new JButton("Mehrspieler");
+            multiPlayerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(multiPlayerButton);
+            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
+
+            // Einstellungen Button
+            JButton settingsButton = new JButton("Einstellungen");
+            settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(settingsButton);
+
+            // Alle Buttons gleich groß machen
+            Dimension buttonSize = new Dimension(200, 50);
+            singlePlayerButton.setMaximumSize(buttonSize);
+            multiPlayerButton.setMaximumSize(buttonSize);
+            settingsButton.setMaximumSize(buttonSize);
+
+            // Button Panel in die Mitte setzen
+            gbc.gridx = 0;
+            gbc.gridy = 1;
+            gbc.gridwidth = 1;
+            gbc.insets = new Insets(0, 0, 20, 0);
+            gbc.anchor = GridBagConstraints.CENTER;
+            background.add(buttonPanel, gbc);
+
+            // ActionListener für die Buttons
+            singlePlayerButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                }
+            });
+
+            multiPlayerButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Mehrspieler Button gedrückt");
+
+                    // Entferne alle Buttons außer dem Mehrspieler-Button
+                    buttonPanel.removeAll();
+
+                    // Neue Buttons für "Lokal" und "Online" hinzufügen
+                    JButton localButton = new JButton("Lokal");
+                    localButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    localButton.setMaximumSize(buttonSize);
+                    localButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            spielFensterSichtbar();
+                        }
+                    });
+
+                    JButton onlineButton = new JButton("Online");
+                    onlineButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    onlineButton.setMaximumSize(buttonSize);
+                    onlineButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            System.out.println("Online Button gedrückt");
+                        }
+                    });
+
+                    buttonPanel.add(localButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
+                    buttonPanel.add(onlineButton);
+
+                    // Panel neu validieren und neu zeichnen
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
+                }
+            });
+
+            settingsButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Einstellungen Button gedrückt");
+                    JDialog settingsDialog = new JDialog(Menu.this, "Einstellungen", true);
+                    settingsDialog.setSize(300, 200);
+                    settingsDialog.setLayout(new FlowLayout());
+                    settingsDialog.setLocationRelativeTo(Menu.this);
+
+                    JButton fullscreenButton = new JButton("Vollbildmodus");
+                    fullscreenButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            System.out.println("Vollbildmodus Button gedrückt");
+                            setExtendedState(JFrame.MAXIMIZED_BOTH);
+                            dispose();
+                            setUndecorated(true);
+                            setVisible(true);
+                        }
+                    });
+
+                    settingsDialog.add(fullscreenButton);
+                    settingsDialog.setVisible(true);
+                }
+            });
+
+            setVisible(true);
+        }
+
     }
 }
