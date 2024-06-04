@@ -9,20 +9,20 @@ public class Model {
     int spieler = 1;
 
     public Model() {
-        playSound("/Sound/ambience.wav", true, -10f);
+        playSound("ambience.wav", true, -10f);
     }
 
     public void schiessen(int n, int m) {
         //markiert das Stück vom Schiff was getroffen wurde
         spielfeldRechts.trefferMarkieren(n, m);
         if (spielfeldRechts.getWert(n, m).equals("Schiff_getroffen")) {
-            playSound("/Sound/kleine_explosion.wav", false, 3f);
+            playSound("kleine_explosion.wav", false, 3f);
         }
         else if (spielfeldRechts.getWert(n, m).equals("Komplettes_Schiff_getroffen")) {
-            playSound("/Sound/große_explosion.wav", false, -6f);
+            playSound("große_explosion.wav", false, -6f);
         }
         else if (spielfeldRechts.getWert(n, m).equals("Wasser_getroffen")) {
-            playSound("/Sound/wasser.wav", false, -6f);
+            playSound("wasser.wav", false, -6f);
         }
         System.out.println("Schuss");
         spielfeldLinks.anzeigen();
@@ -37,7 +37,7 @@ public class Model {
                 try {
                     Clip clip = AudioSystem.getClip();
                     Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
-                    File file = new File(path + url);
+                    File file = new File(path + "/Sound/" + url);
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
                     clip.open(inputStream);
                     FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
