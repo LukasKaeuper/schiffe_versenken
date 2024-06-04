@@ -34,8 +34,8 @@ public class Controller {
             } else {
                 spieler2zuege++;
             }
-            System.out.println(getSpieler1Zuege());
-            System.out.println(model.getSpieler());
+            System.out.println("spieler 1 zuege: " + getSpieler1Zuege() + " spieler 2 zuege: " + getSpieler2Zuege());
+            System.out.println("spieler: " + model.getSpieler());
             System.out.println("Button gedrückt");
             // Index aus View holen
             String dummy = e.getActionCommand();
@@ -53,6 +53,7 @@ public class Controller {
             }
             FeldAktualisieren("Eigen");
             FeldAktualisieren("Gegner");
+            view.zuegeAktualisieren(model.getSpieler());
         }
 
         private void FeldAktualisieren(String spieler) {

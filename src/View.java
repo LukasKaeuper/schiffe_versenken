@@ -71,6 +71,17 @@ public class View extends JFrame {
         add(container, BorderLayout.CENTER);
     }
 
+    public void zuegeAktualisieren(int spieler) {
+        if (spieler == 1) {
+            zuege.setText("Anzahl an Zuegen: " + Controller.spieler1zuege);
+            //System.out.println("spieler 1 aktualisiert");
+        }
+        else if (spieler == 2) {
+            zuege.setText("Anzahl an Zuegen: " + Controller.spieler2zuege);
+            //System.out.println("spieler 2 aktualisiert");
+        }
+    }
+
     private void spielFensterSichtbar(){
         setVisible(true);
     }
