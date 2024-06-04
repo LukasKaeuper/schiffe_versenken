@@ -20,7 +20,7 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("spieler: " + model.getSpieler());
-            System.out.println("Button gedrückt");
+            //System.out.println("Button gedrückt");
             // Index aus View holen
             String dummy = e.getActionCommand();
             int n = Integer.parseInt(dummy.substring(0, 1));
@@ -28,6 +28,7 @@ public class Controller {
             model.schiessen(n, m);
             if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen")) {
                 model.spielerWechseln();
+                view.rundenwechselBestaetigen();
             }
             int spieler = model.getSpieler();
             view.setSpieler(spieler);

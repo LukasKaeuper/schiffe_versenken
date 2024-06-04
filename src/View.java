@@ -8,8 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.text.Caret;
 
 public class View extends JFrame {
     private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];
@@ -17,6 +16,9 @@ public class View extends JFrame {
     private JTextField status;
     private JTextField zuege;
     private JTextField schiffe;
+    private JPanel container;
+    private GamePanel panelSpielfeldEigen;
+    private GamePanel panelSpielfeldGegner;
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
@@ -38,22 +40,27 @@ public class View extends JFrame {
         status.setFont(font1);
         status.setSize(1500,200);
         add(status, BorderLayout.NORTH);
+        status.setEditable(false);
+        status.setCaretColor(UIManager.getColor("Panel.background"));
 
-        zuege = new JTextField("Anzahl an Zuegen: 0");
+        zuege = new JTextField("Anzahl an Zügen: 0");
 
         add(zuege, BorderLayout.SOUTH);
         zuege.setHorizontalAlignment(JTextField.CENTER);
         zuege.setFont(font1);
-
+        zuege.setEditable(false);
+        zuege.setCaretColor(UIManager.getColor("Panel.background"));
 
         schiffe = new JTextField();
         schiffe.setFont(font1);
         schiffe.setSize(200, 200);
+        schiffe.setEditable(false);
+        schiffe.setCaretColor(UIManager.getColor("Panel.background"));
 
-        JPanel container = new JPanel();
+        container = new JPanel();
 
-        GamePanel panelSpielfeldEigen = new GamePanel("Eigen");
-        GamePanel panelSpielfeldGegner = new GamePanel("Gegner");
+        panelSpielfeldEigen = new GamePanel("Eigen");
+        panelSpielfeldGegner = new GamePanel("Gegner");
 
         container.add(schiffe);
         Dimension textFieldSize = new Dimension(50, 30);
@@ -69,17 +76,67 @@ public class View extends JFrame {
 
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
-            zuege.setText("Anzahl an Zuegen: " + anzahlZuege);
+            zuege.setText("Anzahl an Zügen: " + anzahlZuege);
             //System.out.println("spieler 1 aktualisiert");
         }
         else if (spieler == 2) {
-            zuege.setText("Anzahl an Zuegen: " + anzahlZuege);
+            zuege.setText("Anzahl an Zügen: " + anzahlZuege);
             //System.out.println("spieler 2 aktualisiert");
         }
     }
 
     private void spielFensterSichtbar(){
         setVisible(true);
+    }
+
+    public void rundenwechselBestaetigen() {
+        panelSpielfeldEigen.setVisible(false);
+        panelSpielfeldGegner.setVisible(false);
+        schiffe.setVisible(false);
+        zuege.setVisible(false);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Panel für die Buttons
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setOpaque(false);  // Macht das Panel transparent
+        //buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+        // Einstellungen Button
+        JButton neueRundeButton = new JButton("Runde beginnen");
+        neueRundeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonPanel.add(neueRundeButton);
+
+        // Alle Buttons gleich groß machen
+        Dimension buttonSize = new Dimension(400, 100);
+        neueRundeButton.setMaximumSize(buttonSize);
+
+        // Button Panel in die Mitte setzen
+        //gbc.gridx = 0;
+        //gbc.gridy = 1;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        //gbc.insets = new Insets(0, 0, 20, 0);
+        gbc.anchor = GridBagConstraints.CENTER;
+        container.add(buttonPanel, gbc);
+
+        neueRundeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("neue Runde gedrückt");
+
+                // Entferne alle Buttons außer dem Mehrspieler-Button
+                buttonPanel.removeAll();
+
+                panelSpielfeldEigen.setVisible(true);
+                panelSpielfeldGegner.setVisible(true);
+                schiffe.setVisible(true);
+                zuege.setVisible(true);
+
+                // Panel neu validieren und neu zeichnen
+                buttonPanel.revalidate();
+                buttonPanel.repaint();
+            }
+        });
     }
 
     class GamePanel extends JPanel {
