@@ -8,11 +8,20 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class View extends JFrame {
     private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];
     private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];
     private JTextField status;
+    private JTextField zuege;
+    private JTextField schiffe;
+    private static Spieler spieler1;
+    private static Spieler spieler2;
+    private static int aktuellerSpieler = 1;
+    private static Spieler aktueller = spieler1;
+
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
     public View() {
@@ -23,14 +32,40 @@ public class View extends JFrame {
 
     private void fensterGenerieren() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1500, 900);
+        setSize(1600, 900);
         setLayout(new BorderLayout());
+
+        Font font1 = new Font("SansSerif", Font.BOLD, 20);
+
         status = new JTextField("Spieler 1");
+        status.setHorizontalAlignment(JTextField.CENTER);
+        status.setFont(font1);
+        status.setSize(1500,200);
         add(status, BorderLayout.NORTH);
+
+        zuege = new JTextField("Anzahl an Zuegen: " + Controller.spieler1zuege);
+
+        add(zuege, BorderLayout.SOUTH);
+        zuege.setHorizontalAlignment(JTextField.CENTER);
+        zuege.setFont(font1);
+
+
+        schiffe = new JTextField();
+        schiffe.setFont(font1);
+        schiffe.setSize(200, 200);
+
         JPanel container = new JPanel();
-        container.setLayout(new GridLayout(1, 2));
+
         GamePanel panelSpielfeldEigen = new GamePanel("Eigen");
         GamePanel panelSpielfeldGegner = new GamePanel("Gegner");
+
+        container.add(schiffe);
+        Dimension textFieldSize = new Dimension(50, 30);
+        schiffe.setPreferredSize(textFieldSize);
+
+        Dimension panelSize = new Dimension(700, 700);
+        panelSpielfeldEigen.setPreferredSize(panelSize);
+        panelSpielfeldGegner.setPreferredSize(panelSize);
         container.add(panelSpielfeldEigen);
         container.add(panelSpielfeldGegner);
         add(container, BorderLayout.CENTER);
