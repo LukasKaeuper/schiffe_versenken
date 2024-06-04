@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -317,12 +319,46 @@ public class View extends JFrame {
             JButton settingsButton = new JButton("Einstellungen");
             settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             buttonPanel.add(settingsButton);
+            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+            // Regel Button
+            JButton regelButton = new JButton("Regeln");
+            regelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(regelButton);
+
+            // Create the hover window
+            JFrame hoverFrame = new JFrame("Regeln");
+            hoverFrame.setSize(600, 600);
+            hoverFrame.setLayout(new FlowLayout());
+            hoverFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+            // Create the label for hover text
+            JLabel hoverTextLabel = new JLabel("<html>Regeln<br/><br/>Die Schiffe dürfen nicht aneinander liegen sondern haben immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie abfeuern möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: Insgesamt 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
+            hoverTextLabel.setForeground(Color.BLUE);
+
+            // Add the label to the hover window
+            hoverFrame.add(hoverTextLabel);
+
+            // Add mouse listener to handle hover effect
+            regelButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    hoverFrame.setVisible(true);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    hoverFrame.setVisible(false);
+                }
+            });
+
 
             // Alle Buttons gleich groß machen
             Dimension buttonSize = new Dimension(200, 50);
             singlePlayerButton.setMaximumSize(buttonSize);
             multiPlayerButton.setMaximumSize(buttonSize);
             settingsButton.setMaximumSize(buttonSize);
+            regelButton.setMaximumSize(buttonSize);
 
             // Button Panel in die Mitte setzen
             gbc.gridx = 0;
