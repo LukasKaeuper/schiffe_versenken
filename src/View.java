@@ -15,17 +15,17 @@ public class View extends JFrame {
     private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];
     private JTextField status;
     private JTextField zuege;
-    private JTextField schiffe;
+    private JTextField schiffeEigen;
+    private JTextField schiffeGegner;
     private JPanel container;
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
-    private Menu menu;
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
     public View() {
         super("Schiffe Versenken");
-        menu = new Menu();
+        new Menu();
         fensterGenerieren();
     }
 
@@ -52,26 +52,35 @@ public class View extends JFrame {
         zuege.setEditable(false);
         zuege.setCaretColor(UIManager.getColor("Panel.background"));
 
-        schiffe = new JTextField();
-        schiffe.setFont(font1);
-        schiffe.setSize(200, 200);
-        schiffe.setEditable(false);
-        schiffe.setCaretColor(UIManager.getColor("Panel.background"));
+        schiffeEigen = new JTextField();
+        schiffeEigen.setFont(font1);
+        schiffeEigen.setSize(200, 200);
+        schiffeEigen.setEditable(false);
+        schiffeEigen.setCaretColor(UIManager.getColor("Panel.background"));
+
+        schiffeGegner = new JTextField();
+        schiffeGegner.setFont(font1);
+        schiffeGegner.setSize(200, 200);
+        schiffeGegner.setEditable(false);
+        schiffeGegner.setCaretColor(UIManager.getColor("Panel.background"));
 
         container = new JPanel();
+        container.setLayout(new GridBagLayout());
 
         panelSpielfeldEigen = new GamePanel("Eigen");
         panelSpielfeldGegner = new GamePanel("Gegner");
 
-        container.add(schiffe);
         Dimension textFieldSize = new Dimension(50, 30);
-        schiffe.setPreferredSize(textFieldSize);
+        schiffeEigen.setPreferredSize(textFieldSize);
+        schiffeGegner.setPreferredSize(textFieldSize);
 
         Dimension panelSize = new Dimension(700, 700);
         panelSpielfeldEigen.setPreferredSize(panelSize);
         panelSpielfeldGegner.setPreferredSize(panelSize);
+        container.add(schiffeEigen);
         container.add(panelSpielfeldEigen);
         container.add(panelSpielfeldGegner);
+        container.add(schiffeGegner);
         add(container, BorderLayout.CENTER);
     }
 
@@ -93,32 +102,27 @@ public class View extends JFrame {
     public void rundenwechselBestaetigen() {
         panelSpielfeldEigen.setVisible(false);
         panelSpielfeldGegner.setVisible(false);
-        schiffe.setVisible(false);
+        schiffeEigen.setVisible(false);
+        schiffeGegner.setVisible(false);
         zuege.setVisible(false);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        // Panel für die Buttons
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setOpaque(false);  // Macht das Panel transparent
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        container.removeAll();
+//        container.setVisible(false);
 
         // Einstellungen Button
         JButton neueRundeButton = new JButton("Runde beginnen");
         neueRundeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buttonPanel.add(neueRundeButton);
+        neueRundeButton.setPreferredSize(new Dimension(400, 150));
+        neueRundeButton.setFont(new Font("SansSerif", Font.BOLD, 20));
 
-//        // Alle Buttons gleich groß machen
-//        Dimension buttonSize = new Dimension(400, 100);
-//        neueRundeButton.setMaximumSize(buttonSize);
+        // Panel für die Buttons
+        JPanel buttonPanel = new JPanel();
+//        buttonPanel.setOpaque(false);  // Macht das Panel transparent
+//        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setLayout(new BorderLayout());
+        buttonPanel.add(neueRundeButton, BorderLayout.CENTER);
 
-        // Button Panel in die Mitte setzen
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        //gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets = new Insets(0, 0, 20, 0);
-        gbc.anchor = GridBagConstraints.CENTER;
-        container.add(buttonPanel, gbc);
+        //container.setLayout(new GridBagLayout());
+        container.add(buttonPanel);
 
         neueRundeButton.addActionListener(new ActionListener() {
             @Override
@@ -127,9 +131,19 @@ public class View extends JFrame {
 
                 buttonPanel.removeAll();
 
+                //container = new JPanel();
+
+                container.add(schiffeEigen);
+                container.add(panelSpielfeldEigen);
+                container.add(panelSpielfeldGegner);
+                container.add(schiffeGegner);
+                container.remove(buttonPanel);
+                //add(container, BorderLayout.CENTER);
+
                 panelSpielfeldEigen.setVisible(true);
                 panelSpielfeldGegner.setVisible(true);
-                schiffe.setVisible(true);
+                schiffeEigen.setVisible(true);
+                schiffeGegner.setVisible(true);
                 zuege.setVisible(true);
 
                 // Panel neu validieren und neu zeichnen
