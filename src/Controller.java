@@ -1,3 +1,6 @@
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
