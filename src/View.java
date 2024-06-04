@@ -113,8 +113,8 @@ public class View extends JFrame {
         // Einstellungen Button
         JButton neueRundeButton = new JButton("Runde beginnen");
         neueRundeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        neueRundeButton.setPreferredSize(new Dimension(400, 150));
-        neueRundeButton.setFont(new Font("SansSerif", Font.BOLD, 20));
+        neueRundeButton.setPreferredSize(new Dimension(300, 100));
+        neueRundeButton.setFont(new Font("SansSerif", Font.BOLD, 25));
 
         // Panel für die Buttons
         JPanel buttonPanel = new JPanel();
