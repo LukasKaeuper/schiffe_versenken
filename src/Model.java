@@ -12,6 +12,7 @@ public class Model {
     int spieler = 1;
 
     public Model() {
+        playSound("/Sound/ambience.wav");
     }
 
     public void schiessen(int n, int m) {
@@ -42,6 +43,9 @@ public class Model {
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
                     clip.open(inputStream);
                     clip.start();
+                    if (file.getPath().equals(path+ "/Sound/ambience.wav")) {
+                        clip.loop(Clip.LOOP_CONTINUOUSLY);
+                    }
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
                 }

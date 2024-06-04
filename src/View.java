@@ -8,7 +8,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.text.Caret;
 
 public class View extends JFrame {
     private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];
@@ -19,12 +18,13 @@ public class View extends JFrame {
     private JPanel container;
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
+    private Menu menu;
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
     public View() {
         super("Schiffe Versenken");
-        new Menu();
+        menu = new Menu();
         fensterGenerieren();
     }
 
@@ -114,7 +114,7 @@ public class View extends JFrame {
         // Button Panel in die Mitte setzen
         //gbc.gridx = 0;
         //gbc.gridy = 1;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        //gbc.gridwidth = GridBagConstraints.REMAINDER;
         //gbc.insets = new Insets(0, 0, 20, 0);
         gbc.anchor = GridBagConstraints.CENTER;
         container.add(buttonPanel, gbc);
@@ -157,11 +157,9 @@ public class View extends JFrame {
         }
     }
 
-    public void erstelleListener(ActionListener al) {
+    public void erstelleSpielfeldListener(ActionListener al) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                //this.buttonSpielfeldEigen[i][j].setActionCommand("" + i + j);
-                //this.buttonSpielfeldEigen[i][j].addActionListener(al);
                 this.buttonSpielfeldGegner[i][j].setActionCommand("" + i + j);
                 this.buttonSpielfeldGegner[i][j].addActionListener(al);
             }

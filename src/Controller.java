@@ -1,6 +1,3 @@
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,11 +9,11 @@ public class Controller {
     public Controller() {
         this.model = new Model();
         this.view = new View();
-        this.view.erstelleListener(new MeinListener());
+        this.view.erstelleSpielfeldListener(new SpielfeldListener());
     }
 
-    class MeinListener implements ActionListener {
-        public MeinListener() {
+    class SpielfeldListener implements ActionListener {
+        public SpielfeldListener() {
             FeldAktualisieren("Eigen");
         }
 
