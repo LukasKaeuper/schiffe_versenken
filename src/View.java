@@ -17,10 +17,6 @@ public class View extends JFrame {
     private JTextField status;
     private JTextField zuege;
     private JTextField schiffe;
-    private static Spieler spieler1;
-    private static Spieler spieler2;
-    private static int aktuellerSpieler = 1;
-    private static Spieler aktueller = spieler1;
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
@@ -43,7 +39,7 @@ public class View extends JFrame {
         status.setSize(1500,200);
         add(status, BorderLayout.NORTH);
 
-        zuege = new JTextField("Anzahl an Zuegen: " + Controller.spieler1zuege);
+        zuege = new JTextField("Anzahl an Zuegen: 0");
 
         add(zuege, BorderLayout.SOUTH);
         zuege.setHorizontalAlignment(JTextField.CENTER);
@@ -71,13 +67,13 @@ public class View extends JFrame {
         add(container, BorderLayout.CENTER);
     }
 
-    public void zuegeAktualisieren(int spieler) {
+    public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
-            zuege.setText("Anzahl an Zuegen: " + Controller.spieler1zuege);
+            zuege.setText("Anzahl an Zuegen: " + anzahlZuege);
             //System.out.println("spieler 1 aktualisiert");
         }
         else if (spieler == 2) {
-            zuege.setText("Anzahl an Zuegen: " + Controller.spieler2zuege);
+            zuege.setText("Anzahl an Zuegen: " + anzahlZuege);
             //System.out.println("spieler 2 aktualisiert");
         }
     }

@@ -5,21 +5,11 @@ public class Controller {
 
     private View view;
     private Model model;
-    public static int spieler1zuege;
-    public static int spieler2zuege;
 
     public Controller() {
         this.model = new Model();
         this.view = new View();
         this.view.erstelleListener(new MeinListener());
-    }
-
-    public int getSpieler1Zuege(){
-        return spieler1zuege;
-    }
-
-    public int getSpieler2Zuege(){
-        return spieler2zuege;
     }
 
     class MeinListener implements ActionListener {
@@ -29,12 +19,6 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(model.getSpieler() == 1){
-                spieler1zuege++;
-            } else {
-                spieler2zuege++;
-            }
-            System.out.println("spieler 1 zuege: " + getSpieler1Zuege() + " spieler 2 zuege: " + getSpieler2Zuege());
             System.out.println("spieler: " + model.getSpieler());
             System.out.println("Button gedrückt");
             // Index aus View holen
@@ -53,7 +37,7 @@ public class Controller {
             }
             FeldAktualisieren("Eigen");
             FeldAktualisieren("Gegner");
-            view.zuegeAktualisieren(model.getSpieler());
+            view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
         }
 
         private void FeldAktualisieren(String spieler) {

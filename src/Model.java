@@ -1,6 +1,6 @@
 public class Model {
-    private Spielfeld spieler1 = new Spielfeld();
-    private Spielfeld spieler2 = new Spielfeld();
+    private Spielfeld spielfeldLinks = new Spielfeld();
+    private Spielfeld spielfeldRechts = new Spielfeld();
     int spieler = 1;
 
     public Model() {
@@ -9,10 +9,11 @@ public class Model {
 
     public void schiessen(int n, int m) {
         //markiert das Stück vom Schiff was getroffen wurde
-        spieler2.trefferMarkieren(n, m);
+        spielfeldRechts.trefferMarkieren(n, m);
         System.out.println("Schuss");
-        spieler1.anzeigen();
-        spieler2.anzeigen();
+        spielfeldLinks.anzeigen();
+        spielfeldRechts.anzeigen();
+        spielfeldLinks.getSpieler().zugErhoehen();
         //System.out.println();
     }
 
@@ -21,7 +22,7 @@ public class Model {
         boolean ende = true;
         for (int i=0; i<10; i++) {
             for (int j = 0; j < 10; j++) {
-                if (spieler2.getWert(i, j).equals("Schiff")) {
+                if (spielfeldRechts.getWert(i, j).equals("Schiff")) {
                     ende = false;
                 }
             }
@@ -31,9 +32,9 @@ public class Model {
 
     public String getWert(int i, int j, String spieler) {
         if (spieler.equals("Eigen")) {
-            return spieler1.getWert(i, j);
+            return spielfeldLinks.getWert(i, j);
         } else {
-            return spieler2.getWert(i, j);
+            return spielfeldRechts.getWert(i, j);
         }
     }
 
@@ -46,14 +47,18 @@ public class Model {
     }
 
     public void spielerWechseln() {
-        Spielfeld temp = spieler1;
-        spieler1 = spieler2;
-        spieler2 = temp;
+        Spielfeld temp = spielfeldLinks;
+        spielfeldLinks = spielfeldRechts;
+        spielfeldRechts = temp;
         spieler++;
         spieler %= 2;
         System.out.println("Seitenwechsel");
-        spieler1.anzeigen();
-        spieler2.anzeigen();
+        spielfeldLinks.anzeigen();
+        spielfeldRechts.anzeigen();
         //System.out.println();
+    }
+
+    public int getZuege() {
+        return spielfeldLinks.getSpieler().getAnzahlZuege();
     }
 }

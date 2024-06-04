@@ -10,6 +10,7 @@ public class Spielfeld {
     private final int leer_getroffen = 2;
     private final int schiff_getroffen = 3;
     private final int komplettes_schiff_getroffen = 4;
+    private Spieler spieler;
 
     private final int[][] spielfeld;
     private final ArrayList<Schiff> schiffe;
@@ -18,6 +19,7 @@ public class Spielfeld {
     public Spielfeld() {
         spielfeld = new int[reihe][spalte];
         schiffe = new ArrayList<Schiff>();
+        spieler = new Spieler("platzhalter");
         initialisiereSpielfeld();
         schiffePlazieren(5);
         schiffePlazieren(4);
@@ -165,5 +167,9 @@ public class Spielfeld {
                 }
             });
         }
+    }
+
+    public Spieler getSpieler() {
+        return spieler;
     }
 }
