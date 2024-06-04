@@ -160,6 +160,7 @@ public class Spielfeld {
                         n.getKoordinaten().forEach((l) -> {
                             spielfeld[l.getX()][l.getY()] = komplettes_schiff_getroffen;
                         });
+                        n.setAbgeschossen();
                     }
                 }
             });

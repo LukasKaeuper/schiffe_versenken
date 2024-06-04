@@ -6,12 +6,14 @@ public class Schiff {
     private int reihe;
     private int spalte;
     private ArrayList<Koordinatenpaar> koordinaten;
+    private boolean abgeschossen;
 
     public Schiff(boolean horizontal, int laenge, int reihe, int spalte){
         this.horizontal = horizontal;
         this.laenge = laenge;
         this.reihe = reihe;
         this.spalte = spalte;
+        this.abgeschossen = false;
         this.koordinaten = new ArrayList<>();
         System.out.println("neues Schiff \n");
     }
@@ -27,6 +29,11 @@ public class Schiff {
 
     public ArrayList<Koordinatenpaar> getKoordinaten() {
         return koordinaten;
+    }
+
+    public void setAbgeschossen() {
+        abgeschossen = true;
+        //System.out.println("Schiff der Länge : " + this.laenge + " abgeschossen");
     }
 
     public static class Koordinatenpaar<X, Y> {
