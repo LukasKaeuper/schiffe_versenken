@@ -17,7 +17,7 @@ public class Model {
     public void schiessen(int n, int m) {
         //markiert das Stück vom Schiff was getroffen wurde
         spielfeldRechts.trefferMarkieren(n, m);
-        if (spielfeldRechts.getWert(n, m).equals("Schiff_getroffen") || spielfeldLinks.getWert(n, m).equals("Komplettes_Schiff_getroffen")) {
+        if (spielfeldRechts.getWert(n, m).equals("Schiff_getroffen") || spielfeldRechts.getWert(n, m).equals("Komplettes_Schiff_getroffen")) {
             playSound("/Sound/explosion.wav");
         }
         else if (spielfeldRechts.getWert(n, m).equals("Wasser_getroffen")) {
