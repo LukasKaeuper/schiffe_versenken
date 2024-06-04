@@ -1,7 +1,4 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.*;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -12,17 +9,20 @@ public class Model {
     int spieler = 1;
 
     public Model() {
-        playSound("/Sound/ambience.wav");
+        playSound("/Sound/ambience.wav", true, -10f);
     }
 
     public void schiessen(int n, int m) {
         //markiert das Stück vom Schiff was getroffen wurde
         spielfeldRechts.trefferMarkieren(n, m);
-        if (spielfeldRechts.getWert(n, m).equals("Schiff_getroffen") || spielfeldRechts.getWert(n, m).equals("Komplettes_Schiff_getroffen")) {
-            playSound("/Sound/explosion.wav");
+        if (spielfeldRechts.getWert(n, m).equals("Schiff_getroffen")) {
+            playSound("/Sound/kleine_explosion.wav", false, 3f);
+        }
+        else if (spielfeldRechts.getWert(n, m).equals("Komplettes_Schiff_getroffen")) {
+            playSound("/Sound/große_explosion.wav", false, -6f);
         }
         else if (spielfeldRechts.getWert(n, m).equals("Wasser_getroffen")) {
-            playSound("/Sound/wasser.wav");
+            playSound("/Sound/wasser.wav", false, -4f);
         }
         System.out.println("Schuss");
         spielfeldLinks.anzeigen();
@@ -31,7 +31,7 @@ public class Model {
         //System.out.println();
     }
 
-    public static synchronized void playSound(final String url) {
+    public static synchronized void playSound(final String url, boolean loop, float volume) {
         new Thread(new Runnable() {
             // The wrapper thread is unnecessary, unless it blocks on the
             // Clip finishing; see comments.
@@ -42,8 +42,10 @@ public class Model {
                     File file = new File(path + url);
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
                     clip.open(inputStream);
+                    FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                    gainControl.setValue(volume);
                     clip.start();
-                    if (file.getPath().equals(path+ "/Sound/ambience.wav")) {
+                    if (loop) {
                         clip.loop(Clip.LOOP_CONTINUOUSLY);
                     }
                 } catch (Exception e) {
