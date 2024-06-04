@@ -22,7 +22,7 @@ public class Model {
             playSound("/Sound/große_explosion.wav", false, -6f);
         }
         else if (spielfeldRechts.getWert(n, m).equals("Wasser_getroffen")) {
-            playSound("/Sound/wasser.wav", false, -4f);
+            playSound("/Sound/wasser.wav", false, -6f);
         }
         System.out.println("Schuss");
         spielfeldLinks.anzeigen();
@@ -33,8 +33,6 @@ public class Model {
 
     public static synchronized void playSound(final String url, boolean loop, float volume) {
         new Thread(new Runnable() {
-            // The wrapper thread is unnecessary, unless it blocks on the
-            // Clip finishing; see comments.
             public void run() {
                 try {
                     Clip clip = AudioSystem.getClip();
