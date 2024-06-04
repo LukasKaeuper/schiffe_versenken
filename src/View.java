@@ -101,31 +101,30 @@ public class View extends JFrame {
         // Panel für die Buttons
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setOpaque(false);  // Macht das Panel transparent
-        //buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
         // Einstellungen Button
         JButton neueRundeButton = new JButton("Runde beginnen");
         neueRundeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonPanel.add(neueRundeButton);
 
-        // Alle Buttons gleich groß machen
-        Dimension buttonSize = new Dimension(400, 100);
-        neueRundeButton.setMaximumSize(buttonSize);
+//        // Alle Buttons gleich groß machen
+//        Dimension buttonSize = new Dimension(400, 100);
+//        neueRundeButton.setMaximumSize(buttonSize);
 
         // Button Panel in die Mitte setzen
-        //gbc.gridx = 0;
-        //gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         //gbc.gridwidth = GridBagConstraints.REMAINDER;
-        //gbc.insets = new Insets(0, 0, 20, 0);
+        gbc.insets = new Insets(0, 0, 20, 0);
         gbc.anchor = GridBagConstraints.CENTER;
         container.add(buttonPanel, gbc);
 
         neueRundeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("neue Runde gedrückt");
+                //System.out.println("neue Runde gedrückt");
 
-                // Entferne alle Buttons außer dem Mehrspieler-Button
                 buttonPanel.removeAll();
 
                 panelSpielfeldEigen.setVisible(true);
@@ -134,8 +133,8 @@ public class View extends JFrame {
                 zuege.setVisible(true);
 
                 // Panel neu validieren und neu zeichnen
-                buttonPanel.revalidate();
-                buttonPanel.repaint();
+//                buttonPanel.revalidate();
+//                buttonPanel.repaint();
             }
         });
     }
