@@ -25,9 +25,9 @@ public class View extends JFrame {
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
-    public View() {
+    public View(ActionListener sp) {
         super("Schiffe Versenken");
-        new Menu();
+        new Menu(sp);
         fensterGenerieren();
     }
 
@@ -97,7 +97,7 @@ public class View extends JFrame {
         }
     }
 
-    private void spielFensterSichtbar(){
+    public void spielFensterSichtbar(){
         setVisible(true);
     }
 
@@ -153,6 +153,14 @@ public class View extends JFrame {
 //                buttonPanel.repaint();
             }
         });
+    }
+
+    public void listenerEntfernen(ActionListener al) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                this.buttonSpielfeldGegner[i][j].removeActionListener(al);
+            }
+        }
     }
 
     class GamePanel extends JPanel {
@@ -267,7 +275,7 @@ public class View extends JFrame {
 
     public class Menu extends JFrame {
 
-        public Menu() {
+        public Menu(ActionListener sp) {
             // Fenster initialisieren
             setTitle("Schiffe Versenken");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -369,11 +377,8 @@ public class View extends JFrame {
             background.add(buttonPanel, gbc);
 
             // ActionListener für die Buttons
-            singlePlayerButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                }
-            });
+
+            singlePlayerButton.addActionListener(sp);
 
             multiPlayerButton.addActionListener(new ActionListener() {
                 @Override
@@ -442,6 +447,5 @@ public class View extends JFrame {
 
             setVisible(true);
         }
-
     }
 }
