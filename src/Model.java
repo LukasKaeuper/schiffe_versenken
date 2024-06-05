@@ -141,7 +141,7 @@ public class Model {
             }
         }
         spielerWechseln("sp");
-        System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen);
+        System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
 
 //        try {
 //            Thread.sleep(2000);
