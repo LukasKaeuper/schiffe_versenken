@@ -35,7 +35,6 @@ public class Model {
         spielfeldLinks.anzeigen();
         spielfeldRechts.anzeigen();
         spielfeldLinks.getSpieler().zugErhoehen();
-        //System.out.println();
     }
 
     public void ki_schiessen() {
@@ -45,7 +44,6 @@ public class Model {
                 kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
             }
         }
-
         spielfeldLinks.trefferMarkieren(kiSchussX, kiSchussY);
         spielfeldRechts.getSpieler().zugErhoehen();
         System.out.println("KI Schuss bei: (" + kiSchussX + ", " + kiSchussY + ")");
@@ -142,12 +140,6 @@ public class Model {
         }
         spielerWechseln("sp");
         System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
-
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     public static synchronized void playSound(final String url, boolean loop, float volume) {
@@ -212,11 +204,9 @@ public class Model {
         }
         spieler++;
         spieler %= 2;
-        //System.out.println();
     }
 
     public int getZuege() {
         return spielfeldLinks.getSpieler().getAnzahlZuege();
     }
-
 }
