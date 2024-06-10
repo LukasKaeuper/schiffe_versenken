@@ -58,13 +58,13 @@ public class Spielfeld {
                     for(int i = 0; i < laenge; i++){
                         spielfeld[y][x + i] = schiff;
                         //System.out.println("neue Koordinate");
-                        neuesSchiff.neueKoordinate(x, y+i);
+                        neuesSchiff.neueKoordinate(y, x+i);
                     }
                 } else {
                     for(int i = 0; i < laenge; i++){
                         spielfeld[y + i][x] = schiff;
                         //System.out.println("neue Koordinate");
-                        neuesSchiff.neueKoordinate(x+i, y);
+                        neuesSchiff.neueKoordinate(y+i, x);
                     }
                 }
                 schiffe.add(neuesSchiff);
