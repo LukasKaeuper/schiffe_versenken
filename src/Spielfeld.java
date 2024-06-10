@@ -21,16 +21,16 @@ public class Spielfeld {
         schiffe = new ArrayList<Schiff>();
         spieler = new Spieler("platzhalter");
         initialisiereSpielfeld();
-        schiffePlazieren(5);
-        schiffePlazieren(4);
-        schiffePlazieren(4);
-        schiffePlazieren(3);
-        schiffePlazieren(3);
-        schiffePlazieren(3);
-        schiffePlazieren(2);
-        schiffePlazieren(2);
-        schiffePlazieren(2);
-        schiffePlazieren(2);
+        schiffePlatzieren(5);
+        schiffePlatzieren(4);
+        schiffePlatzieren(4);
+        schiffePlatzieren(3);
+        schiffePlatzieren(3);
+        schiffePlatzieren(3);
+        schiffePlatzieren(2);
+        schiffePlatzieren(2);
+        schiffePlatzieren(2);
+        schiffePlatzieren(2);
         anzeigen();
     }
 
@@ -42,58 +42,66 @@ public class Spielfeld {
         }
     }
 
-    public void schiffePlazieren(int laenge){
+    public void schiffePlatzieren(int laenge){
         Random random = new Random();
-        boolean horizontal = random.nextBoolean();
-        int x = random.nextInt(spalte);;
-        int y = random.nextInt(reihe);;
+        boolean platziert = false;
 
-        if(checkPlazierung(x,y,laenge, horizontal) && checkAbstand(x,y,laenge, horizontal)){
-            Schiff neuesSchiff = new Schiff(horizontal,laenge,x,y);
+        while(!platziert){
+            boolean horizontal = random.nextBoolean();
+            int x = random.nextInt(spalte);
+            int y = random.nextInt(reihe);
 
-            if(horizontal){
-                for(int i = 0; i < laenge; i++){
-                    spielfeld[x][y + i] = schiff;
-                    //System.out.println("neue Koordinate");
-                    neuesSchiff.neueKoordinate(x, y+i);
+            if(checkPlatzierung(x,y,laenge, horizontal) && checkAbstand(x,y,laenge, horizontal)){
+                Schiff neuesSchiff = new Schiff(horizontal,laenge,x,y);
+
+                if(horizontal){
+                    for(int i = 0; i < laenge; i++){
+                        spielfeld[y][x + i] = schiff;
+                        //System.out.println("neue Koordinate");
+                        neuesSchiff.neueKoordinate(x, y+i);
+                    }
+                } else {
+                    for(int i = 0; i < laenge; i++){
+                        spielfeld[y + i][x] = schiff;
+                        //System.out.println("neue Koordinate");
+                        neuesSchiff.neueKoordinate(x+i, y);
+                    }
                 }
-            } else {
-                for(int i = 0; i < laenge; i++){
-                    spielfeld[x + i][y] = schiff;
-                    //System.out.println("neue Koordinate");
-                    neuesSchiff.neueKoordinate(x+i, y);
-                }
+                schiffe.add(neuesSchiff);
+                neuesSchiff.ausgabe();
+                platziert = true;
             }
-            schiffe.add(neuesSchiff);
-            neuesSchiff.ausgabe();
-
-        } else {
-            schiffePlazieren(laenge);
         }
     }
 
-    private boolean checkPlazierung(int x, int y, int laenge, boolean horizontal){
+    private boolean checkPlatzierung(int x, int y, int laenge, boolean horizontal){
         if(horizontal){
-            for (int i = 0; i < laenge; i++){
-                if(y + i >= spalte || spielfeld[x][y + i] != leer) {
-                    return false;
+            if (x + laenge > spalte){
+                for (int i = 0; i < laenge; i++){
+                    if(y + i >= spalte || spielfeld[x][y + i] != leer) {
+                        return false;
+                    }
                 }
+                return false;
             }
         } else {
-            for(int i = 0; i < laenge; i++){
-                if(x + i >= reihe || spielfeld[x + i][y] != leer){
-                    return false;
+            if (y + laenge > reihe){
+                for(int i = 0; i < laenge; i++){
+                    if(x + i >= reihe || spielfeld[x + i][y] != leer){
+                        return false;
+                    }
                 }
+                return false;
             }
         }
         return true;
     }
 
     private boolean checkAbstand(int x, int y, int laenge, boolean horizontal) {
-        int startReihe = Math.max(0, x - 1);
-        int endReihe = Math.min(reihe - 1, horizontal ? x + 1 : x + laenge);
-        int startSpalte = Math.max(0, y - 1);
-        int endSpalte = Math.min(spalte - 1, horizontal ? y + laenge : y + 1);
+        int startReihe = Math.max(0, y - 1);
+        int endReihe = horizontal ? Math.min(reihe - 1, y + 1) : Math.min(reihe - 1, y + laenge);
+        int startSpalte = Math.max(0, x - 1);
+        int endSpalte = horizontal ? Math.min(spalte - 1, x + laenge) : Math.min(spalte - 1, x + 1);
 
         for (int i = startReihe; i <= endReihe; i++) {
             for (int j = startSpalte; j <= endSpalte; j++) {
