@@ -1,20 +1,167 @@
+import javax.sound.sampled.*;
+import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Model {
     private Spielfeld spielfeldLinks = new Spielfeld();
     private Spielfeld spielfeldRechts = new Spielfeld();
-    int spieler = 1;
+    private int spieler = 1;
+    private int kiSchussX;
+    private int kiSchussY;
+    private boolean neuesSchiffSuchen = true;
+    private String suchRichtung = "unbekannt";
 
     public Model() {
-
+        playSound("ambience.wav", true, -10f);
+        this.kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
+        this.kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
     }
 
     public void schiessen(int n, int m) {
         //markiert das Stück vom Schiff was getroffen wurde
         spielfeldRechts.trefferMarkieren(n, m);
+        if (spielfeldRechts.getWert(n, m).equals("Schiff_getroffen")) {
+            playSound("kleine_explosion.wav", false, 3f);
+        }
+        else if (spielfeldRechts.getWert(n, m).equals("Komplettes_Schiff_getroffen")) {
+            playSound("große_explosion.wav", false, -6f);
+        }
+        else if (spielfeldRechts.getWert(n, m).equals("Wasser_getroffen")) {
+            playSound("wasser.wav", false, -6f);
+        }
         System.out.println("Schuss");
         spielfeldLinks.anzeigen();
         spielfeldRechts.anzeigen();
         spielfeldLinks.getSpieler().zugErhoehen();
-        //System.out.println();
+    }
+
+    public void ki_schiessen() {
+        if (neuesSchiffSuchen) {
+            while (!spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff") && !spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Wasser")) {
+                kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
+                kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
+            }
+        }
+        spielfeldLinks.trefferMarkieren(kiSchussX, kiSchussY);
+        spielfeldRechts.getSpieler().zugErhoehen();
+        System.out.println("KI Schuss bei: (" + kiSchussX + ", " + kiSchussY + ")");
+        if (spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff_getroffen")) {
+            neuesSchiffSuchen = false;
+            int ursprungsTrefferX = kiSchussX;
+            int ursprungstrefferY = kiSchussY;
+            int letzterTrefferX = kiSchussX;
+            int letzterTrefferY = kiSchussY;
+
+            while (!spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Wasser_getroffen")) {
+                if (letzterTrefferX+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("Wasser_getroffen") && (suchRichtung.equals("süden") || suchRichtung.equals("unbekannt"))) {
+                    spielfeldLinks.trefferMarkieren(letzterTrefferX+1, letzterTrefferY);
+                    spielfeldRechts.getSpieler().zugErhoehen();
+                    System.out.println("KI Schuss bei: (" + Integer.toString(letzterTrefferX+1) + ", " + letzterTrefferY + ")");
+                    if(spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("Schiff_getroffen")) {
+                        letzterTrefferX++;
+                        suchRichtung = "süden";
+                    } else {
+                        if (spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Komplettes_Schiff_getroffen")) {
+                            neuesSchiffSuchen = true;
+                            suchRichtung = "unbekannt";
+                            System.out.println("KI hat ganzes Schiff getroffen!");
+                        }
+                        break;
+                    }
+                }
+                else if (letzterTrefferY+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("Wasser_getroffen") && (suchRichtung.equals("westen") || suchRichtung.equals("unbekannt"))) {
+                    spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY+1);
+                    spielfeldRechts.getSpieler().zugErhoehen();
+                    System.out.println("KI Schuss bei: (" + letzterTrefferX + ", " + Integer.toString(letzterTrefferY+1) + ")");
+                    if(spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("Schiff_getroffen")) {
+                        letzterTrefferY++;
+                        suchRichtung = "westen";
+                    } else {
+                        if (spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Komplettes_Schiff_getroffen")) {
+                            neuesSchiffSuchen = true;
+                            suchRichtung = "unbekannt";
+                            System.out.println("KI hat ganzes Schiff getroffen!");
+                        }
+                        break;
+                    }
+                }
+                else if (letzterTrefferX-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("Wasser_getroffen") && (suchRichtung.equals("norden") || suchRichtung.equals("unbekannt"))) {
+                    spielfeldLinks.trefferMarkieren(letzterTrefferX-1, letzterTrefferY);
+                    spielfeldRechts.getSpieler().zugErhoehen();
+                    System.out.println("KI Schuss bei: (" + Integer.toString(letzterTrefferX-1) + ", " + letzterTrefferY + ")");
+                    if(spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("Schiff_getroffen")) {
+                        letzterTrefferX--;
+                        suchRichtung = "norden";
+                    } else {
+                        if (spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Komplettes_Schiff_getroffen")) {
+                            neuesSchiffSuchen = true;
+                            suchRichtung = "unbekannt";
+                            System.out.println("KI hat ganzes Schiff getroffen!");
+                        }
+                        break;
+                    }
+                }
+                else if (letzterTrefferY-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("Wasser_getroffen") && (suchRichtung.equals("osten") || suchRichtung.equals("unbekannt"))) {
+                    spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY-1);
+                    spielfeldRechts.getSpieler().zugErhoehen();
+                    System.out.println("KI Schuss bei: (" + letzterTrefferX + ", " + Integer.toString(letzterTrefferY-1) + ")");
+                    if(spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("Schiff_getroffen")) {
+                        letzterTrefferY--;
+                        suchRichtung = "osten";
+                    } else {
+                        if (spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Komplettes_Schiff_getroffen")) {
+                            neuesSchiffSuchen = true;
+                            suchRichtung = "unbekannt";
+                            System.out.println("KI hat ganzes Schiff getroffen!");
+                        }
+                        break;
+                    }
+                } else {
+                    letzterTrefferX = ursprungsTrefferX;
+                    letzterTrefferY = ursprungstrefferY;
+                    switch (suchRichtung) {
+                        case "norden":
+                            suchRichtung = "süden";
+                            break;
+                        case "süden":
+                            suchRichtung = "norden";
+                            break;
+                        case "westen":
+                            suchRichtung = "osten";
+                            break;
+                        case "osten":
+                            suchRichtung = "westen";
+                            break;
+                    }
+                }
+            }
+        }
+        spielerWechseln("sp");
+        System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
+    }
+
+    public static synchronized void playSound(final String url, boolean loop, float volume) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Clip clip = AudioSystem.getClip();
+                    Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
+                    File file = new File(path + "/Sound/" + url);
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
+                    clip.open(inputStream);
+                    FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                    gainControl.setValue(volume);
+                    clip.start();
+                    if (loop) {
+                        clip.loop(Clip.LOOP_CONTINUOUSLY);
+                    }
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
     }
 
     public boolean beendet() {
@@ -46,16 +193,17 @@ public class Model {
         };
     }
 
-    public void spielerWechseln() {
-        Spielfeld temp = spielfeldLinks;
-        spielfeldLinks = spielfeldRechts;
-        spielfeldRechts = temp;
+    public void spielerWechseln(String modus) {
+        if (!modus.equals("sp")) {
+            Spielfeld temp = spielfeldLinks;
+            spielfeldLinks = spielfeldRechts;
+            spielfeldRechts = temp;
+            System.out.println("Seitenwechsel");
+            spielfeldLinks.anzeigen();
+            spielfeldRechts.anzeigen();
+        }
         spieler++;
         spieler %= 2;
-        System.out.println("Seitenwechsel");
-        spielfeldLinks.anzeigen();
-        spielfeldRechts.anzeigen();
-        //System.out.println();
     }
 
     public int getZuege() {

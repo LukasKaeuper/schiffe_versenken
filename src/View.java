@@ -1,28 +1,33 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.Observable;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-
 
 public class View extends JFrame {
     private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];
     private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];
     private JTextField status;
     private JTextField zuege;
-    private JTextField schiffe;
+    private JTextField schiffeEigen;
+    private JTextField schiffeGegner;
+    private JPanel container;
+    private GamePanel panelSpielfeldEigen;
+    private GamePanel panelSpielfeldGegner;
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
-    public View() {
+    public View(ActionListener sp) {
         super("Schiffe Versenken");
-        new Menu();
+        new Menu(sp);
         fensterGenerieren();
     }
 
@@ -38,48 +43,124 @@ public class View extends JFrame {
         status.setFont(font1);
         status.setSize(1500,200);
         add(status, BorderLayout.NORTH);
+        status.setEditable(false);
+        status.setCaretColor(UIManager.getColor("Panel.background"));
 
-        zuege = new JTextField("Anzahl an Zuegen: 0");
+        zuege = new JTextField("Anzahl an Zügen: 0");
 
         add(zuege, BorderLayout.SOUTH);
         zuege.setHorizontalAlignment(JTextField.CENTER);
         zuege.setFont(font1);
+        zuege.setEditable(false);
+        zuege.setCaretColor(UIManager.getColor("Panel.background"));
 
+        schiffeEigen = new JTextField();
+        schiffeEigen.setFont(font1);
+        schiffeEigen.setSize(200, 200);
+        schiffeEigen.setEditable(false);
+        schiffeEigen.setCaretColor(UIManager.getColor("Panel.background"));
 
-        schiffe = new JTextField();
-        schiffe.setFont(font1);
-        schiffe.setSize(200, 200);
+        schiffeGegner = new JTextField();
+        schiffeGegner.setFont(font1);
+        schiffeGegner.setSize(200, 200);
+        schiffeGegner.setEditable(false);
+        schiffeGegner.setCaretColor(UIManager.getColor("Panel.background"));
 
-        JPanel container = new JPanel();
+        container = new JPanel();
+        container.setLayout(new GridBagLayout());
 
-        GamePanel panelSpielfeldEigen = new GamePanel("Eigen");
-        GamePanel panelSpielfeldGegner = new GamePanel("Gegner");
+        panelSpielfeldEigen = new GamePanel("Eigen");
+        panelSpielfeldGegner = new GamePanel("Gegner");
 
-        container.add(schiffe);
         Dimension textFieldSize = new Dimension(50, 30);
-        schiffe.setPreferredSize(textFieldSize);
+        schiffeEigen.setPreferredSize(textFieldSize);
+        schiffeGegner.setPreferredSize(textFieldSize);
 
         Dimension panelSize = new Dimension(700, 700);
         panelSpielfeldEigen.setPreferredSize(panelSize);
         panelSpielfeldGegner.setPreferredSize(panelSize);
+        container.add(schiffeEigen);
         container.add(panelSpielfeldEigen);
         container.add(panelSpielfeldGegner);
+        container.add(schiffeGegner);
         add(container, BorderLayout.CENTER);
     }
 
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
-            zuege.setText("Anzahl an Zuegen: " + anzahlZuege);
+            zuege.setText("Anzahl an Zügen: " + anzahlZuege);
             //System.out.println("spieler 1 aktualisiert");
         }
         else if (spieler == 2) {
-            zuege.setText("Anzahl an Zuegen: " + anzahlZuege);
+            zuege.setText("Anzahl an Zügen: " + anzahlZuege);
             //System.out.println("spieler 2 aktualisiert");
         }
     }
 
-    private void spielFensterSichtbar(){
+    public void spielFensterSichtbar(){
         setVisible(true);
+    }
+
+    public void rundenwechselBestaetigen() {
+        panelSpielfeldEigen.setVisible(false);
+        panelSpielfeldGegner.setVisible(false);
+        schiffeEigen.setVisible(false);
+        schiffeGegner.setVisible(false);
+        zuege.setVisible(false);
+        container.removeAll();
+//        container.setVisible(false);
+
+        // Einstellungen Button
+        JButton neueRundeButton = new JButton("Runde beginnen");
+        neueRundeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        neueRundeButton.setPreferredSize(new Dimension(300, 100));
+        neueRundeButton.setFont(new Font("SansSerif", Font.BOLD, 25));
+
+        // Panel für die Buttons
+        JPanel buttonPanel = new JPanel();
+//        buttonPanel.setOpaque(false);  // Macht das Panel transparent
+//        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setLayout(new BorderLayout());
+        buttonPanel.add(neueRundeButton, BorderLayout.CENTER);
+
+        //container.setLayout(new GridBagLayout());
+        container.add(buttonPanel);
+
+        neueRundeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //System.out.println("neue Runde gedrückt");
+
+                buttonPanel.removeAll();
+
+                //container = new JPanel();
+
+                container.add(schiffeEigen);
+                container.add(panelSpielfeldEigen);
+                container.add(panelSpielfeldGegner);
+                container.add(schiffeGegner);
+                container.remove(buttonPanel);
+                //add(container, BorderLayout.CENTER);
+
+                panelSpielfeldEigen.setVisible(true);
+                panelSpielfeldGegner.setVisible(true);
+                schiffeEigen.setVisible(true);
+                schiffeGegner.setVisible(true);
+                zuege.setVisible(true);
+
+                // Panel neu validieren und neu zeichnen
+//                buttonPanel.revalidate();
+//                buttonPanel.repaint();
+            }
+        });
+    }
+
+    public void listenerEntfernen(ActionListener al) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                this.buttonSpielfeldGegner[i][j].removeActionListener(al);
+            }
+        }
     }
 
     class GamePanel extends JPanel {
@@ -100,11 +181,9 @@ public class View extends JFrame {
         }
     }
 
-    public void erstelleListener(ActionListener al) {
+    public void erstelleSpielfeldListener(ActionListener al) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                //this.buttonSpielfeldEigen[i][j].setActionCommand("" + i + j);
-                //this.buttonSpielfeldEigen[i][j].addActionListener(al);
                 this.buttonSpielfeldGegner[i][j].setActionCommand("" + i + j);
                 this.buttonSpielfeldGegner[i][j].addActionListener(al);
             }
@@ -196,7 +275,7 @@ public class View extends JFrame {
 
     public class Menu extends JFrame {
 
-        public Menu() {
+        public Menu(ActionListener sp) {
             // Fenster initialisieren
             setTitle("Schiffe Versenken");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -255,7 +334,6 @@ public class View extends JFrame {
             regelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             buttonPanel.add(regelButton);
 
-
             // Create the hover window
             JFrame hoverFrame = new JFrame("Regeln");
             hoverFrame.setSize(600, 600);
@@ -263,8 +341,8 @@ public class View extends JFrame {
             hoverFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
             // Create the label for hover text
-            JLabel hoverTextLabel = new JLabel("<html>Regeln<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie abfeuern möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: Insgesamt 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
-            hoverTextLabel.setForeground(Color.BLUE);
+            JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/>Regeln<br/><br/>Die Schiffe dürfen nicht aneinander liegen sondern haben immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie abfeuern möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: Insgesamt 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
+            hoverTextLabel.setForeground(Color.BLACK);
 
             // Add the label to the hover window
             hoverFrame.add(hoverTextLabel);
@@ -299,11 +377,8 @@ public class View extends JFrame {
             background.add(buttonPanel, gbc);
 
             // ActionListener für die Buttons
-            singlePlayerButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                }
-            });
+
+            singlePlayerButton.addActionListener(sp);
 
             multiPlayerButton.addActionListener(new ActionListener() {
                 @Override
@@ -372,6 +447,5 @@ public class View extends JFrame {
 
             setVisible(true);
         }
-
     }
 }
