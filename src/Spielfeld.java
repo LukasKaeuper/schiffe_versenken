@@ -78,7 +78,7 @@ public class Spielfeld {
         if(horizontal){
             if (x + laenge > spalte){
                 for (int i = 0; i < laenge; i++){
-                    if(y + i >= spalte || spielfeld[x][y + i] != leer) {
+                    if(x + i >= spalte || spielfeld[y][x + i] != leer) {
                         return false;
                     }
                 }
@@ -87,7 +87,7 @@ public class Spielfeld {
         } else {
             if (y + laenge > reihe){
                 for(int i = 0; i < laenge; i++){
-                    if(x + i >= reihe || spielfeld[x + i][y] != leer){
+                    if(y + i >= reihe || spielfeld[y + i][x] != leer){
                         return false;
                     }
                 }
