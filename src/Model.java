@@ -67,6 +67,7 @@ public class Model {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
                             System.out.println("KI hat ganzes Schiff getroffen!");
+                            ki_schiessen();
                         }
                         break;
                     }
@@ -83,6 +84,7 @@ public class Model {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
                             System.out.println("KI hat ganzes Schiff getroffen!");
+                            ki_schiessen();
                         }
                         break;
                     }
@@ -99,6 +101,7 @@ public class Model {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
                             System.out.println("KI hat ganzes Schiff getroffen!");
+                            ki_schiessen();
                         }
                         break;
                     }
@@ -115,6 +118,7 @@ public class Model {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
                             System.out.println("KI hat ganzes Schiff getroffen!");
+                            ki_schiessen();
                         }
                         break;
                     }
