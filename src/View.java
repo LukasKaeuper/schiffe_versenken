@@ -341,8 +341,8 @@ public class View extends JFrame {
             hoverFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
             // Create the label for hover text
-            JLabel hoverTextLabel = new JLabel("<html>Regeln<br/><br/>Die Schiffe dürfen nicht aneinander liegen sondern haben immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie abfeuern möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: Insgesamt 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
-            hoverTextLabel.setForeground(Color.BLUE);
+            JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/>Regeln<br/><br/>Die Schiffe dürfen nicht aneinander liegen sondern haben immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie abfeuern möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: Insgesamt 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
+            hoverTextLabel.setForeground(Color.BLACK);
 
             // Add the label to the hover window
             hoverFrame.add(hoverTextLabel);

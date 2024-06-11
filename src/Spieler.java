@@ -2,7 +2,6 @@ public class Spieler {
     private String name;
     private int anzahlZuege = 0;
     private int anzahlSchiffe = 10;
-    ;
 
     public Spieler(String name){
         this.name = name;
