@@ -67,7 +67,9 @@ public class Model {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
                             System.out.println("KI hat ganzes Schiff getroffen!");
+                            System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
                             ki_schiessen();
+                            return;
                         }
                         break;
                     }
@@ -84,7 +86,9 @@ public class Model {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
                             System.out.println("KI hat ganzes Schiff getroffen!");
+                            System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
                             ki_schiessen();
+                            return;
                         }
                         break;
                     }
@@ -101,7 +105,9 @@ public class Model {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
                             System.out.println("KI hat ganzes Schiff getroffen!");
+                            System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
                             ki_schiessen();
+                            return;
                         }
                         break;
                     }
@@ -118,7 +124,9 @@ public class Model {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
                             System.out.println("KI hat ganzes Schiff getroffen!");
+                            System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
                             ki_schiessen();
+                            return;
                         }
                         break;
                     }
