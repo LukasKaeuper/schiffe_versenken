@@ -76,7 +76,7 @@ public class Spielfeld {
 
     private boolean checkPlatzierung(int x, int y, int laenge, boolean horizontal){
         if(horizontal){
-            if (x + laenge > spalte - 1){
+            if (x + laenge > spalte){
                 for (int i = 0; i < laenge; i++){
                     if(x + i >= spalte || spielfeld[y][x + i] != leer) {
                         return false;
@@ -85,7 +85,7 @@ public class Spielfeld {
                 return false;
             }
         } else {
-            if (y + laenge > reihe - 1){
+            if (y + laenge > reihe){
                 for(int i = 0; i < laenge; i++){
                     if(y + i >= reihe || spielfeld[y + i][x] != leer){
                         return false;
