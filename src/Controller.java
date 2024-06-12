@@ -10,7 +10,7 @@ public class Controller {
 
     public Controller() {
         this.model = new Model();
-        this.view = new View(new SingleplayerListener());
+        this.view = new View(new SingleplayerListener(), this);
         this.view.erstelleSpielfeldListener(new SpielfeldListener());
         this.modus = "lokal_mp";
     }

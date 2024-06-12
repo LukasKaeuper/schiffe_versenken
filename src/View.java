@@ -22,12 +22,14 @@ public class View extends JFrame {
     private JPanel container;
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
+    private Controller controller;
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
-    public View(ActionListener sp) {
+    public View(ActionListener sp, Controller controller) {
         super("Schiffe Versenken");
         new Menu(sp);
+        this.controller = controller;
         fensterGenerieren();
     }
 
