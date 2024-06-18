@@ -39,7 +39,7 @@ public class Model {
 
     public void ki_schiessen() {
         if (neuesSchiffSuchen) {
-            while (!spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff") && !spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Wasser")) {
+            while (!spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff") && !spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Wasser") || spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("unmoeglich")) {
                 kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
                 kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
             }
@@ -55,7 +55,7 @@ public class Model {
             int letzterTrefferY = kiSchussY;
 
             while (!spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Wasser_getroffen")) {
-                if (letzterTrefferX+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("Wasser_getroffen") && (suchRichtung.equals("süden") || suchRichtung.equals("unbekannt"))) {
+                if (letzterTrefferX+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("unmoeglich") && (suchRichtung.equals("süden") || suchRichtung.equals("unbekannt"))) {
                     spielfeldLinks.trefferMarkieren(letzterTrefferX+1, letzterTrefferY);
                     spielfeldRechts.getSpieler().zugErhoehen();
                     System.out.println("KI Schuss bei: (" + Integer.toString(letzterTrefferX+1) + ", " + letzterTrefferY + ")");
@@ -74,7 +74,7 @@ public class Model {
                         break;
                     }
                 }
-                else if (letzterTrefferY+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("Wasser_getroffen") && (suchRichtung.equals("westen") || suchRichtung.equals("unbekannt"))) {
+                else if (letzterTrefferY+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("unmoeglich") && (suchRichtung.equals("westen") || suchRichtung.equals("unbekannt"))) {
                     spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY+1);
                     spielfeldRechts.getSpieler().zugErhoehen();
                     System.out.println("KI Schuss bei: (" + letzterTrefferX + ", " + Integer.toString(letzterTrefferY+1) + ")");
@@ -93,7 +93,7 @@ public class Model {
                         break;
                     }
                 }
-                else if (letzterTrefferX-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("Wasser_getroffen") && (suchRichtung.equals("norden") || suchRichtung.equals("unbekannt"))) {
+                else if (letzterTrefferX-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("unmoeglich") && (suchRichtung.equals("norden") || suchRichtung.equals("unbekannt"))) {
                     spielfeldLinks.trefferMarkieren(letzterTrefferX-1, letzterTrefferY);
                     spielfeldRechts.getSpieler().zugErhoehen();
                     System.out.println("KI Schuss bei: (" + Integer.toString(letzterTrefferX-1) + ", " + letzterTrefferY + ")");
@@ -112,7 +112,7 @@ public class Model {
                         break;
                     }
                 }
-                else if (letzterTrefferY-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("Wasser_getroffen") && (suchRichtung.equals("osten") || suchRichtung.equals("unbekannt"))) {
+                else if (letzterTrefferY-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("unmoeglich") && (suchRichtung.equals("osten") || suchRichtung.equals("unbekannt"))) {
                     spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY-1);
                     spielfeldRechts.getSpieler().zugErhoehen();
                     System.out.println("KI Schuss bei: (" + letzterTrefferX + ", " + Integer.toString(letzterTrefferY-1) + ")");

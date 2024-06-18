@@ -22,13 +22,13 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("spieler: " + model.getSpieler());
             //System.out.println("Button gedrückt");
             // Index aus View holen
             String dummy = e.getActionCommand();
             int n = Integer.parseInt(dummy.substring(0, 1));
             int m = Integer.parseInt(dummy.substring(dummy.length() - 1));
             if (model.getWert(n, m, "Gegner").equals("Wasser") || model.getWert(n, m, "Gegner").equals("Schiff")) {
+                System.out.println("spieler: " + model.getSpieler());
                 model.schiessen(n, m);
                 if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen") && !modus.equals("sp")) {
                     model.spielerWechseln("lokal_mp");

@@ -5,11 +5,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Spielfeld {
     private final int reihe = 10;
     private final int spalte = 10;
-    private final int leer = 0;
+    private final int wasser = 0;
     private final int schiff = 1;
-    private final int leer_getroffen = 2;
+    private final int wasser_getroffen = 2;
     private final int schiff_getroffen = 3;
     private final int komplettes_schiff_getroffen = 4;
+    private final int unmoeglich = 5;
     private Spieler spieler;
 
     private final int[][] spielfeld;
@@ -37,7 +38,7 @@ public class Spielfeld {
     public void initialisiereSpielfeld() {
         for (int i = 0; i < reihe; i++) {
             for (int j = 0; j < spalte; j++) {
-                spielfeld[i][j] = leer;
+                spielfeld[i][j] = wasser;
             }
         }
     }
@@ -78,7 +79,7 @@ public class Spielfeld {
         if(horizontal){
             if (x + laenge > spalte){
                 for (int i = 0; i < laenge; i++){
-                    if(x + i >= spalte || spielfeld[y][x + i] != leer) {
+                    if(x + i >= spalte || spielfeld[y][x + i] != wasser) {
                         return false;
                     }
                 }
@@ -87,7 +88,7 @@ public class Spielfeld {
         } else {
             if (y + laenge > reihe){
                 for(int i = 0; i < laenge; i++){
-                    if(y + i >= reihe || spielfeld[y + i][x] != leer){
+                    if(y + i >= reihe || spielfeld[y + i][x] != wasser){
                         return false;
                     }
                 }
@@ -105,7 +106,7 @@ public class Spielfeld {
 
         for (int i = startReihe; i <= endReihe; i++) {
             for (int j = startSpalte; j <= endSpalte; j++) {
-                if (spielfeld[i][j] != leer) {
+                if (spielfeld[i][j] != wasser) {
                     return false;
                 }
             }
@@ -117,10 +118,10 @@ public class Spielfeld {
         if (spielfeld[x][y] == schiff) {
             return "Schiff";
         }
-        else if (spielfeld[x][y] == leer) {
+        else if (spielfeld[x][y] == wasser) {
             return "Wasser";
         }
-        else if (spielfeld[x][y] == leer_getroffen) {
+        else if (spielfeld[x][y] == wasser_getroffen) {
             return "Wasser_getroffen";
         }
         else if (spielfeld[x][y] == schiff_getroffen) {
@@ -128,6 +129,9 @@ public class Spielfeld {
         }
         else if (spielfeld[x][y] == komplettes_schiff_getroffen) {
             return "Komplettes_Schiff_getroffen";
+        }
+        else if (spielfeld[x][y] == unmoeglich) {
+            return "unmoeglich";
         }
         else {
             return null;
@@ -146,13 +150,14 @@ public class Spielfeld {
     }
 
     public void trefferMarkieren(int x, int y) {
-        if (spielfeld[x][y] == leer) {
-            spielfeld[x][y] = leer_getroffen;
+        if (spielfeld[x][y] == wasser) {
+            spielfeld[x][y] = wasser_getroffen;
         }
         if (spielfeld[x][y] == schiff) {
             spielfeld[x][y] = schiff_getroffen;
         }
         ganzesSchiffGetroffen(x, y);
+        unmoeglicheFelderMarkieren(x, y);
     }
 
     public void ganzesSchiffGetroffen(int x, int y) {
@@ -174,6 +179,49 @@ public class Spielfeld {
                     }
                 }
             });
+        }
+    }
+
+    public void unmoeglicheFelderMarkieren(int x, int y) {
+        if (spielfeld[x][y] == schiff_getroffen || spielfeld[x][y] == komplettes_schiff_getroffen) {
+            if (x-1 >= 0 && y-1 >= 0 && spielfeld[x-1][y-1] != wasser_getroffen) {
+                spielfeld[x-1][y-1] = unmoeglich;
+            }
+            if (x-1 >= 0 && y+1 <= 9 && spielfeld[x-1][y+1] != wasser_getroffen) {
+                spielfeld[x-1][y+1] = unmoeglich;
+            }
+            if (x+1 <= 9 && y-1 >= 0 && spielfeld[x+1][y-1] != wasser_getroffen) {
+                spielfeld[x+1][y-1] = unmoeglich;
+            }
+            if (x+1 <= 9 && y+1 <= 9 && spielfeld[x+1][y+1] != wasser_getroffen) {
+                spielfeld[x+1][y+1] = unmoeglich;
+            }
+        }
+        if (spielfeld[x][y] == komplettes_schiff_getroffen) {
+            for (Schiff n : schiffe) {
+                n.getKoordinaten().forEach((m) -> {
+                    if (m.x.equals(x) && m.y.equals(y)) {
+                        n.getKoordinaten().forEach((k) -> {
+                            himmelsrichtungenAlsUnmoeglichMarkieren(k.getX(), k.getY());
+                        });
+                    }
+                });
+            }
+        }
+    }
+
+    private void himmelsrichtungenAlsUnmoeglichMarkieren(int x, int y) {
+        if (x-1 >= 0 && spielfeld[x-1][y] != wasser_getroffen && spielfeld[x-1][y] != schiff_getroffen && spielfeld[x-1][y] != komplettes_schiff_getroffen) {
+            spielfeld[x-1][y] = unmoeglich;
+        }
+        if (y-1 >= 0 && spielfeld[x][y-1] != wasser_getroffen && spielfeld[x][y-1] != schiff_getroffen && spielfeld[x][y-1] != komplettes_schiff_getroffen) {
+            spielfeld[x][y-1] = unmoeglich;
+        }
+        if (x+1 <= 9 && spielfeld[x+1][y] != wasser_getroffen && spielfeld[x+1][y] != schiff_getroffen && spielfeld[x+1][y] != komplettes_schiff_getroffen) {
+            spielfeld[x+1][y] = unmoeglich;
+        }
+        if (y+1 <= 9 && spielfeld[x][y+1] != wasser_getroffen && spielfeld[x][y+1] != schiff_getroffen && spielfeld[x][y+1] != komplettes_schiff_getroffen) {
+            spielfeld[x][y+1] = unmoeglich;
         }
     }
 

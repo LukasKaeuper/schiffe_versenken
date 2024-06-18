@@ -233,6 +233,12 @@ public class View extends JFrame {
             buttonSpielfeldGegner[i][j].setBackground(Color.BLUE);
             buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+        } else if (spieler.equals("Gegner") && temp.equals("unmoeglich")) {
+            buttonSpielfeldGegner[i][j].setText("X");
+            buttonSpielfeldGegner[i][j].setBackground(null);
+            buttonSpielfeldGegner[i][j].setForeground(Color.RED);
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.BOLD, 40));
+            //buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
         } else {
             buttonSpielfeldGegner[i][j].setText("");
             buttonSpielfeldGegner[i][j].setBackground(null);
