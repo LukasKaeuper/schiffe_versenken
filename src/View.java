@@ -237,7 +237,7 @@ public class View extends JFrame {
             buttonSpielfeldGegner[i][j].setText("X");
             buttonSpielfeldGegner[i][j].setBackground(null);
             buttonSpielfeldGegner[i][j].setForeground(Color.RED);
-            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.BOLD, 40));
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 40));
             //buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
         } else {
             buttonSpielfeldGegner[i][j].setText("");
