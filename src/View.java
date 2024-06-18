@@ -68,23 +68,44 @@ public class View extends JFrame {
         schiffeGegner.setEditable(false);
         schiffeGegner.setCaretColor(UIManager.getColor("Panel.background"));
 
-        container = new JPanel();
-        container.setLayout(new GridBagLayout());
-
         panelSpielfeldEigen = new GamePanel("Eigen");
         panelSpielfeldGegner = new GamePanel("Gegner");
-
-        Dimension textFieldSize = new Dimension(50, 30);
-        schiffeEigen.setPreferredSize(textFieldSize);
-        schiffeGegner.setPreferredSize(textFieldSize);
 
         Dimension panelSize = new Dimension(700, 700);
         panelSpielfeldEigen.setPreferredSize(panelSize);
         panelSpielfeldGegner.setPreferredSize(panelSize);
-        container.add(schiffeEigen);
-        container.add(panelSpielfeldEigen);
-        container.add(panelSpielfeldGegner);
-        container.add(schiffeGegner);
+
+        container = new JPanel();
+        container.setLayout(new GridBagLayout());
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 0.5;
+        c.weighty = 1;
+        container.add(schiffeEigen, c);
+        c.gridx = 1;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.weighty = 1;
+        container.add(panelSpielfeldEigen, c);
+        c.gridx = 2;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.weighty = 1;
+        container.add(panelSpielfeldGegner, c);
+        c.gridx = 3;
+        c.gridy = 0;
+        c.weightx = 0.5;
+        c.weighty = 1;
+        container.add(schiffeGegner, c);
+
+//        Dimension textFieldSize = new Dimension(50, 30);
+//        schiffeEigen.setPreferredSize(textFieldSize);
+//        schiffeGegner.setPreferredSize(textFieldSize);
+
         add(container, BorderLayout.CENTER);
     }
 
@@ -198,51 +219,61 @@ public class View extends JFrame {
             buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
             buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
         } else if (spieler.equals("Eigen") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("X");
             buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
             buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
         } else if (spieler.equals("Eigen") && temp.equals("Wasser")) {
             buttonSpielfeldEigen[i][j].setText("O");
             buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
             buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+            //buttonSpielfeldEigen[i][j].setIcon(new ImageIcon("Bilder/waves.gif"));
         } else if (spieler.equals("Eigen") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("O");
             buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
             buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
         } else if (spieler.equals("Eigen") && temp.equals("Komplettes_Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("X");
             buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
             buttonSpielfeldEigen[i][j].setForeground(Color.RED);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
         } else if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("X");
             buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
             buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
         } else if (spieler.equals("Gegner") && temp.equals("Komplettes_Schiff_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("X");
             buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
             buttonSpielfeldGegner[i][j].setForeground(Color.RED);
             buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
         } else if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("O");
             buttonSpielfeldGegner[i][j].setBackground(Color.BLUE);
             buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+            //buttonSpielfeldGegner[i][j].setIcon(new ImageIcon("Bilder/waves.gif"));
         } else if (spieler.equals("Gegner") && temp.equals("unmoeglich")) {
             buttonSpielfeldGegner[i][j].setText("X");
             buttonSpielfeldGegner[i][j].setBackground(null);
             buttonSpielfeldGegner[i][j].setForeground(Color.RED);
             buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 40));
-            //buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
         } else {
             buttonSpielfeldGegner[i][j].setText("");
             buttonSpielfeldGegner[i][j].setBackground(null);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
         }
     }
 
