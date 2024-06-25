@@ -1,16 +1,15 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 public class View extends JFrame {
     private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];
@@ -23,6 +22,9 @@ public class View extends JFrame {
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
     private Controller controller;
+    private DefaultTableModel tableModel;
+    private JTable table;
+    private ArrayList<Spieler> spieler;
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
@@ -78,6 +80,24 @@ public class View extends JFrame {
         container = new JPanel();
         container.setLayout(new GridBagLayout());
 
+        Dimension buttonSize = new Dimension(150, 50);
+
+        JButton bestenlistebutton = new JButton("Bestenliste");
+        bestenlistebutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bestenlisteGenerieren();
+            }
+        });
+
+        JButton zurueckHauptmenue = new JButton("Hauptmenü");
+        zurueckHauptmenue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.BOTH;
@@ -101,6 +121,24 @@ public class View extends JFrame {
         c.weightx = 0.5;
         c.weighty = 1;
         container.add(schiffeGegner, c);
+        c.gridx = 2;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(10, 0, 10, 10); // Abstände um den Button herum
+        c.fill = GridBagConstraints.NONE;
+        container.add(bestenlistebutton, c);
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.EAST;
+        c.insets = new Insets(10, 0, 10, 10); // Abstände um den Button herum
+        c.fill = GridBagConstraints.NONE;
+        container.add(zurueckHauptmenue, c);
+
+
 
 //        Dimension textFieldSize = new Dimension(50, 30);
 //        schiffeEigen.setPreferredSize(textFieldSize);
@@ -108,6 +146,66 @@ public class View extends JFrame {
 
         add(container, BorderLayout.CENTER);
     }
+
+    public void bestenlisteGenerieren(){
+        panelSpielfeldEigen.setVisible(false);
+        panelSpielfeldGegner.setVisible(false);
+        schiffeEigen.setVisible(false);
+        schiffeGegner.setVisible(false);
+        zuege.setVisible(false);
+        container.removeAll();
+
+        Font font1 = new Font("SansSerif", Font.BOLD, 20);
+
+        remove(status);
+        status = new JTextField("Bestenliste");
+        status.setHorizontalAlignment(JTextField.CENTER);
+        status.setFont(font1);
+        status.setSize(1500,200);
+        add(status, BorderLayout.NORTH);
+        status.setEditable(false);
+        status.setCaretColor(UIManager.getColor("Panel.background"));
+
+        tableModel = new DefaultTableModel(new Object[]{"Rang", "Name", "Züge", "Datum"}, 0);
+
+        table = new JTable(tableModel) {
+            @Override
+            public Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (row == 0 && column == 0) {
+                    c.setForeground(Color.ORANGE);
+                } else {
+                    c.setForeground(Color.BLACK);
+                }
+                return c;
+            }
+        };
+
+        table.setFocusable(false);
+        table.setRowSelectionAllowed(false);
+        table.setColumnSelectionAllowed(false);
+        table.setCellSelectionEnabled(false);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+
+
+        for (int i = 1; i <= 10; i++) {  // Beispielhaft 10 Ränge
+            tableModel.addRow(new Object[]{i, "", "", ""});
+        }
+
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(10, 0, 10, 10); // Abstände um den Button herum
+        gbc.fill = GridBagConstraints.NONE;
+        container.add(scrollPane, gbc);
+    }
+
 
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
@@ -441,12 +539,12 @@ public class View extends JFrame {
                     JButton onlineButton = new JButton("Online");
                     onlineButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                     onlineButton.setMaximumSize(buttonSize);
-                    onlineButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            System.out.println("Online Button gedrückt");
-                        }
-                    });
+                onlineButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println("Online Button gedrückt");
+                    }
+                });
 
                     buttonPanel.add(localButton);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
