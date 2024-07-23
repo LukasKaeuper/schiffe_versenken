@@ -19,8 +19,6 @@ public class View extends JFrame {
     private JTextField zuege;
     private JPanel schiffanzeigeEigen;
     private JPanel schiffanzeigeGegner;
-    ArrayList<Schiffeintrag> eigeneSchiffe;
-    ArrayList<Schiffeintrag> gegnerSchiffe;
     private JPanel container;
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
@@ -32,8 +30,6 @@ public class View extends JFrame {
         super("Schiffe Versenken");
         new Menu(sp);
         this.controller = controller;
-        eigeneSchiffe = new ArrayList<>();
-        gegnerSchiffe = new ArrayList<>();
         fensterGenerieren();
     }
 
@@ -193,7 +189,6 @@ public class View extends JFrame {
     }
 
     public void rundenwechselBestaetigen() {
-        JPanel temp = new JPanel();
         panelSpielfeldEigen.setVisible(false);
         panelSpielfeldGegner.setVisible(false);
         schiffanzeigeEigen.setVisible(false);
@@ -203,6 +198,7 @@ public class View extends JFrame {
 //        container.setVisible(false);
 
         // Schiffanzeigen tauschen
+        JPanel temp = new JPanel();
         for (Component c: schiffanzeigeEigen.getComponents()){
             temp.add(c);
         }
@@ -347,6 +343,10 @@ public class View extends JFrame {
 //            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
+            if (buttonSpielfeldEigen[i][j].getIcon() == null) {
+                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(new ImageIcon("Bilder/Logo/horizontal_waves.gif").getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
+            }
         } else if (spieler.equals("Eigen") && temp.equals("Komplettes_Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setText("X");
             buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
@@ -382,7 +382,7 @@ public class View extends JFrame {
 //            buttonSpielfeldGegner[i][j].setText("O");
 //            buttonSpielfeldGegner[i][j].setBackground(Color.BLUE);
 //            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
-//            buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+            buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
               buttonSpielfeldGegner[i][j].setBackground(Color.decode("#0277bd"));
             if (buttonSpielfeldGegner[i][j].getIcon() == null) {
