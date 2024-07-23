@@ -36,6 +36,10 @@ public class Schiff {
         //System.out.println("Schiff der Länge : " + this.laenge + " abgeschossen");
     }
 
+    public int getLaenge(){
+        return laenge;
+    }
+
     public static class Koordinatenpaar<X, Y> {
         public final X x;
         public final Y y;

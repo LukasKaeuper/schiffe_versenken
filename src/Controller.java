@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,7 +8,7 @@ public class Controller {
     private String modus;
 
     public Controller() {
-        this.model = new Model();
+        this.model = new Model(this);
         this.view = new View(new SingleplayerListener(), this);
         this.view.erstelleSpielfeldListener(new SpielfeldListener());
         this.modus = "lokal_mp";
@@ -59,6 +58,11 @@ public class Controller {
                 }
             }
         }
+    }
+
+    public void schiffanzeigeBenachrichtigen(int laenge, String spieler){
+        System.out.println("Komplettes Schiff der Länge " + laenge + " von Spieler: " + spieler + " getroffen!");
+        view.schiffanzeigeAktualisieren(laenge, spieler);
     }
 
     class SingleplayerListener implements ActionListener{

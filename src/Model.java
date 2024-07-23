@@ -12,16 +12,18 @@ public class Model {
     private int kiSchussY;
     private boolean neuesSchiffSuchen = true;
     private String suchRichtung = "unbekannt";
+    private Controller controller;
 
-    public Model() {
+    public Model(Controller controller) {
         playSound("ambience.wav", true, -10f);
         this.kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
         this.kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
+        this.controller = controller;
     }
 
     public void schiessen(int n, int m) {
         //markiert das Stück vom Schiff was getroffen wurde
-        spielfeldRechts.trefferMarkieren(n, m);
+        int laengeVomAbgeschossenenSchiff = spielfeldRechts.trefferMarkieren(n, m);
         if (spielfeldRechts.getWert(n, m).equals("Schiff_getroffen")) {
             playSound("kleine_explosion.wav", false, 3f);
         }
@@ -31,6 +33,9 @@ public class Model {
         else if (spielfeldRechts.getWert(n, m).equals("Wasser_getroffen")) {
             playSound("wasser.wav", false, -6f);
         }
+        if (laengeVomAbgeschossenenSchiff != 0) {
+            controller.schiffanzeigeBenachrichtigen(laengeVomAbgeschossenenSchiff, "Gegner");
+        }
         System.out.println("Schuss");
         spielfeldLinks.anzeigen();
         spielfeldRechts.anzeigen();
@@ -38,13 +43,14 @@ public class Model {
     }
 
     public void ki_schiessen() {
+        int laengeVomAbgeschossenenSchiff = 0;
         if (neuesSchiffSuchen) {
             while (!spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff") && !spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Wasser") || spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("unmoeglich")) {
                 kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
                 kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
             }
         }
-        spielfeldLinks.trefferMarkieren(kiSchussX, kiSchussY);
+        laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(kiSchussX, kiSchussY);
         spielfeldRechts.getSpieler().zugErhoehen();
         System.out.println("KI Schuss bei: (" + kiSchussX + ", " + kiSchussY + ")");
         if (spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff_getroffen")) {
@@ -56,7 +62,7 @@ public class Model {
 
             while (!spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Wasser_getroffen")) {
                 if (letzterTrefferX+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("unmoeglich") && (suchRichtung.equals("süden") || suchRichtung.equals("unbekannt"))) {
-                    spielfeldLinks.trefferMarkieren(letzterTrefferX+1, letzterTrefferY);
+                    laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(letzterTrefferX+1, letzterTrefferY);
                     spielfeldRechts.getSpieler().zugErhoehen();
                     System.out.println("KI Schuss bei: (" + Integer.toString(letzterTrefferX+1) + ", " + letzterTrefferY + ")");
                     if(spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("Schiff_getroffen")) {
@@ -66,7 +72,8 @@ public class Model {
                         if (spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Komplettes_Schiff_getroffen")) {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
-                            System.out.println("KI hat ganzes Schiff getroffen!");
+                            //System.out.println("KI hat ganzes Schiff getroffen!");
+                            controller.schiffanzeigeBenachrichtigen(laengeVomAbgeschossenenSchiff, "Eigen");
                             System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
                             ki_schiessen();
                             return;
@@ -75,7 +82,7 @@ public class Model {
                     }
                 }
                 else if (letzterTrefferY+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("unmoeglich") && (suchRichtung.equals("westen") || suchRichtung.equals("unbekannt"))) {
-                    spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY+1);
+                    laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY+1);
                     spielfeldRechts.getSpieler().zugErhoehen();
                     System.out.println("KI Schuss bei: (" + letzterTrefferX + ", " + Integer.toString(letzterTrefferY+1) + ")");
                     if(spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("Schiff_getroffen")) {
@@ -85,7 +92,8 @@ public class Model {
                         if (spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Komplettes_Schiff_getroffen")) {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
-                            System.out.println("KI hat ganzes Schiff getroffen!");
+                            //System.out.println("KI hat ganzes Schiff getroffen!");
+                            controller.schiffanzeigeBenachrichtigen(laengeVomAbgeschossenenSchiff, "Eigen");
                             System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
                             ki_schiessen();
                             return;
@@ -94,7 +102,7 @@ public class Model {
                     }
                 }
                 else if (letzterTrefferX-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("unmoeglich") && (suchRichtung.equals("norden") || suchRichtung.equals("unbekannt"))) {
-                    spielfeldLinks.trefferMarkieren(letzterTrefferX-1, letzterTrefferY);
+                    laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(letzterTrefferX-1, letzterTrefferY);
                     spielfeldRechts.getSpieler().zugErhoehen();
                     System.out.println("KI Schuss bei: (" + Integer.toString(letzterTrefferX-1) + ", " + letzterTrefferY + ")");
                     if(spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("Schiff_getroffen")) {
@@ -104,7 +112,8 @@ public class Model {
                         if (spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Komplettes_Schiff_getroffen")) {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
-                            System.out.println("KI hat ganzes Schiff getroffen!");
+                            //System.out.println("KI hat ganzes Schiff getroffen!");
+                            controller.schiffanzeigeBenachrichtigen(laengeVomAbgeschossenenSchiff, "Eigen");
                             System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
                             ki_schiessen();
                             return;
@@ -113,7 +122,7 @@ public class Model {
                     }
                 }
                 else if (letzterTrefferY-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("unmoeglich") && (suchRichtung.equals("osten") || suchRichtung.equals("unbekannt"))) {
-                    spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY-1);
+                    laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY-1);
                     spielfeldRechts.getSpieler().zugErhoehen();
                     System.out.println("KI Schuss bei: (" + letzterTrefferX + ", " + Integer.toString(letzterTrefferY-1) + ")");
                     if(spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("Schiff_getroffen")) {
@@ -123,7 +132,8 @@ public class Model {
                         if (spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Komplettes_Schiff_getroffen")) {
                             neuesSchiffSuchen = true;
                             suchRichtung = "unbekannt";
-                            System.out.println("KI hat ganzes Schiff getroffen!");
+                            //System.out.println("KI hat ganzes Schiff getroffen!");
+                            controller.schiffanzeigeBenachrichtigen(laengeVomAbgeschossenenSchiff, "Eigen");
                             System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
                             ki_schiessen();
                             return;

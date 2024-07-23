@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Spielfeld {
     private final int reihe = 10;
@@ -149,18 +150,18 @@ public class Spielfeld {
         System.out.println();
     }
 
-    public void trefferMarkieren(int x, int y) {
+    public int trefferMarkieren(int x, int y) {
         if (spielfeld[x][y] == wasser) {
             spielfeld[x][y] = wasser_getroffen;
         }
         if (spielfeld[x][y] == schiff) {
             spielfeld[x][y] = schiff_getroffen;
         }
-        ganzesSchiffGetroffen(x, y);
-        unmoeglicheFelderMarkieren(x, y);
+        return ganzesSchiffGetroffen(x, y);
     }
 
-    public void ganzesSchiffGetroffen(int x, int y) {
+    public int ganzesSchiffGetroffen(int x, int y) {
+        AtomicInteger laengeVomAbgeschossenenSchiff = new AtomicInteger(0);
         AtomicBoolean alleGetroffen = new AtomicBoolean(true);
         for (Schiff n : schiffe) {
             n.getKoordinaten().forEach((m) -> {
@@ -176,10 +177,13 @@ public class Spielfeld {
                             spielfeld[l.getX()][l.getY()] = komplettes_schiff_getroffen;
                         });
                         n.setAbgeschossen();
+                        laengeVomAbgeschossenenSchiff.set(n.getLaenge());
                     }
                 }
             });
         }
+        unmoeglicheFelderMarkieren(x, y);
+        return laengeVomAbgeschossenenSchiff.get();
     }
 
     public void unmoeglicheFelderMarkieren(int x, int y) {

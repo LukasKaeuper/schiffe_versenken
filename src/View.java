@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,8 +17,10 @@ public class View extends JFrame {
     private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];
     private JTextField status;
     private JTextField zuege;
-    private JTextField schiffeEigen;
-    private JTextField schiffeGegner;
+    private JPanel schiffanzeigeEigen;
+    private JPanel schiffanzeigeGegner;
+    ArrayList<Schiffeintrag> eigeneSchiffe;
+    ArrayList<Schiffeintrag> gegnerSchiffe;
     private JPanel container;
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
@@ -30,6 +32,8 @@ public class View extends JFrame {
         super("Schiffe Versenken");
         new Menu(sp);
         this.controller = controller;
+        eigeneSchiffe = new ArrayList<>();
+        gegnerSchiffe = new ArrayList<>();
         fensterGenerieren();
     }
 
@@ -56,17 +60,18 @@ public class View extends JFrame {
         zuege.setEditable(false);
         zuege.setCaretColor(UIManager.getColor("Panel.background"));
 
-        schiffeEigen = new JTextField();
-        schiffeEigen.setFont(font1);
-        schiffeEigen.setSize(200, 200);
-        schiffeEigen.setEditable(false);
-        schiffeEigen.setCaretColor(UIManager.getColor("Panel.background"));
+        schiffanzeigeEigen = new JPanel();
+        schiffanzeigeEigen.setLayout(new BoxLayout(schiffanzeigeEigen, BoxLayout.Y_AXIS));
+        schiffanzeigeEigen.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
 
-        schiffeGegner = new JTextField();
-        schiffeGegner.setFont(font1);
-        schiffeGegner.setSize(200, 200);
-        schiffeGegner.setEditable(false);
-        schiffeGegner.setCaretColor(UIManager.getColor("Panel.background"));
+        schiffanzeigeGegner = new JPanel();
+        schiffanzeigeGegner.setLayout(new BoxLayout(schiffanzeigeGegner, BoxLayout.Y_AXIS));
+        schiffanzeigeGegner.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
+
+        Dimension anzeigeSize = new Dimension(170, 700);
+        schiffanzeigeEigen.setPreferredSize(anzeigeSize);
+        schiffanzeigeGegner.setPreferredSize(anzeigeSize);
+        schiffanzeigenFuellen();
 
         panelSpielfeldEigen = new GamePanel("Eigen");
         panelSpielfeldGegner = new GamePanel("Gegner");
@@ -81,11 +86,95 @@ public class View extends JFrame {
         containerFuellen();
 
 //        Dimension textFieldSize = new Dimension(50, 30);
-//        schiffeEigen.setPreferredSize(textFieldSize);
-//        schiffeGegner.setPreferredSize(textFieldSize);
+//        schiffanzeigeEigen.setPreferredSize(textFieldSize);
+//        schiffanzeigeGegner.setPreferredSize(textFieldSize);
 
         add(container, BorderLayout.CENTER);
         pack();
+    }
+
+    private void schiffanzeigenFuellen() {
+        //eigeneSchiffe.add(new )
+        schiffanzeigeEigen.add(new Schiffeintrag(5));
+        schiffanzeigeEigen.add(new Schiffeintrag(4));
+        schiffanzeigeEigen.add(new Schiffeintrag(4));
+        schiffanzeigeEigen.add(new Schiffeintrag(3));
+        schiffanzeigeEigen.add(new Schiffeintrag(3));
+        schiffanzeigeEigen.add(new Schiffeintrag(3));
+        schiffanzeigeEigen.add(new Schiffeintrag(2));
+        schiffanzeigeEigen.add(new Schiffeintrag(2));
+        schiffanzeigeEigen.add(new Schiffeintrag(2));
+        schiffanzeigeEigen.add(new Schiffeintrag(2));
+        schiffanzeigeGegner.add(new Schiffeintrag(5));
+        schiffanzeigeGegner.add(new Schiffeintrag(4));
+        schiffanzeigeGegner.add(new Schiffeintrag(4));
+        schiffanzeigeGegner.add(new Schiffeintrag(3));
+        schiffanzeigeGegner.add(new Schiffeintrag(3));
+        schiffanzeigeGegner.add(new Schiffeintrag(3));
+        schiffanzeigeGegner.add(new Schiffeintrag(2));
+        schiffanzeigeGegner.add(new Schiffeintrag(2));
+        schiffanzeigeGegner.add(new Schiffeintrag(2));
+        schiffanzeigeGegner.add(new Schiffeintrag(2));
+    }
+
+    public void schiffanzeigeAktualisieren(int laenge, String spieler){
+        if (spieler.equals("Eigen")){
+            for (Component c: schiffanzeigeEigen.getComponents()){
+                Schiffeintrag temp = (Schiffeintrag) c;
+                if (!temp.istAbgeschossen() && temp.getLaenge() == laenge){
+                    temp.setAbgeschossen();
+                    return;
+                }
+            }
+        }
+        if (spieler.equals("Gegner")){
+            for (Component c: schiffanzeigeGegner.getComponents()){
+                Schiffeintrag temp = (Schiffeintrag) c;
+                if (!temp.istAbgeschossen() && temp.getLaenge() == laenge){
+                    temp.setAbgeschossen();
+                    return;
+                }
+            }
+        }
+    }
+
+    private class Schiffeintrag extends JPanel{
+        private int laenge;
+        private boolean abgeschossen;
+        Dimension buttonSize = new Dimension(10, 10);
+
+        public Schiffeintrag(int laenge){
+            this.laenge = laenge;
+            this.abgeschossen = false;
+            this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+            this.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+            for (int i=0; i < laenge; i++){
+                JButton button = new JButton();
+                button.setBackground(Color.LIGHT_GRAY);
+                button.setEnabled(false);
+                button.setPreferredSize(buttonSize);
+                this.add(button);
+            }
+        }
+
+        public void einfaerben(){
+            for (Component c: this.getComponents()){
+                c.setBackground(Color.RED);
+            }
+        }
+
+        public boolean istAbgeschossen(){
+            return abgeschossen;
+        }
+
+        public void setAbgeschossen(){
+            this.abgeschossen = true;
+            this.einfaerben();
+        }
+
+        public int getLaenge(){
+            return laenge;
+        }
     }
 
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
@@ -104,15 +193,27 @@ public class View extends JFrame {
     }
 
     public void rundenwechselBestaetigen() {
+        JPanel temp = new JPanel();
         panelSpielfeldEigen.setVisible(false);
         panelSpielfeldGegner.setVisible(false);
-        schiffeEigen.setVisible(false);
-        schiffeGegner.setVisible(false);
+        schiffanzeigeEigen.setVisible(false);
+        schiffanzeigeGegner.setVisible(false);
         zuege.setVisible(false);
         container.removeAll();
 //        container.setVisible(false);
 
-        // Einstellungen Button
+        // Schiffanzeigen tauschen
+        for (Component c: schiffanzeigeEigen.getComponents()){
+            temp.add(c);
+        }
+        for (Component c: schiffanzeigeGegner.getComponents()){
+            schiffanzeigeEigen.add(c);
+        }
+        for (Component c: temp.getComponents()){
+            schiffanzeigeGegner.add(c);
+        }
+
+        // neueRunde Button
         JButton neueRundeButton = new JButton("Runde beginnen");
         neueRundeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         neueRundeButton.setPreferredSize(new Dimension(300, 100));
@@ -143,8 +244,8 @@ public class View extends JFrame {
 
                 panelSpielfeldEigen.setVisible(true);
                 panelSpielfeldGegner.setVisible(true);
-                schiffeEigen.setVisible(true);
-                schiffeGegner.setVisible(true);
+                schiffanzeigeEigen.setVisible(true);
+                schiffanzeigeGegner.setVisible(true);
                 zuege.setVisible(true);
 
                 // Panel neu validieren und neu zeichnen
@@ -162,7 +263,7 @@ public class View extends JFrame {
         c.gridy = 0;
         c.weightx = 0.5;
         c.weighty = 1;
-        container.add(schiffeEigen, c);
+        container.add(schiffanzeigeEigen, c);
         c.gridx = 1;
         c.gridy = 0;
         c.weightx = 1;
@@ -177,7 +278,7 @@ public class View extends JFrame {
         c.gridy = 0;
         c.weightx = 0.5;
         c.weighty = 1;
-        container.add(schiffeGegner, c);
+        container.add(schiffanzeigeGegner, c);
     }
 
     public void listenerEntfernen(ActionListener al) {
