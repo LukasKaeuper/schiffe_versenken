@@ -45,7 +45,7 @@ public class Model {
     public void ki_schiessen() {
         int laengeVomAbgeschossenenSchiff = 0;
         if (neuesSchiffSuchen) {
-            while (!spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff") && !spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Wasser") || spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("unmoeglich")) {
+            while (!spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff") && !spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Wasser") || spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("unmoeglich") || spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("unmoeglich_getroffen")) {
                 kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
                 kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
             }

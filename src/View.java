@@ -359,9 +359,20 @@ public class View extends JFrame {
 //            buttonSpielfeldEigen[i][j].setText("O");
 //            buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
 //            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
-//            buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+            buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
             buttonSpielfeldEigen[i][j].setBackground(Color.decode("#4F84c9"));
+            if (buttonSpielfeldEigen[i][j].getIcon() == null) {
+                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
+            }
+        } else if (spieler.equals("Eigen") && temp.equals("unmoeglich_getroffen")) {
+            buttonSpielfeldEigen[i][j].setText(null);
+//            buttonSpielfeldEigen[i][j].setText("O");
+//            buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
+//            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
+            buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
+//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
                 buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
             }
@@ -397,6 +408,17 @@ public class View extends JFrame {
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
             buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 40));
             buttonSpielfeldGegner[i][j].setIcon(null);
+        } else if (spieler.equals("Gegner") && temp.equals("unmoeglich_getroffen")) {
+            buttonSpielfeldGegner[i][j].setText(null);
+//            buttonSpielfeldGegner[i][j].setText("O");
+//            buttonSpielfeldGegner[i][j].setBackground(Color.BLUE);
+//            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
+            buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+//            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+            buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
+            if (buttonSpielfeldGegner[i][j].getIcon() == null) {
+                buttonSpielfeldGegner[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldGegner[i][j].getWidth(), buttonSpielfeldGegner[i][j].getHeight(), Image.SCALE_DEFAULT)));
+            }
         } else {
             buttonSpielfeldGegner[i][j].setText("");
             buttonSpielfeldGegner[i][j].setBackground(null);

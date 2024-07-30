@@ -12,6 +12,7 @@ public class Spielfeld {
     private final int schiff_getroffen = 3;
     private final int komplettes_schiff_getroffen = 4;
     private final int unmoeglich = 5;
+    private final int unmoeglich_getroffen = 6;
     private Spieler spieler;
 
     private final int[][] spielfeld;
@@ -134,6 +135,9 @@ public class Spielfeld {
         else if (spielfeld[x][y] == unmoeglich) {
             return "unmoeglich";
         }
+        else if (spielfeld[x][y] == unmoeglich_getroffen) {
+            return "unmoeglich_getroffen";
+        }
         else {
             return null;
         }
@@ -188,16 +192,28 @@ public class Spielfeld {
 
     public void unmoeglicheFelderMarkieren(int x, int y) {
         if (spielfeld[x][y] == schiff_getroffen || spielfeld[x][y] == komplettes_schiff_getroffen) {
-            if (x-1 >= 0 && y-1 >= 0 && spielfeld[x-1][y-1] != wasser_getroffen) {
-                spielfeld[x-1][y-1] = unmoeglich;
+
+            if (x-1 >= 0 && y-1 >= 0 && (spielfeld[x-1][y-1] == wasser_getroffen || spielfeld[x-1][y-1] == unmoeglich_getroffen)) {
+                spielfeld[x-1][y-1] = unmoeglich_getroffen;
+            }else if (x-1 >= 0 && y-1 >= 0 && spielfeld[x-1][y-1] != wasser_getroffen) {
+                spielfeld[x - 1][y - 1] = unmoeglich;
             }
-            if (x-1 >= 0 && y+1 <= 9 && spielfeld[x-1][y+1] != wasser_getroffen) {
+
+            if (x-1 >= 0 && y+1 <= 9 && (spielfeld[x-1][y+1] == wasser_getroffen || spielfeld[x-1][y+1] == unmoeglich_getroffen)) {
+                spielfeld[x-1][y+1] = unmoeglich_getroffen;
+            } else if (x-1 >= 0 && y+1 <= 9 && spielfeld[x-1][y+1] != wasser_getroffen){
                 spielfeld[x-1][y+1] = unmoeglich;
             }
-            if (x+1 <= 9 && y-1 >= 0 && spielfeld[x+1][y-1] != wasser_getroffen) {
+
+            if (x+1 <= 9 && y-1 >= 0 && (spielfeld[x+1][y-1] == wasser_getroffen || spielfeld[x+1][y-1] == unmoeglich_getroffen)) {
+                spielfeld[x+1][y-1] = unmoeglich_getroffen;
+            } else if (x+1 <= 9 && y-1 >= 0 && spielfeld[x+1][y-1] != wasser_getroffen) {
                 spielfeld[x+1][y-1] = unmoeglich;
             }
-            if (x+1 <= 9 && y+1 <= 9 && spielfeld[x+1][y+1] != wasser_getroffen) {
+
+            if (x+1 <= 9 && y+1 <= 9 && (spielfeld[x+1][y+1] == wasser_getroffen || spielfeld[x+1][y+1] == unmoeglich_getroffen)) {
+                spielfeld[x+1][y+1] = unmoeglich_getroffen;
+            }else if (x+1 <= 9 && y+1 <= 9 && spielfeld[x+1][y+1] != wasser_getroffen) {
                 spielfeld[x+1][y+1] = unmoeglich;
             }
         }
@@ -215,17 +231,33 @@ public class Spielfeld {
     }
 
     private void himmelsrichtungenAlsUnmoeglichMarkieren(int x, int y) {
-        if (x-1 >= 0 && spielfeld[x-1][y] != wasser_getroffen && spielfeld[x-1][y] != schiff_getroffen && spielfeld[x-1][y] != komplettes_schiff_getroffen) {
-            spielfeld[x-1][y] = unmoeglich;
+        if (x-1 >= 0 && spielfeld[x-1][y] != schiff_getroffen && spielfeld[x-1][y] != komplettes_schiff_getroffen) {
+            if (spielfeld[x-1][y] == wasser_getroffen || spielfeld[x-1][y] == unmoeglich_getroffen){
+                spielfeld[x-1][y] = unmoeglich_getroffen;
+            } else {
+                spielfeld[x-1][y] = unmoeglich;
+            }
         }
-        if (y-1 >= 0 && spielfeld[x][y-1] != wasser_getroffen && spielfeld[x][y-1] != schiff_getroffen && spielfeld[x][y-1] != komplettes_schiff_getroffen) {
-            spielfeld[x][y-1] = unmoeglich;
+        if (y-1 >= 0 && spielfeld[x][y-1] != schiff_getroffen && spielfeld[x][y-1] != komplettes_schiff_getroffen) {
+            if (spielfeld[x][y-1] == wasser_getroffen || spielfeld[x][y-1] == unmoeglich_getroffen){
+                spielfeld[x][y-1] = unmoeglich_getroffen;
+            } else {
+                spielfeld[x][y-1] = unmoeglich;
+            }
         }
-        if (x+1 <= 9 && spielfeld[x+1][y] != wasser_getroffen && spielfeld[x+1][y] != schiff_getroffen && spielfeld[x+1][y] != komplettes_schiff_getroffen) {
-            spielfeld[x+1][y] = unmoeglich;
+        if (x+1 <= 9 && spielfeld[x+1][y] != schiff_getroffen && spielfeld[x+1][y] != komplettes_schiff_getroffen) {
+            if (spielfeld[x+1][y] == wasser_getroffen || spielfeld[x+1][y] == unmoeglich_getroffen){
+                spielfeld[x+1][y] = unmoeglich_getroffen;
+            } else {
+                spielfeld[x+1][y] = unmoeglich;
+            }
         }
-        if (y+1 <= 9 && spielfeld[x][y+1] != wasser_getroffen && spielfeld[x][y+1] != schiff_getroffen && spielfeld[x][y+1] != komplettes_schiff_getroffen) {
-            spielfeld[x][y+1] = unmoeglich;
+        if (y+1 <= 9 && spielfeld[x][y+1] != schiff_getroffen && spielfeld[x][y+1] != komplettes_schiff_getroffen) {
+            if (spielfeld[x][y+1] == wasser_getroffen || spielfeld[x][y+1] == unmoeglich_getroffen){
+                spielfeld[x][y+1] = unmoeglich_getroffen;
+            } else {
+                spielfeld[x][y+1] = unmoeglich;
+            }
         }
     }
 
