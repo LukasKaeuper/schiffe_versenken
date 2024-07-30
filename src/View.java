@@ -23,6 +23,7 @@ public class View extends JFrame {
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
     private Controller controller;
+    private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
@@ -333,9 +334,9 @@ public class View extends JFrame {
 //            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
 //            buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-              buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
+              buttonSpielfeldEigen[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
-                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(new ImageIcon("Bilder/Logo/horizontal_waves.gif").getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
             }
         } else if (spieler.equals("Eigen") && temp.equals("Wasser_getroffen")) {
 //            buttonSpielfeldEigen[i][j].setText("O");
@@ -360,9 +361,9 @@ public class View extends JFrame {
 //            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
 //            buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
+            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
-                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(new ImageIcon("Bilder/Logo/horizontal_waves.gif").getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
             }
         } else if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldGegner[i][j].setText("X");
@@ -384,9 +385,9 @@ public class View extends JFrame {
 //            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-              buttonSpielfeldGegner[i][j].setBackground(Color.decode("#0277bd"));
+              buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldGegner[i][j].getIcon() == null) {
-                buttonSpielfeldGegner[i][j].setIcon(new ImageIcon(new ImageIcon("Bilder/Logo/horizontal_waves.gif").getImage().getScaledInstance(buttonSpielfeldGegner[i][j].getWidth(), buttonSpielfeldGegner[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldGegner[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldGegner[i][j].getWidth(), buttonSpielfeldGegner[i][j].getHeight(), Image.SCALE_DEFAULT)));
             }
         } else if (spieler.equals("Gegner") && temp.equals("unmoeglich")) {
             buttonSpielfeldGegner[i][j].setText("X");
