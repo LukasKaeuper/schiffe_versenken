@@ -23,7 +23,7 @@ public class View extends JFrame {
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
     private Controller controller;
-    private ImageIcon wasser = new ImageIcon("Bilder/NEU_Wasser.gif");
+    private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
