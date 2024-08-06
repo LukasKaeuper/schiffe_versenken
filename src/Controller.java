@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -48,8 +47,17 @@ public class Controller {
             FeldAktualisieren("Eigen");
             FeldAktualisieren("Gegner");
             view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
-            view.nameAktualisieren(model.getSpieler());
+            view.nameAktualisieren(model.getSpieler(), model.getName());
         }
+
+        //private void namenWechsel(int spieler){
+          //  if(spieler == 1){
+            //    view.nameAktualisieren(model.getSpieler(), model.getSpielerNameEins());
+           // }
+            //else if(spieler == 2){
+              //  view.nameAktualisieren(model.getSpieler(), model.getSpielerNameZwei());
+           // }
+       // }
 
         private void FeldAktualisieren(String spieler) {
             String temp;
@@ -73,11 +81,19 @@ public class Controller {
         }
     }
 
-    public void setSpielerName(String name) {
-        model.setSpielerName(name);
+    public void setSpielerNameEins(String name) {
+        model.setSpielerNameEins(name);
     }
 
-    public String getSpielerName() {
-        return model.getSpielerName();
+    public String getSpielerNameEins() {
+        return model.getSpielerNameEins();
+    }
+
+    public void setSpielerNameZwei(String name) {
+        model.setSpielerNameZwei(name);
+    }
+
+    public String getSpielerNameZwei() {
+        return model.getSpielerNameZwei();
     }
 }

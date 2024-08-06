@@ -20,7 +20,7 @@ public class Spielfeld {
     public Spielfeld() {
         spielfeld = new int[reihe][spalte];
         schiffe = new ArrayList<Schiff>();
-        spieler = new Spieler("platzhalter");
+        spieler = new Spieler("Spieler");
         initialisiereSpielfeld();
         schiffePlatzieren(5);
         schiffePlatzieren(4);

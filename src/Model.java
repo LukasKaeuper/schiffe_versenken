@@ -222,13 +222,26 @@ public class Model {
         return spielfeldLinks.getSpieler().getAnzahlZuege();
     }
 
-    public String getSpielerName() {
+    public String getName() {
         return spielfeldLinks.getSpieler().getName();
     }
 
-    public void setSpielerName(String name) {
+    public String getSpielerNameEins() {
+        return spielfeldLinks.getSpieler().getName();
+    }
+
+    public void setSpielerNameEins(String name) {
         spielfeldLinks.getSpieler().setName(name);
     }
+
+    public String getSpielerNameZwei() {
+        return spielfeldRechts.getSpieler().getName();
+    }
+
+    public void setSpielerNameZwei(String name) {
+        spielfeldRechts.getSpieler().setName(name);
+    }
+
 
 
 }

@@ -21,9 +21,6 @@ public class View extends JFrame {
     private JTextField nameZwei;
     private int spielerEinsZuege;
     private int spielerZweiZuege;
-    private String nameSpielerEins;
-    private String nameSpielerZwei;
-    private String aktuellerSpielerName;
     private JPanel container;
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
@@ -37,8 +34,8 @@ public class View extends JFrame {
         super("Schiffe Versenken");
         new Menu(sp);
         this.controller = controller;
-        nameSpielerZwei = "Spieler 2";
-        nameSpielerEins = "Spieler 1";
+        controller.setSpielerNameEins("Spieler 1");
+        controller.setSpielerNameZwei("Spieler 2");
         fensterGenerieren();
     }
 
@@ -50,7 +47,7 @@ public class View extends JFrame {
         Font font1 = new Font("SansSerif", Font.BOLD, 20);
 
 
-        status = new JTextField(nameSpielerEins);
+        status = new JTextField(controller.getSpielerNameEins());
         status.setHorizontalAlignment(JTextField.CENTER);
         status.setFont(font1);
         status.setSize(1500,200);
@@ -93,10 +90,10 @@ public class View extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(spielerEinsZuege != 0) {
-                    bestenliste.eintragHinzufuegen(nameSpielerEins,spielerEinsZuege);
+                    bestenliste.eintragHinzufuegen(controller.getSpielerNameEins(), spielerEinsZuege);
                 }
                 else if(spielerZweiZuege != 0) {
-                    bestenliste.eintragHinzufuegen(nameSpielerZwei,spielerZweiZuege);
+                    bestenliste.eintragHinzufuegen(controller.getSpielerNameZwei(), spielerZweiZuege);
                 }
                 bestenlisteGenerieren();
             }
@@ -208,7 +205,6 @@ public class View extends JFrame {
             eintraege.clear();
             speichern();
         }
-
 
         public ArrayList<Eintrag> getEintraege() {
             return eintraege;
@@ -348,14 +344,12 @@ public class View extends JFrame {
         }
     }
 
-    public void nameAktualisieren(int spieler){
+    public void nameAktualisieren(int spieler, String name){
         if (spieler == 1) {
-            aktuellerSpielerName = nameSpielerEins;
-            status.setText(aktuellerSpielerName);
+            status.setText(name);
         }
         else if (spieler == 2) {
-            aktuellerSpielerName = nameSpielerZwei;
-            status.setText(aktuellerSpielerName);
+            status.setText(name);
         }
     }
 
@@ -715,13 +709,6 @@ public class View extends JFrame {
                     gbc.gridy = 0;
                     container.add(nameEins, gbc);
 
-                    // Schriftfarbe wird gesetzt
-                    nameEins.setForeground(Color.BLUE);
-                    // Hintergrundfarbe wird gesetzt
-                    nameEins.setBackground(Color.YELLOW);
-                    // Textfeld wird unserem Panel hinzugefügt
-
-
                     JLabel labelSpielerEins = new JLabel("Name Spieler 1:");
                     gbc.gridx = 0;
                     gbc.gridy = 0;
@@ -744,13 +731,6 @@ public class View extends JFrame {
                     gbc.gridy = 1;
                     container.add(nameZwei, gbc);
 
-                    // Schriftfarbe wird gesetzt
-                    nameZwei.setForeground(Color.BLUE);
-                    // Hintergrundfarbe wird gesetzt
-                    nameZwei.setBackground(Color.YELLOW);
-                    // Textfeld wird unserem Panel hinzugefügt
-
-
                     JButton buttonOK = new JButton("OK");
                     gbc.gridx = 1;
                     gbc.gridy = 2;
@@ -771,11 +751,11 @@ public class View extends JFrame {
                     buttonOK.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            nameSpielerEins = nameEins.getText();
-                            nameSpielerZwei = nameZwei.getText();
-                            nameAktualisieren(1);
-                            System.out.println(getNameSpielerEins());
-                            System.out.println(getNameSpielerZwei());
+                            controller.setSpielerNameEins(nameEins.getText());
+                            controller.setSpielerNameZwei(nameZwei.getText());
+                            nameAktualisieren(1, controller.getSpielerNameEins());
+                            System.out.println(controller.getSpielerNameEins());
+                            System.out.println(controller.getSpielerNameZwei());
                             meinJFrame.dispose();
                         }
                     });
@@ -786,13 +766,5 @@ public class View extends JFrame {
 
             setVisible(true);
         }
-    }
-
-    public String getNameSpielerEins() {
-        return nameSpielerEins;
-    }
-
-    public String getNameSpielerZwei() {
-        return nameSpielerZwei;
     }
 }
