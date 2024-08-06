@@ -221,4 +221,14 @@ public class Model {
     public int getZuege() {
         return spielfeldLinks.getSpieler().getAnzahlZuege();
     }
+
+    public String getSpielerName() {
+        return spielfeldLinks.getSpieler().getName();
+    }
+
+    public void setSpielerName(String name) {
+        spielfeldLinks.getSpieler().setName(name);
+    }
+
+
 }
