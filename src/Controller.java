@@ -50,15 +50,6 @@ public class Controller {
             view.nameAktualisieren(model.getSpieler(), model.getName());
         }
 
-        //private void namenWechsel(int spieler){
-          //  if(spieler == 1){
-            //    view.nameAktualisieren(model.getSpieler(), model.getSpielerNameEins());
-           // }
-            //else if(spieler == 2){
-              //  view.nameAktualisieren(model.getSpieler(), model.getSpielerNameZwei());
-           // }
-       // }
-
         private void FeldAktualisieren(String spieler) {
             String temp;
             for (int i=0; i<10; i++) {

@@ -243,8 +243,6 @@ public class View extends JFrame {
         }
     }
 
-
-
     public void bestenlisteGenerieren(){
         panelSpielfeldEigen.setVisible(false);
         panelSpielfeldGegner.setVisible(false);
