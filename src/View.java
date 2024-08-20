@@ -17,8 +17,6 @@ public class View extends JFrame {
     private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];
     private JTextField status;
     private JTextField zuege;
-    private JTextField schiffeEigen;
-    private JTextField schiffeGegner;
     private JTextField nameEins;
     private JTextField nameZwei;
     private int spielerEinsZuege;
@@ -316,8 +314,8 @@ public class View extends JFrame {
     public void bestenlisteGenerieren(){
         panelSpielfeldEigen.setVisible(false);
         panelSpielfeldGegner.setVisible(false);
-        schiffeEigen.setVisible(false);
-        schiffeGegner.setVisible(false);
+        schiffanzeigeEigen.setVisible(false);
+        schiffanzeigeGegner.setVisible(false);
         zuege.setVisible(false);
         container.removeAll();
         status.setText("Bestenliste");
