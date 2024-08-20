@@ -1,21 +1,28 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class View extends JFrame {
     private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];
     private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];
     private JTextField status;
     private JTextField zuege;
+    private JTextField schiffeEigen;
+    private JTextField schiffeGegner;
+    private JTextField nameEins;
+    private JTextField nameZwei;
+    private int spielerEinsZuege;
+    private int spielerZweiZuege;
     private JPanel schiffanzeigeEigen;
     private JPanel schiffanzeigeGegner;
     private JPanel container;
@@ -24,12 +31,16 @@ public class View extends JFrame {
     private Controller controller;
     private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
 
+    Bestenliste bestenliste = new Bestenliste();
+
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
     public View(ActionListener sp, Controller controller) {
         super("Schiffe Versenken");
         new Menu(sp);
         this.controller = controller;
+        controller.setSpielerNameEins("Spieler 1");
+        controller.setSpielerNameZwei("Spieler 2");
         fensterGenerieren();
     }
 
@@ -40,7 +51,8 @@ public class View extends JFrame {
 
         Font font1 = new Font("SansSerif", Font.BOLD, 20);
 
-        status = new JTextField("Spieler 1");
+
+        status = new JTextField(controller.getSpielerNameEins());
         status.setHorizontalAlignment(JTextField.CENTER);
         status.setFont(font1);
         status.setSize(1500,200);
@@ -80,6 +92,47 @@ public class View extends JFrame {
         container.setLayout(new GridBagLayout());
 
         containerFuellen();
+        JButton bestenlistebutton = new JButton("Bestenliste");
+        bestenlistebutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(spielerEinsZuege != 0) {
+                    bestenliste.eintragHinzufuegen(controller.getSpielerNameEins(), spielerEinsZuege);
+                }
+                else if(spielerZweiZuege != 0) {
+                    bestenliste.eintragHinzufuegen(controller.getSpielerNameZwei(), spielerZweiZuege);
+                }
+                bestenlisteGenerieren();
+            }
+        });
+
+        JButton zurueckHauptmenue = new JButton("Hauptmenü");
+        zurueckHauptmenue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 2;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(10, 0, 10, 10); // Abstände um den Button herum
+        c.fill = GridBagConstraints.NONE;
+        container.add(bestenlistebutton, c);
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.EAST;
+        c.insets = new Insets(10, 0, 10, 10); // Abstände um den Button herum
+        c.fill = GridBagConstraints.NONE;
+        container.add(zurueckHauptmenue, c);
+
+
 
 //        Dimension textFieldSize = new Dimension(50, 30);
 //        schiffanzeigeEigen.setPreferredSize(textFieldSize);
@@ -173,14 +226,198 @@ public class View extends JFrame {
         }
     }
 
+    public class Eintrag {
+        String name;
+        int anzahlZuege;
+        String datumZeit;
+
+        public Eintrag(String name, int anzahlZuege, String datumZeit) {
+            this.name = name;
+            this.anzahlZuege = anzahlZuege;
+            this.datumZeit = datumZeit;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getAnzahlZuege() {
+            return anzahlZuege;
+        }
+
+        public String getDatumZeit() {
+            return datumZeit;
+        }
+
+        @Override
+        public String toString() {
+            return name + "," + anzahlZuege + "," + datumZeit;
+        }
+    }
+
+    public class Bestenliste {
+        private ArrayList<Eintrag> eintraege;
+        private String dateiName = "bestenliste.csv";
+
+        public Bestenliste() {
+            eintraege = new ArrayList<>();
+            laden();
+        }
+
+        public void eintragHinzufuegen(String name, int anzahlZuege) {
+            String datumZeit = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
+            eintraege.add(new Eintrag(name, anzahlZuege, datumZeit));
+            Collections.sort(eintraege, Comparator.comparingInt(Eintrag::getAnzahlZuege));
+            speichern();
+        }
+
+        public void alleEintraegeLoeschen() {
+            eintraege.clear();
+            speichern();
+        }
+
+        public ArrayList<Eintrag> getEintraege() {
+            return eintraege;
+        }
+
+        private void speichern() {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(dateiName))) {
+                for (Eintrag eintrag : eintraege) {
+                    writer.write(eintrag.toString());
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void laden() {
+            File file = new File(dateiName);
+            if (!file.exists()) {
+                System.out.println("Datei " + dateiName + " existiert nicht. Eine neue Datei wird erstellt, wenn Einträge hinzugefügt werden.");
+                return;
+            }
+            try (BufferedReader reader = new BufferedReader(new FileReader(dateiName))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    String name = parts[0];
+                    int anzahlZuege = Integer.parseInt(parts[1]);
+                    String datumZeit = parts[2];
+                    eintraege.add(new Eintrag(name, anzahlZuege, datumZeit));
+                }
+                Collections.sort(eintraege, Comparator.comparingInt(Eintrag::getAnzahlZuege));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void bestenlisteGenerieren(){
+        panelSpielfeldEigen.setVisible(false);
+        panelSpielfeldGegner.setVisible(false);
+        schiffeEigen.setVisible(false);
+        schiffeGegner.setVisible(false);
+        zuege.setVisible(false);
+        container.removeAll();
+        status.setText("Bestenliste");
+
+        // Bestehende Einträge abrufen
+        ArrayList<Eintrag> eintraege = bestenliste.getEintraege();
+
+        Font font1 = new Font("SansSerif", Font.BOLD, 15);
+
+        // Daten für die Tabelle vorbereiten
+        String[] spaltenNamen = {"Rang", "Name", "Züge", "Datum/Zeit"};
+        String[][] daten = new String[eintraege.size()][4];
+
+        for (int i = 0; i < eintraege.size(); i++) {
+            Eintrag eintrag = eintraege.get(i);
+            daten[i][0] = Integer.toString(i + 1);
+            daten[i][1] = eintrag.getName();
+            daten[i][2] = Integer.toString(eintrag.getAnzahlZuege());
+            daten[i][3] = eintrag.getDatumZeit();
+        }
+
+        // JTable erstellen und in einem JFrame anzeigen
+        JTable tabelle = new JTable(daten, spaltenNamen);
+        tabelle.getTableHeader().setReorderingAllowed(false);
+        tabelle.getTableHeader().setFont(font1);
+        JScrollPane scrollPane = new JScrollPane(tabelle);
+        tabelle.setFillsViewportHeight(true);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        for (int i = 0; i < tabelle.getColumnCount(); i++) {
+            tabelle.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        JButton zurueckbutton = new JButton("Zurück");
+        zurueckbutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        JButton zurueckHauptmenue = new JButton("Hauptmenü");
+        zurueckHauptmenue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 1; // Position der Tabelle in der GridBagLayout
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH; // Tabelle füllt den verfügbaren Raum aus
+        gbc.insets = new Insets(100, 400, 100, 400); // Abstand um die Tabelle herum
+        container.add(scrollPane, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 100, 10, 10); // Abstände um den Button herum
+        gbc.fill = GridBagConstraints.NONE;
+        container.add(zurueckbutton, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 100); // Abstände um den Button herum
+        gbc.fill = GridBagConstraints.NONE;
+        container.add(zurueckHauptmenue, gbc);
+
+
+    }
+
+
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            //System.out.println("spieler 1 aktualisiert");
+            spielerEinsZuege = anzahlZuege;
+            System.out.println("spieler 1 aktualisiert, Anzahl Zuege: " + spielerEinsZuege);
         }
         else if (spieler == 2) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            //System.out.println("spieler 2 aktualisiert");
+            spielerZweiZuege = anzahlZuege;
+            System.out.println("spieler 2 aktualisiert, Anzahl Zuege: " + spielerZweiZuege);
+        }
+    }
+
+    public void nameAktualisieren(int spieler, String name){
+        if (spieler == 1) {
+            status.setText(name);
+        }
+        else if (spieler == 2) {
+            status.setText(name);
         }
     }
 
@@ -592,12 +829,12 @@ public class View extends JFrame {
                     JButton onlineButton = new JButton("Online");
                     onlineButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                     onlineButton.setMaximumSize(buttonSize);
-                    onlineButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            System.out.println("Online Button gedrückt");
-                        }
-                    });
+                onlineButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println("Online Button gedrückt");
+                    }
+                });
 
                     buttonPanel.add(localButton);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
@@ -612,26 +849,73 @@ public class View extends JFrame {
             settingsButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Einstellungen Button gedrückt");
-                    JDialog settingsDialog = new JDialog(Menu.this, "Einstellungen", true);
-                    settingsDialog.setSize(300, 200);
-                    settingsDialog.setLayout(new FlowLayout());
-                    settingsDialog.setLocationRelativeTo(Menu.this);
+                    JFrame meinJFrame = new JFrame();
+                    Container container = meinJFrame.getContentPane();
+                    container.setLayout(new GridBagLayout());
+                    GridBagConstraints gbc = new GridBagConstraints();
+                    gbc.insets = new Insets(10, 10, 10, 10);
+                    //System.out.println("Einstellungen Button gedrückt");
+                    meinJFrame.setSize(500, 500);
 
-                    JButton fullscreenButton = new JButton("Vollbildmodus");
-                    fullscreenButton.addActionListener(new ActionListener() {
+                    // Textfeld wird erstellt
+                    // Text und Spaltenanzahl werden dabei direkt gesetzt
+                    nameEins = new JTextField("Lukas", 15);
+                    gbc.gridx = 1;
+                    gbc.gridy = 0;
+                    container.add(nameEins, gbc);
+
+                    JLabel labelSpielerEins = new JLabel("Name Spieler 1:");
+                    gbc.gridx = 0;
+                    gbc.gridy = 0;
+                    container.add(labelSpielerEins, gbc);
+
+                    JLabel labelSpielerZwei = new JLabel("Name Spieler 2:");
+                    gbc.gridx = 0;
+                    gbc.gridy = 1;
+                    container.add(labelSpielerZwei, gbc);
+
+                    JLabel labelBestenliste = new JLabel("Bestenliste löschen");
+                    gbc.gridx = 0;
+                    gbc.gridy = 3;
+                    container.add(labelBestenliste, gbc);
+
+                    // Textfeld wird erstellt
+                    // Text und Spaltenanzahl werden dabei direkt gesetzt
+                    nameZwei = new JTextField("Marten", 15);
+                    gbc.gridx = 1;
+                    gbc.gridy = 1;
+                    container.add(nameZwei, gbc);
+
+                    JButton buttonOK = new JButton("OK");
+                    gbc.gridx = 1;
+                    gbc.gridy = 2;
+                    container.add(buttonOK, gbc);
+
+                    JButton loeschen = new JButton("OK");
+                    loeschen.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            System.out.println("Vollbildmodus Button gedrückt");
-                            setExtendedState(JFrame.MAXIMIZED_BOTH);
-                            dispose();
-                            setUndecorated(true);
-                            setVisible(true);
+                            bestenliste.alleEintraegeLoeschen();
                         }
                     });
 
-                    settingsDialog.add(fullscreenButton);
-                    settingsDialog.setVisible(true);
+                    gbc.gridx = 1;
+                    gbc.gridy = 3;
+                    container.add(loeschen, gbc);
+
+                    buttonOK.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            controller.setSpielerNameEins(nameEins.getText());
+                            controller.setSpielerNameZwei(nameZwei.getText());
+                            nameAktualisieren(1, controller.getSpielerNameEins());
+                            System.out.println(controller.getSpielerNameEins());
+                            System.out.println(controller.getSpielerNameZwei());
+                            meinJFrame.dispose();
+                        }
+                    });
+
+                    meinJFrame.setVisible(true);
                 }
             });
 

@@ -47,6 +47,7 @@ public class Controller {
             FeldAktualisieren("Eigen");
             FeldAktualisieren("Gegner");
             view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
+            view.nameAktualisieren(model.getSpieler(), model.getName());
         }
 
         private void FeldAktualisieren(String spieler) {
@@ -74,5 +75,21 @@ public class Controller {
             modus = "sp";
             view.spielFensterSichtbar();
         }
+    }
+
+    public void setSpielerNameEins(String name) {
+        model.setSpielerNameEins(name);
+    }
+
+    public String getSpielerNameEins() {
+        return model.getSpielerNameEins();
+    }
+
+    public void setSpielerNameZwei(String name) {
+        model.setSpielerNameZwei(name);
+    }
+
+    public String getSpielerNameZwei() {
+        return model.getSpielerNameZwei();
     }
 }
