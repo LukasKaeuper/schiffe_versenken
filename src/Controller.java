@@ -20,7 +20,7 @@ public class Controller {
 
     class SpielfeldListener implements ActionListener {
         public SpielfeldListener() {
-            FeldAktualisieren("Eigen");
+            feldAktualisieren("Eigen");
         }
 
         @Override
@@ -48,19 +48,20 @@ public class Controller {
                 view.listenerEntfernen(this);
                 //model.zuruecksetzen();
             }
-            FeldAktualisieren("Eigen");
-            FeldAktualisieren("Gegner");
+            feldAktualisieren("Eigen");
+            feldAktualisieren("Gegner");
             view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
             view.nameAktualisieren(model.getSpieler(), model.getName());
         }
 
-        private void FeldAktualisieren(String spieler) {
-            String temp;
-            for (int i=0; i<10; i++) {
-                for (int j = 0; j < 10; j++) {
-                    temp = model.getWert(i, j, spieler);
-                    view.setButton(i, j, temp, spieler);
-                }
+    }
+
+    public void feldAktualisieren(String spieler) {
+        String temp;
+        for (int i=0; i<10; i++) {
+            for (int j = 0; j < 10; j++) {
+                temp = model.getWert(i, j, spieler);
+                view.setButton(i, j, temp, spieler);
             }
         }
     }
