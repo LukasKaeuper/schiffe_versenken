@@ -165,6 +165,12 @@ public class View extends JFrame {
         }
     }
 
+    public void schiffanzeigenZuruecksetzen(){
+        schiffanzeigeEigen.removeAll();
+        schiffanzeigeGegner.removeAll();
+        schiffanzeigenFuellen();
+    }
+
     private class Schiffeintrag extends JPanel{
         private int laenge;
         private boolean abgeschossen;
@@ -812,6 +818,8 @@ public class View extends JFrame {
                     spielFensterSichtbar();
                     containerFuellen();
                     status.setText(nameEins.getText());
+                    controller.feldAktualisieren("Gegner");
+                    schiffanzeigenZuruecksetzen();
                     setVisible(false);
                 }
             });
