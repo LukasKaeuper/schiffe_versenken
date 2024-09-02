@@ -29,6 +29,9 @@ public class View extends JFrame {
     private Controller controller;
     private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
     Font font1 = new Font("SansSerif", Font.BOLD, 20);
+    Menu menu;
+    JButton zurueckHauptmenue = new JButton("Hauptmenü");
+    JButton bestenlistebutton = new JButton("Bestenliste");
 
     Bestenliste bestenliste = new Bestenliste();
 
@@ -36,7 +39,7 @@ public class View extends JFrame {
 
     public View(Controller controller) {
         super("Schiffe Versenken");
-        new Menu();
+        menu = new Menu();
         this.controller = controller;
         fensterGenerieren();
     }
@@ -47,6 +50,14 @@ public class View extends JFrame {
         setLayout(new BorderLayout());
 
         zuege = new JTextField("Anzahl an Zügen: 0");
+
+        status = new JTextField(nameEins.getText());
+        status.setHorizontalAlignment(JTextField.CENTER);
+        status.setFont(font1);
+        status.setSize(1500,200);
+        add(status, BorderLayout.NORTH);
+        status.setEditable(false);
+        status.setCaretColor(UIManager.getColor("Panel.background"));
 
         add(zuege, BorderLayout.SOUTH);
         zuege.setHorizontalAlignment(JTextField.CENTER);
@@ -78,7 +89,6 @@ public class View extends JFrame {
         container.setLayout(new GridBagLayout());
 
         containerFuellen();
-        JButton bestenlistebutton = new JButton("Bestenliste");
         bestenlistebutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,32 +102,14 @@ public class View extends JFrame {
             }
         });
 
-        JButton zurueckHauptmenue = new JButton("Hauptmenü");
         zurueckHauptmenue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                setVisible(false);
+                menu.setVisible(true);
+                containerFuellen();
             }
         });
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 2;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(10, 0, 10, 10); // Abstände um den Button herum
-        c.fill = GridBagConstraints.NONE;
-        container.add(bestenlistebutton, c);
-        c.gridx = 1;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.EAST;
-        c.insets = new Insets(10, 0, 10, 10); // Abstände um den Button herum
-        c.fill = GridBagConstraints.NONE;
-        container.add(zurueckHauptmenue, c);
-
 
 
 //        Dimension textFieldSize = new Dimension(50, 30);
@@ -126,16 +118,6 @@ public class View extends JFrame {
 
         add(container, BorderLayout.CENTER);
         pack();
-    }
-
-    private void statusfuellen(){
-        status = new JTextField(controller.getSpielerNameEins());
-        status.setHorizontalAlignment(JTextField.CENTER);
-        status.setFont(font1);
-        status.setSize(1500,200);
-        add(status, BorderLayout.NORTH);
-        status.setEditable(false);
-        status.setCaretColor(UIManager.getColor("Panel.background"));
     }
 
     private void schiffanzeigenFuellen() {
@@ -361,7 +343,9 @@ public class View extends JFrame {
         zurueckHauptmenue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                setVisible(false);
+                container.removeAll();
+                menu.setVisible(true);
             }
         });
 
@@ -471,12 +455,6 @@ public class View extends JFrame {
                 container.remove(buttonPanel);
                 //add(container, BorderLayout.CENTER);
 
-                panelSpielfeldEigen.setVisible(true);
-                panelSpielfeldGegner.setVisible(true);
-                schiffanzeigeEigen.setVisible(true);
-                schiffanzeigeGegner.setVisible(true);
-                zuege.setVisible(true);
-
                 // Panel neu validieren und neu zeichnen
 //                buttonPanel.revalidate();
 //                buttonPanel.repaint();
@@ -508,6 +486,28 @@ public class View extends JFrame {
         c.weightx = 0.5;
         c.weighty = 1;
         container.add(schiffanzeigeGegner, c);
+        c.gridx = 2;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(0, 5, 10, 0); // Abstände um den Button herum
+        c.fill = GridBagConstraints.NONE;
+        container.add(bestenlistebutton, c);
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.EAST;
+        c.insets = new Insets(0, 0, 10, 5); // Abstände um den Button herum
+        c.fill = GridBagConstraints.NONE;
+        container.add(zurueckHauptmenue, c);
+
+        panelSpielfeldEigen.setVisible(true);
+        panelSpielfeldGegner.setVisible(true);
+        schiffanzeigeEigen.setVisible(true);
+        schiffanzeigeGegner.setVisible(true);
+        zuege.setVisible(true);
     }
 
     public void listenerEntfernen(ActionListener al) {
@@ -806,11 +806,13 @@ public class View extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Singleplayer\n");
                     controller.setModus("sp");
-                    spielFensterSichtbar();
                     controller.spielfelderInitialisieren();
                     controller.setSpielerNameEins(nameEins.getText());
                     controller.setSpielerNameZwei(nameZwei.getText());
-                    statusfuellen();
+                    spielFensterSichtbar();
+                    containerFuellen();
+                    status.setText(nameEins.getText());
+                    setVisible(false);
                 }
             });
 
@@ -829,6 +831,7 @@ public class View extends JFrame {
                     localButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            controller.setModus("lokal_mp");
                             spielFensterSichtbar();
                         }
                     });
