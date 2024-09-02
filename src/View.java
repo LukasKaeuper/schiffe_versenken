@@ -341,7 +341,9 @@ public class View extends JFrame {
         zurueckbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                container.removeAll();
+                status.setText(controller.getSpielerNameEins());
+                containerFuellen();
             }
         });
 
