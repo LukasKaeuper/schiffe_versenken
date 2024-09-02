@@ -4,8 +4,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Spielfeld {
-    private final int reihe = 10;
-    private final int spalte = 10;
+    private int reihe;
+    private int spalte;
     private final int wasser = 0;
     private final int schiff = 1;
     private final int wasser_getroffen = 2;
@@ -14,26 +14,31 @@ public class Spielfeld {
     private final int unmoeglich = 5;
     private final int unmoeglich_getroffen = 6;
     private Spieler spieler;
+    private boolean regelAus;
+    private boolean feldGroesser = false;
 
-    private final int[][] spielfeld;
+    private int[][] spielfeld;
     private final ArrayList<Schiff> schiffe;
 
 
-    public Spielfeld() {
+    public Spielfeld(int i, int j, boolean x) {
+        reihe = i;
+        spalte = j;
+        regelAus = x;
         spielfeld = new int[reihe][spalte];
         schiffe = new ArrayList<Schiff>();
         spieler = new Spieler("Spieler");
         initialisiereSpielfeld();
-        schiffePlatzieren(5);
-        schiffePlatzieren(4);
-        schiffePlatzieren(4);
-        schiffePlatzieren(3);
-        schiffePlatzieren(3);
-        schiffePlatzieren(3);
-        schiffePlatzieren(2);
-        schiffePlatzieren(2);
-        schiffePlatzieren(2);
-        schiffePlatzieren(2);
+        schiffePlatzieren(5,regelAus);
+        schiffePlatzieren(4,regelAus);
+        schiffePlatzieren(4,regelAus);
+        schiffePlatzieren(3,regelAus);
+        schiffePlatzieren(3,regelAus);
+        schiffePlatzieren(3,regelAus);
+        schiffePlatzieren(2,regelAus);
+        schiffePlatzieren(2,regelAus);
+        schiffePlatzieren(2,regelAus);
+        schiffePlatzieren(2,regelAus);
         anzeigen();
     }
 
@@ -45,34 +50,66 @@ public class Spielfeld {
         }
     }
 
-    public void schiffePlatzieren(int laenge){
+    public void schiffePlatzieren(int laenge, boolean aus){
         Random random = new Random();
         boolean platziert = false;
+        aus = getRegelAus();
 
-        while(!platziert){
-            boolean horizontal = random.nextBoolean();
-            int x = random.nextInt(spalte);
-            int y = random.nextInt(reihe);
+        if(!aus){
+            while(!platziert){
+                boolean horizontal = random.nextBoolean();
+                int x = random.nextInt(spalte);
+                int y = random.nextInt(reihe);
 
-            if(checkPlatzierung(x,y,laenge, horizontal) && checkAbstand(x,y,laenge, horizontal)){
-                Schiff neuesSchiff = new Schiff(horizontal,laenge,x,y);
+                if(checkPlatzierung(x,y,laenge, horizontal) && checkAbstand(x,y,laenge, horizontal)){
+                    Schiff neuesSchiff = new Schiff(horizontal,laenge,x,y);
 
-                if(horizontal){
-                    for(int i = 0; i < laenge; i++){
-                        spielfeld[y][x + i] = schiff;
-                        //System.out.println("neue Koordinate");
-                        neuesSchiff.neueKoordinate(y, x+i);
+                    if(horizontal){
+                        for(int i = 0; i < laenge; i++){
+                            spielfeld[y][x + i] = schiff;
+                            //System.out.println("neue Koordinate");
+                            neuesSchiff.neueKoordinate(y, x+i);
+                        }
+                    } else {
+                        for(int i = 0; i < laenge; i++){
+                            spielfeld[y + i][x] = schiff;
+                            //System.out.println("neue Koordinate");
+                            neuesSchiff.neueKoordinate(y+i, x);
+                        }
                     }
-                } else {
-                    for(int i = 0; i < laenge; i++){
-                        spielfeld[y + i][x] = schiff;
-                        //System.out.println("neue Koordinate");
-                        neuesSchiff.neueKoordinate(y+i, x);
-                    }
+                    schiffe.add(neuesSchiff);
+                    neuesSchiff.ausgabe();
+                    platziert = true;
                 }
-                schiffe.add(neuesSchiff);
-                neuesSchiff.ausgabe();
-                platziert = true;
+            }
+        }
+
+        if(aus){
+            while(!platziert){
+                boolean horizontal = random.nextBoolean();
+                int x = random.nextInt(spalte);
+                int y = random.nextInt(reihe);
+
+                if(checkPlatzierung(x,y,laenge, horizontal)){
+                    Schiff neuesSchiff = new Schiff(horizontal,laenge,x,y);
+
+                    if(horizontal){
+                        for(int i = 0; i < laenge; i++){
+                            spielfeld[y][x + i] = schiff;
+                            //System.out.println("neue Koordinate");
+                            neuesSchiff.neueKoordinate(y, x+i);
+                        }
+                    } else {
+                        for(int i = 0; i < laenge; i++){
+                            spielfeld[y + i][x] = schiff;
+                            //System.out.println("neue Koordinate");
+                            neuesSchiff.neueKoordinate(y+i, x);
+                        }
+                    }
+                    schiffe.add(neuesSchiff);
+                    neuesSchiff.ausgabe();
+                    platziert = true;
+                }
             }
         }
     }
@@ -191,31 +228,35 @@ public class Spielfeld {
     }
 
     public void unmoeglicheFelderMarkieren(int x, int y) {
-        if (spielfeld[x][y] == schiff_getroffen || spielfeld[x][y] == komplettes_schiff_getroffen) {
 
-            if (x-1 >= 0 && y-1 >= 0 && (spielfeld[x-1][y-1] == wasser_getroffen || spielfeld[x-1][y-1] == unmoeglich_getroffen)) {
-                spielfeld[x-1][y-1] = unmoeglich_getroffen;
-            }else if (x-1 >= 0 && y-1 >= 0 && spielfeld[x-1][y-1] != wasser_getroffen) {
-                spielfeld[x - 1][y - 1] = unmoeglich;
+        if(!regelAus){
+            if (spielfeld[x][y] == schiff_getroffen || spielfeld[x][y] == komplettes_schiff_getroffen) {
+
+                if (x - 1 >= 0 && y - 1 >= 0 && (spielfeld[x - 1][y - 1] == wasser_getroffen || spielfeld[x - 1][y - 1] == unmoeglich_getroffen)) {
+                    spielfeld[x - 1][y - 1] = unmoeglich_getroffen;
+                } else if (x - 1 >= 0 && y - 1 >= 0 && spielfeld[x - 1][y - 1] != wasser_getroffen) {
+                    spielfeld[x - 1][y - 1] = unmoeglich;
+                }
+
+                if (x - 1 >= 0 && y + 1 <= 9 && (spielfeld[x - 1][y + 1] == wasser_getroffen || spielfeld[x - 1][y + 1] == unmoeglich_getroffen)) {
+                    spielfeld[x - 1][y + 1] = unmoeglich_getroffen;
+                } else if (x - 1 >= 0 && y + 1 <= 9 && spielfeld[x - 1][y + 1] != wasser_getroffen) {
+                    spielfeld[x - 1][y + 1] = unmoeglich;
+                }
+
+                if (x + 1 <= 9 && y - 1 >= 0 && (spielfeld[x + 1][y - 1] == wasser_getroffen || spielfeld[x + 1][y - 1] == unmoeglich_getroffen)) {
+                    spielfeld[x + 1][y - 1] = unmoeglich_getroffen;
+                } else if (x + 1 <= 9 && y - 1 >= 0 && spielfeld[x + 1][y - 1] != wasser_getroffen) {
+                    spielfeld[x + 1][y - 1] = unmoeglich;
+                }
+
+                if (x + 1 <= 9 && y + 1 <= 9 && (spielfeld[x + 1][y + 1] == wasser_getroffen || spielfeld[x + 1][y + 1] == unmoeglich_getroffen)) {
+                    spielfeld[x + 1][y + 1] = unmoeglich_getroffen;
+                } else if (x + 1 <= 9 && y + 1 <= 9 && spielfeld[x + 1][y + 1] != wasser_getroffen) {
+                    spielfeld[x + 1][y + 1] = unmoeglich;
+                }
             }
 
-            if (x-1 >= 0 && y+1 <= 9 && (spielfeld[x-1][y+1] == wasser_getroffen || spielfeld[x-1][y+1] == unmoeglich_getroffen)) {
-                spielfeld[x-1][y+1] = unmoeglich_getroffen;
-            } else if (x-1 >= 0 && y+1 <= 9 && spielfeld[x-1][y+1] != wasser_getroffen){
-                spielfeld[x-1][y+1] = unmoeglich;
-            }
-
-            if (x+1 <= 9 && y-1 >= 0 && (spielfeld[x+1][y-1] == wasser_getroffen || spielfeld[x+1][y-1] == unmoeglich_getroffen)) {
-                spielfeld[x+1][y-1] = unmoeglich_getroffen;
-            } else if (x+1 <= 9 && y-1 >= 0 && spielfeld[x+1][y-1] != wasser_getroffen) {
-                spielfeld[x+1][y-1] = unmoeglich;
-            }
-
-            if (x+1 <= 9 && y+1 <= 9 && (spielfeld[x+1][y+1] == wasser_getroffen || spielfeld[x+1][y+1] == unmoeglich_getroffen)) {
-                spielfeld[x+1][y+1] = unmoeglich_getroffen;
-            }else if (x+1 <= 9 && y+1 <= 9 && spielfeld[x+1][y+1] != wasser_getroffen) {
-                spielfeld[x+1][y+1] = unmoeglich;
-            }
         }
         if (spielfeld[x][y] == komplettes_schiff_getroffen) {
             for (Schiff n : schiffe) {
@@ -231,37 +272,71 @@ public class Spielfeld {
     }
 
     private void himmelsrichtungenAlsUnmoeglichMarkieren(int x, int y) {
-        if (x-1 >= 0 && spielfeld[x-1][y] != schiff_getroffen && spielfeld[x-1][y] != komplettes_schiff_getroffen) {
-            if (spielfeld[x-1][y] == wasser_getroffen || spielfeld[x-1][y] == unmoeglich_getroffen){
-                spielfeld[x-1][y] = unmoeglich_getroffen;
-            } else {
-                spielfeld[x-1][y] = unmoeglich;
+        if(!regelAus){
+            if (x-1 >= 0 && spielfeld[x-1][y] != schiff_getroffen && spielfeld[x-1][y] != komplettes_schiff_getroffen) {
+                if (spielfeld[x-1][y] == wasser_getroffen || spielfeld[x-1][y] == unmoeglich_getroffen){
+                    spielfeld[x-1][y] = unmoeglich_getroffen;
+                } else {
+                    spielfeld[x-1][y] = unmoeglich;
+                }
             }
-        }
-        if (y-1 >= 0 && spielfeld[x][y-1] != schiff_getroffen && spielfeld[x][y-1] != komplettes_schiff_getroffen) {
-            if (spielfeld[x][y-1] == wasser_getroffen || spielfeld[x][y-1] == unmoeglich_getroffen){
-                spielfeld[x][y-1] = unmoeglich_getroffen;
-            } else {
-                spielfeld[x][y-1] = unmoeglich;
+            if (y-1 >= 0 && spielfeld[x][y-1] != schiff_getroffen && spielfeld[x][y-1] != komplettes_schiff_getroffen) {
+                if (spielfeld[x][y-1] == wasser_getroffen || spielfeld[x][y-1] == unmoeglich_getroffen){
+                    spielfeld[x][y-1] = unmoeglich_getroffen;
+                } else {
+                    spielfeld[x][y-1] = unmoeglich;
+                }
             }
-        }
-        if (x+1 <= 9 && spielfeld[x+1][y] != schiff_getroffen && spielfeld[x+1][y] != komplettes_schiff_getroffen) {
-            if (spielfeld[x+1][y] == wasser_getroffen || spielfeld[x+1][y] == unmoeglich_getroffen){
-                spielfeld[x+1][y] = unmoeglich_getroffen;
-            } else {
-                spielfeld[x+1][y] = unmoeglich;
+            if (x+1 <= 9 && spielfeld[x+1][y] != schiff_getroffen && spielfeld[x+1][y] != komplettes_schiff_getroffen) {
+                if (spielfeld[x+1][y] == wasser_getroffen || spielfeld[x+1][y] == unmoeglich_getroffen){
+                    spielfeld[x+1][y] = unmoeglich_getroffen;
+                } else {
+                    spielfeld[x+1][y] = unmoeglich;
+                }
             }
-        }
-        if (y+1 <= 9 && spielfeld[x][y+1] != schiff_getroffen && spielfeld[x][y+1] != komplettes_schiff_getroffen) {
-            if (spielfeld[x][y+1] == wasser_getroffen || spielfeld[x][y+1] == unmoeglich_getroffen){
-                spielfeld[x][y+1] = unmoeglich_getroffen;
-            } else {
-                spielfeld[x][y+1] = unmoeglich;
+            if (y+1 <= 9 && spielfeld[x][y+1] != schiff_getroffen && spielfeld[x][y+1] != komplettes_schiff_getroffen) {
+                if (spielfeld[x][y+1] == wasser_getroffen || spielfeld[x][y+1] == unmoeglich_getroffen){
+                    spielfeld[x][y+1] = unmoeglich_getroffen;
+                } else {
+                    spielfeld[x][y+1] = unmoeglich;
+                }
             }
         }
     }
 
     public Spieler getSpieler() {
         return spieler;
+    }
+
+    public boolean getRegelAus(){
+        return regelAus;
+    }
+
+    public void setRegelAus(boolean regelAus) {
+        this.regelAus = regelAus;
+    }
+
+    public boolean getFeldGroesser() {
+        return feldGroesser;
+    }
+
+    public void setFeldGroesser(boolean feldGroesser) {
+        this.feldGroesser = feldGroesser;
+    }
+
+    public int getSpalte() {
+        return spalte;
+    }
+
+    public void setSpalte(int spalte) {
+        this.spalte = spalte;
+    }
+
+    public int getReihe() {
+        return reihe;
+    }
+
+    public void setReihe(int reihe) {
+        this.reihe = reihe;
     }
 }

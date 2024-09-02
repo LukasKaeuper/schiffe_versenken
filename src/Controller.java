@@ -9,14 +9,18 @@ public class Controller {
 
     public Controller() {
         this.model = new Model(this);
-        this.view = new View(new SingleplayerListener(), this);
-        this.view.erstelleSpielfeldListener(new SpielfeldListener());
+        this.view = new View(new SingleplayerListener(), this, 10);
+        this.view.erstelleSpielfeldListener(new SpielfeldListener(), 10);
         this.modus = "lokal_mp";
     }
 
+    //public void viewAktuakisieren() {
+    //    view = new View(new SingleplayerListener(), new Controller(), getSpalte());
+    //}
+
     class SpielfeldListener implements ActionListener {
         public SpielfeldListener() {
-            FeldAktualisieren("Eigen");
+            FeldAktualisieren("Eigen", getSpalte());
         }
 
         @Override
@@ -44,19 +48,21 @@ public class Controller {
                 view.listenerEntfernen(this);
                 //model.zuruecksetzen();
             }
-            FeldAktualisieren("Eigen");
-            FeldAktualisieren("Gegner");
+            FeldAktualisieren("Eigen", getSpalte());
+            FeldAktualisieren("Gegner", getSpalte());
             view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
-            view.nameAktualisieren(model.getSpieler(), model.getName());
+            if (!model.beendet()){
+                view.nameAktualisieren(model.getSpieler(), model.getName());
+            }
         }
+    }
 
-        private void FeldAktualisieren(String spieler) {
-            String temp;
-            for (int i=0; i<10; i++) {
-                for (int j = 0; j < 10; j++) {
-                    temp = model.getWert(i, j, spieler);
-                    view.setButton(i, j, temp, spieler);
-                }
+    public void FeldAktualisieren(String spieler, int x) {
+        String temp;
+        for (int i=0; i< x; i++) {
+            for (int j = 0; j < x; j++) {
+                temp = model.getWert(i, j, spieler);
+                view.setButton(i, j, temp, spieler);
             }
         }
     }
@@ -73,7 +79,8 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
             System.out.println("Singleplayer\n");
             modus = "sp";
-            view.spielFensterSichtbar();
+            view.spielFensterSichtbar(true);
+            FeldAktualisieren("Eigen", getSpalte());
         }
     }
 
@@ -91,5 +98,41 @@ public class Controller {
 
     public String getSpielerNameZwei() {
         return model.getSpielerNameZwei();
+    }
+
+    public void setRegelAus(boolean value){
+        model.setRegelAus(value);
+    }
+
+    public boolean getRegelAus(){
+        return model.getRegelAus();
+    }
+
+    public boolean getFeldGroesser() {
+        return model.getFeldGroesser();
+    }
+
+    public void setFeldGroesser(boolean feldGroesser) {
+        model.setFeldGroesser(feldGroesser);
+    }
+
+    public void setSpalte(int spalte){
+        model.setSpalte(spalte);
+    }
+
+    public int getSpalte(){
+        return model.getSpalte();
+    }
+
+    public void setReihe(int reihe){
+        model.setReihe(reihe);
+    }
+
+    public int getReihe(){
+        return model.getReihe();
+    }
+
+    public void spielfeldAktualisiern(int i){
+        model.spielfeldaktualisieren(i);
     }
 }
