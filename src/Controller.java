@@ -14,9 +14,9 @@ public class Controller {
         this.modus = "lokal_mp";
     }
 
-    //public void viewAktuakisieren() {
-    //    view = new View(new SingleplayerListener(), new Controller(), getSpalte());
-    //}
+    public void viewAktuakisieren() {
+        view = new View(new SingleplayerListener(), new Controller(), getSpalte());
+    }
 
     class SpielfeldListener implements ActionListener {
         public SpielfeldListener() {

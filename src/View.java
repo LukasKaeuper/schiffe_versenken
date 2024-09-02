@@ -1003,7 +1003,7 @@ public class View extends JFrame {
                                 controller.setReihe(20);
                                 controller.setSpalte(20);
                                 controller.spielfeldAktualisiern(20);
-                                //controller.viewAktuakisieren();
+                                controller.viewAktuakisieren();
                                 System.out.println(controller.getReihe());
                             } else {
                                 toggleButtonFeldGroesser.setText("OFF");
@@ -1011,7 +1011,7 @@ public class View extends JFrame {
                                 controller.setReihe(10);
                                 controller.setSpalte(10);
                                 controller.spielfeldAktualisiern(10);
-                                //controller.viewAktuakisieren();
+                                controller.viewAktuakisieren();
 
                                 System.out.println(controller.getReihe());
                             }
