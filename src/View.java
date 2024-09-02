@@ -17,8 +17,8 @@ public class View extends JFrame {
     private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];
     private JTextField status;
     private JTextField zuege;
-    private JTextField nameEins;
-    private JTextField nameZwei;
+    private JTextField nameEins = new JTextField("Lukas", 15);;
+    private JTextField nameZwei = new JTextField("Marten", 15);;
     private int spielerEinsZuege;
     private int spielerZweiZuege;
     private JPanel schiffanzeigeEigen;
@@ -28,35 +28,23 @@ public class View extends JFrame {
     private GamePanel panelSpielfeldGegner;
     private Controller controller;
     private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
+    Font font1 = new Font("SansSerif", Font.BOLD, 20);
 
     Bestenliste bestenliste = new Bestenliste();
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
-    public View(ActionListener sp, Controller controller) {
+    public View(Controller controller) {
         super("Schiffe Versenken");
-        new Menu(sp);
+        new Menu();
         this.controller = controller;
-        controller.setSpielerNameEins("Spieler 1");
-        controller.setSpielerNameZwei("Spieler 2");
         fensterGenerieren();
     }
 
     private void fensterGenerieren() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1600, 900);
+        setSize(1600, 1000);
         setLayout(new BorderLayout());
-
-        Font font1 = new Font("SansSerif", Font.BOLD, 20);
-
-
-        status = new JTextField(controller.getSpielerNameEins());
-        status.setHorizontalAlignment(JTextField.CENTER);
-        status.setFont(font1);
-        status.setSize(1500,200);
-        add(status, BorderLayout.NORTH);
-        status.setEditable(false);
-        status.setCaretColor(UIManager.getColor("Panel.background"));
 
         zuege = new JTextField("Anzahl an Zügen: 0");
 
@@ -138,6 +126,16 @@ public class View extends JFrame {
 
         add(container, BorderLayout.CENTER);
         pack();
+    }
+
+    private void statusfuellen(){
+        status = new JTextField(controller.getSpielerNameEins());
+        status.setHorizontalAlignment(JTextField.CENTER);
+        status.setFont(font1);
+        status.setSize(1500,200);
+        add(status, BorderLayout.NORTH);
+        status.setEditable(false);
+        status.setCaretColor(UIManager.getColor("Panel.background"));
     }
 
     private void schiffanzeigenFuellen() {
@@ -700,7 +698,7 @@ public class View extends JFrame {
 
     public class Menu extends JFrame {
 
-        public Menu(ActionListener sp) {
+        public Menu() {
             // Fenster initialisieren
             setTitle("Schiffe Versenken");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -803,7 +801,18 @@ public class View extends JFrame {
 
             // ActionListener für die Buttons
 
-            singlePlayerButton.addActionListener(sp);
+            singlePlayerButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Singleplayer\n");
+                    controller.setModus("sp");
+                    spielFensterSichtbar();
+                    controller.spielfelderInitialisieren();
+                    controller.setSpielerNameEins(nameEins.getText());
+                    controller.setSpielerNameZwei(nameZwei.getText());
+                    statusfuellen();
+                }
+            });
 
             multiPlayerButton.addActionListener(new ActionListener() {
                 @Override
@@ -879,15 +888,9 @@ public class View extends JFrame {
 
                     // Textfeld wird erstellt
                     // Text und Spaltenanzahl werden dabei direkt gesetzt
-                    nameZwei = new JTextField("Marten", 15);
                     gbc.gridx = 1;
                     gbc.gridy = 1;
                     container.add(nameZwei, gbc);
-
-                    JButton buttonOK = new JButton("OK");
-                    gbc.gridx = 1;
-                    gbc.gridy = 2;
-                    container.add(buttonOK, gbc);
 
                     JButton loeschen = new JButton("OK");
                     loeschen.addActionListener(new ActionListener() {
@@ -901,17 +904,6 @@ public class View extends JFrame {
                     gbc.gridy = 3;
                     container.add(loeschen, gbc);
 
-                    buttonOK.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            controller.setSpielerNameEins(nameEins.getText());
-                            controller.setSpielerNameZwei(nameZwei.getText());
-                            nameAktualisieren(1, controller.getSpielerNameEins());
-                            System.out.println(controller.getSpielerNameEins());
-                            System.out.println(controller.getSpielerNameZwei());
-                            meinJFrame.dispose();
-                        }
-                    });
 
                     meinJFrame.setVisible(true);
                 }

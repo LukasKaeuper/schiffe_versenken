@@ -9,9 +9,13 @@ public class Controller {
 
     public Controller() {
         this.model = new Model(this);
-        this.view = new View(new SingleplayerListener(), this);
-        this.view.erstelleSpielfeldListener(new SpielfeldListener());
+        this.view = new View(this);
         this.modus = "lokal_mp";
+    }
+
+    public void spielfelderInitialisieren() {
+        model.spielfeldInitialisieren();
+        this.view.erstelleSpielfeldListener(new SpielfeldListener());
     }
 
     class SpielfeldListener implements ActionListener {
@@ -66,15 +70,8 @@ public class Controller {
         view.schiffanzeigeAktualisieren(laenge, spieler);
     }
 
-    class SingleplayerListener implements ActionListener{
-        public SingleplayerListener() {}
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("Singleplayer\n");
-            modus = "sp";
-            view.spielFensterSichtbar();
-        }
+    public void setModus(String modus){
+        this.modus = modus;
     }
 
     public void setSpielerNameEins(String name) {

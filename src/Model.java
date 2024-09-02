@@ -5,8 +5,8 @@ import java.nio.file.Path;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Model {
-    private Spielfeld spielfeldLinks = new Spielfeld();
-    private Spielfeld spielfeldRechts = new Spielfeld();
+    private Spielfeld spielfeldLinks;
+    private Spielfeld spielfeldRechts;
     private int spieler = 1;
     private int kiSchussX;
     private int kiSchussY;
@@ -19,6 +19,11 @@ public class Model {
         this.kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
         this.kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
         this.controller = controller;
+    }
+
+    public void spielfeldInitialisieren(){
+        spielfeldLinks = new Spielfeld();
+        spielfeldRechts = new Spielfeld();
     }
 
     public void schiessen(int n, int m) {
