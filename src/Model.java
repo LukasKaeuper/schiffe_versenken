@@ -5,8 +5,10 @@ import java.nio.file.Path;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Model {
-    private Spielfeld spielfeldLinks = new Spielfeld(10,10,false);
-    private Spielfeld spielfeldRechts = new Spielfeld(10,10,false);
+//    private Spielfeld spielfeldLinks = new Spielfeld(10,10,false);
+//    private Spielfeld spielfeldRechts = new Spielfeld(10,10,false);
+    private Spielfeld spielfeldLinks;
+    private Spielfeld spielfeldRechts;
     private int spieler = 1;
     private int kiSchussX;
     private int kiSchussY;
@@ -16,14 +18,14 @@ public class Model {
 
     public Model(Controller controller) {
         playSound("ambience.wav", true, -10f);
-        this.kiSchussX = ThreadLocalRandom.current().nextInt(0, spielfeldLinks.getSpalte());
-        this.kiSchussY = ThreadLocalRandom.current().nextInt(0, spielfeldLinks.getSpalte());
         this.controller = controller;
     }
 
     public void spielfeldaktualisieren(int i){
-        spielfeldLinks = new Spielfeld(i,i,getRegelAus());
-        spielfeldRechts = new Spielfeld(i,i,getRegelAus());
+        spielfeldLinks = new Spielfeld(i,i, controller.getRegelAus());
+        spielfeldRechts = new Spielfeld(i,i, controller.getRegelAus());
+        this.kiSchussX = ThreadLocalRandom.current().nextInt(0, spielfeldLinks.getSpalte());
+        this.kiSchussY = ThreadLocalRandom.current().nextInt(0, spielfeldLinks.getSpalte());
     }
 
     public void schiessen(int n, int m) {
@@ -266,19 +268,11 @@ public class Model {
         return spielfeldLinks.getRegelAus();
     }
 
-    public boolean getFeldGroesser() {
-        return spielfeldLinks.getFeldGroesser();
+    public void setGroesse(int groesse){
+        spielfeldLinks.setSpalte(groesse);
     }
 
-    public void setFeldGroesser(boolean feldGroesser) {
-        spielfeldLinks.setFeldGroesser(feldGroesser);
-    }
-
-    public void setSpalte(int spalte){
-        spielfeldLinks.setSpalte(spalte);
-    }
-
-    public int getSpalte(){
+    public int getGroesse(){
         return spielfeldLinks.getSpalte();
     }
 

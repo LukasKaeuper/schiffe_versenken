@@ -29,6 +29,7 @@ public class View extends JFrame {
     private GamePanel panelSpielfeldGegner;
     private boolean gewonnen = false;
     private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
+    Font font1 = new Font("SansSerif", Font.BOLD, 20);
 
 
     Bestenliste bestenliste = new Bestenliste();
@@ -41,8 +42,8 @@ public class View extends JFrame {
         new Menu(sp);
         this.buttonSpielfeldEigen = new JButton[x][x];
         this.buttonSpielfeldGegner = new JButton[x][x];
-        controller.setSpielerNameEins("Spieler 1");
-        controller.setSpielerNameZwei("Spieler 2");
+//        controller.setSpielerNameEins("Spieler 1");
+//        controller.setSpielerNameZwei("Spieler 2");
         fensterGenerieren(x);
     }
 
@@ -50,17 +51,6 @@ public class View extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(1920, 1080);
         setLayout(new BorderLayout());
-
-        Font font1 = new Font("SansSerif", Font.BOLD, 20);
-
-
-        status = new JTextField(controller.getSpielerNameEins());
-        status.setHorizontalAlignment(JTextField.CENTER);
-        status.setFont(font1);
-        status.setSize(1500,200);
-        add(status, BorderLayout.NORTH);
-        status.setEditable(false);
-        status.setCaretColor(UIManager.getColor("Panel.background"));
 
         zuege = new JTextField("Anzahl an Zügen: 0");
 
@@ -147,6 +137,15 @@ public class View extends JFrame {
         pack();
     }
 
+    public void status_fuellen(){
+        status = new JTextField(controller.getSpielerNameEins());
+        status.setHorizontalAlignment(JTextField.CENTER);
+        status.setFont(font1);
+        status.setSize(1500,200);
+        add(status, BorderLayout.NORTH);
+        status.setEditable(false);
+        status.setCaretColor(UIManager.getColor("Panel.background"));
+    }
     private void schiffanzeigenFuellen() {
         //eigeneSchiffe.add(new )
         schiffanzeigeEigen.add(new Schiffeintrag(5));
@@ -539,8 +538,8 @@ public class View extends JFrame {
     }
 
     public void listenerEntfernen(ActionListener al) {
-        for (int i = 0; i < controller.getSpalte(); i++) {
-            for (int j = 0; j < controller.getSpalte(); j++) {
+        for (int i = 0; i < controller.getGroesse(); i++) {
+            for (int j = 0; j < controller.getGroesse(); j++) {
                 this.buttonSpielfeldGegner[i][j].removeActionListener(al);
             }
         }
@@ -999,17 +998,13 @@ public class View extends JFrame {
                             // Prüfe den Zustand des Buttons und setze den boolean Wert über den Controller
                             if (toggleButtonFeldGroesser.isSelected()) {
                                 toggleButtonFeldGroesser.setText("ON");
-                                controller.setFeldGroesser(true);
-                                controller.setReihe(20);
-                                controller.setSpalte(20);
+                                controller.setGroesse(20);
                                 controller.spielfeldAktualisiern(20);
                                 controller.viewAktuakisieren();
                                 System.out.println(controller.getReihe());
                             } else {
                                 toggleButtonFeldGroesser.setText("OFF");
-                                controller.setFeldGroesser(false);
-                                controller.setReihe(10);
-                                controller.setSpalte(10);
+                                controller.setGroesse(10);
                                 controller.spielfeldAktualisiern(10);
                                 controller.viewAktuakisieren();
 
@@ -1017,7 +1012,7 @@ public class View extends JFrame {
                             }
 
                             // Ausgabe des aktuellen Wertes über den Controller
-                            System.out.println("Boolean value is: " + controller.getFeldGroesser());
+                            System.out.println("Spielfeldgröße: " + controller.getGroesse());
                         }
                     });
 
@@ -1042,6 +1037,6 @@ public class View extends JFrame {
     }
 
     public int getSpalte(){
-        return controller.getSpalte();
+        return controller.getGroesse();
     }
 }

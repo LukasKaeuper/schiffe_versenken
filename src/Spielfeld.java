@@ -15,7 +15,6 @@ public class Spielfeld {
     private final int unmoeglich_getroffen = 6;
     private Spieler spieler;
     private boolean regelAus;
-    private boolean feldGroesser = false;
 
     private int[][] spielfeld;
     private final ArrayList<Schiff> schiffe;
@@ -29,16 +28,30 @@ public class Spielfeld {
         schiffe = new ArrayList<Schiff>();
         spieler = new Spieler("Spieler");
         initialisiereSpielfeld();
-        schiffePlatzieren(5,regelAus);
-        schiffePlatzieren(4,regelAus);
-        schiffePlatzieren(4,regelAus);
-        schiffePlatzieren(3,regelAus);
-        schiffePlatzieren(3,regelAus);
-        schiffePlatzieren(3,regelAus);
-        schiffePlatzieren(2,regelAus);
-        schiffePlatzieren(2,regelAus);
-        schiffePlatzieren(2,regelAus);
-        schiffePlatzieren(2,regelAus);
+        if (i == 10) {
+            schiffePlatzieren(5,regelAus);
+            schiffePlatzieren(4,regelAus);
+            schiffePlatzieren(4,regelAus);
+            schiffePlatzieren(3,regelAus);
+            schiffePlatzieren(3,regelAus);
+            schiffePlatzieren(3,regelAus);
+            schiffePlatzieren(2,regelAus);
+            schiffePlatzieren(2,regelAus);
+            schiffePlatzieren(2,regelAus);
+            schiffePlatzieren(2,regelAus);
+        }
+        else if (i == 20){
+            schiffePlatzieren(10,regelAus);
+            schiffePlatzieren(8,regelAus);
+            schiffePlatzieren(8,regelAus);
+            schiffePlatzieren(6,regelAus);
+            schiffePlatzieren(6,regelAus);
+            schiffePlatzieren(6,regelAus);
+            schiffePlatzieren(4,regelAus);
+            schiffePlatzieren(4,regelAus);
+            schiffePlatzieren(4,regelAus);
+            schiffePlatzieren(4,regelAus);
+        }
         anzeigen();
     }
 
@@ -314,14 +327,6 @@ public class Spielfeld {
 
     public void setRegelAus(boolean regelAus) {
         this.regelAus = regelAus;
-    }
-
-    public boolean getFeldGroesser() {
-        return feldGroesser;
-    }
-
-    public void setFeldGroesser(boolean feldGroesser) {
-        this.feldGroesser = feldGroesser;
     }
 
     public int getSpalte() {

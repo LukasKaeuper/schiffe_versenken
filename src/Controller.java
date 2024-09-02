@@ -6,21 +6,24 @@ public class Controller {
     private View view;
     private Model model;
     private String modus;
+    private int groesse;
+    private boolean regelAus;
 
     public Controller() {
         this.model = new Model(this);
         this.view = new View(new SingleplayerListener(), this, 10);
-        this.view.erstelleSpielfeldListener(new SpielfeldListener(), 10);
         this.modus = "lokal_mp";
+        this.groesse = 10;
+        this.regelAus = false;
     }
 
     public void viewAktuakisieren() {
-        view = new View(new SingleplayerListener(), new Controller(), getSpalte());
+        view = new View(new SingleplayerListener(), new Controller(), getGroesse());
     }
 
     class SpielfeldListener implements ActionListener {
         public SpielfeldListener() {
-            FeldAktualisieren("Eigen", getSpalte());
+            FeldAktualisieren("Eigen", getGroesse());
         }
 
         @Override
@@ -48,8 +51,8 @@ public class Controller {
                 view.listenerEntfernen(this);
                 //model.zuruecksetzen();
             }
-            FeldAktualisieren("Eigen", getSpalte());
-            FeldAktualisieren("Gegner", getSpalte());
+            FeldAktualisieren("Eigen", getGroesse());
+            FeldAktualisieren("Gegner", getGroesse());
             view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
             if (!model.beendet()){
                 view.nameAktualisieren(model.getSpieler(), model.getName());
@@ -80,7 +83,12 @@ public class Controller {
             System.out.println("Singleplayer\n");
             modus = "sp";
             view.spielFensterSichtbar(true);
-            FeldAktualisieren("Eigen", getSpalte());
+            model.spielfeldaktualisieren(groesse);
+            FeldAktualisieren("Eigen", groesse);
+            setSpielerNameEins("Spieler 1");
+            setSpielerNameZwei("Spieler 2");
+            view.erstelleSpielfeldListener(new SpielfeldListener(), groesse);
+            view.status_fuellen();
         }
     }
 
@@ -101,27 +109,19 @@ public class Controller {
     }
 
     public void setRegelAus(boolean value){
-        model.setRegelAus(value);
+        regelAus = value;
     }
 
     public boolean getRegelAus(){
-        return model.getRegelAus();
+        return regelAus;
     }
 
-    public boolean getFeldGroesser() {
-        return model.getFeldGroesser();
+    public void setGroesse(int groesse){
+        this.groesse = groesse;
     }
 
-    public void setFeldGroesser(boolean feldGroesser) {
-        model.setFeldGroesser(feldGroesser);
-    }
-
-    public void setSpalte(int spalte){
-        model.setSpalte(spalte);
-    }
-
-    public int getSpalte(){
-        return model.getSpalte();
+    public int getGroesse(){
+        return groesse;
     }
 
     public void setReihe(int reihe){
