@@ -31,20 +31,21 @@ public class Controller {
             int n = Integer.parseInt(dummy.substring(0, 1));
             int m = Integer.parseInt(dummy.substring(dummy.length() - 1));
             if (model.getWert(n, m, "Gegner").equals("Wasser") || model.getWert(n, m, "Gegner").equals("Schiff")) {
-                System.out.println("spieler: " + model.getSpieler());
+                System.out.println("Spieler: " + model.getName());
                 model.schiessen(n, m);
+                view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
                 if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen") && !modus.equals("sp")) {
                     model.spielerWechseln("lokal_mp");
                     view.rundenwechselBestaetigen();
-                    view.setSpieler(model.getSpieler());
+                    view.nameAktualisieren(model.getSpieler(), model.getName());
+                    view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
                 }
                 if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen") && modus.equals("sp")) {
                     model.spielerWechseln("sp");
                     model.ki_schiessen();
+                    view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
                 }
             }
-            view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
-            view.nameAktualisieren(model.getSpieler(), model.getName());
             if (model.beendet()) {
                 view.setGewonnen(model.getName());
                 view.listenerEntfernen();
