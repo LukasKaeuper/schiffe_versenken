@@ -79,9 +79,7 @@ public class Spielfeld {
 
             if (ChronoUnit.SECONDS.between(start, LocalDateTime.now()) >= 2){
                 System.out.println("Timeout bei Initialisierung, Neustart\n");
-                for (Schiff temp : schiffe){
-                    schiffe.remove(temp);
-                }
+                schiffe.clear();
                 initialisiereSpielfeld();
                 schiffePlatzieren(5);
                 schiffePlatzieren(4);
