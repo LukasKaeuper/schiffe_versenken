@@ -1,4 +1,9 @@
-
+/**
+ * Klasse Spieler
+ *
+ * @author (Lukas Käuper)
+ * @version 03.09.2024
+ */
 public class Spieler {
     private String name;            // Name des Spielers
     private int anzahlZuege = 0;    // Anzahl der Züge vom Spieler

@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -92,12 +91,6 @@ public class View extends JFrame {
         bestenlistebutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(spielerEinsZuege != 0) {
-                    bestenliste.eintragHinzufuegen(controller.getSpielerNameEins(), spielerEinsZuege);
-                }
-                else if(spielerZweiZuege != 0) {
-                    bestenliste.eintragHinzufuegen(controller.getSpielerNameZwei(), spielerZweiZuege);
-                }
                 bestenlisteGenerieren();
             }
         });
@@ -382,8 +375,74 @@ public class View extends JFrame {
         gbc.insets = new Insets(10, 0, 10, 100); // Abstände um den Button herum
         gbc.fill = GridBagConstraints.NONE;
         container.add(zurueckHauptmenue, gbc);
+    }
 
+    public void bestenlisteGenerierenImMenue(){
+        panelSpielfeldEigen.setVisible(false);
+        panelSpielfeldGegner.setVisible(false);
+        schiffanzeigeEigen.setVisible(false);
+        schiffanzeigeGegner.setVisible(false);
+        zuege.setVisible(false);
+        container.removeAll();
+        status.setText("Bestenliste");
 
+        // Bestehende Einträge abrufen
+        ArrayList<Eintrag> eintraege = bestenliste.getEintraege();
+
+        Font font1 = new Font("SansSerif", Font.BOLD, 15);
+
+        // Daten für die Tabelle vorbereiten
+        String[] spaltenNamen = {"Rang", "Name", "Züge", "Datum/Zeit"};
+        String[][] daten = new String[eintraege.size()][4];
+
+        for (int i = 0; i < eintraege.size(); i++) {
+            Eintrag eintrag = eintraege.get(i);
+            daten[i][0] = Integer.toString(i + 1);
+            daten[i][1] = eintrag.getName();
+            daten[i][2] = Integer.toString(eintrag.getAnzahlZuege());
+            daten[i][3] = eintrag.getDatumZeit();
+        }
+
+        // JTable erstellen und in einem JFrame anzeigen
+        JTable tabelle = new JTable(daten, spaltenNamen);
+        tabelle.getTableHeader().setReorderingAllowed(false);
+        tabelle.getTableHeader().setFont(font1);
+        JScrollPane scrollPane = new JScrollPane(tabelle);
+        tabelle.setFillsViewportHeight(true);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        for (int i = 0; i < tabelle.getColumnCount(); i++) {
+            tabelle.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        JButton zurueckHauptmenue = new JButton("Hauptmenü");
+        zurueckHauptmenue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                container.removeAll();
+                menu.setVisible(true);
+            }
+        });
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 1; // Position der Tabelle in der GridBagLayout
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH; // Tabelle füllt den verfügbaren Raum aus
+        gbc.insets = new Insets(100, 400, 100, 400); // Abstand um die Tabelle herum
+        container.add(scrollPane, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 0); // Abstände um den Button herum
+        gbc.fill = GridBagConstraints.NONE;
+        container.add(zurueckHauptmenue, gbc);
     }
 
 
@@ -765,6 +824,22 @@ public class View extends JFrame {
             JButton regelButton = new JButton("Regeln");
             regelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             buttonPanel.add(regelButton);
+            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+            JButton bestenlisteMenue = new JButton("Bestenliste");
+            bestenlisteMenue.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(bestenlisteMenue);
+
+            bestenlisteMenue.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    spielFensterSichtbar();
+                    containerFuellen();
+                    schiffanzeigenZuruecksetzen();
+                    setVisible(false);
+                    bestenlisteGenerierenImMenue();
+                }
+            });
 
             // Create the hover window
             JFrame hoverFrame = new JFrame("Regeln");
@@ -800,6 +875,7 @@ public class View extends JFrame {
             multiPlayerButton.setMaximumSize(buttonSize);
             settingsButton.setMaximumSize(buttonSize);
             regelButton.setMaximumSize(buttonSize);
+            bestenlisteMenue.setMaximumSize(buttonSize);
 
             // Button Panel in die Mitte setzen
             gbc.gridx = 0;
@@ -874,6 +950,8 @@ public class View extends JFrame {
                         buttonPanel.add(settingsButton);
                         buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
                         buttonPanel.add(regelButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(bestenlisteMenue);
 
                         buttonPanel.revalidate();
                         buttonPanel.repaint();
@@ -954,6 +1032,8 @@ public class View extends JFrame {
                             buttonPanel.add(settingsButton);
                             buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
                             buttonPanel.add(regelButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(bestenlisteMenue);
 
                             buttonPanel.revalidate();
                             buttonPanel.repaint();
