@@ -98,6 +98,7 @@ public class View extends JFrame {
         zurueckHauptmenue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                listenerEntfernen();
                 setVisible(false);
                 menu.setVisible(true);
                 containerFuellen();
@@ -577,10 +578,12 @@ public class View extends JFrame {
         zuege.setVisible(true);
     }
 
-    public void listenerEntfernen(ActionListener al) {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                this.buttonSpielfeldGegner[i][j].removeActionListener(al);
+    public void listenerEntfernen() {
+        for (ActionListener al: buttonSpielfeldGegner[1][1].getActionListeners()) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    this.buttonSpielfeldGegner[i][j].removeActionListener(al);
+                }
             }
         }
     }
@@ -895,12 +898,13 @@ public class View extends JFrame {
                     controller.spielfelderInitialisieren();
                     controller.setSpielerNameEins(nameEins.getText());
                     controller.setSpielerNameZwei(nameZwei.getText());
-                    spielFensterSichtbar();
                     containerFuellen();
                     status.setText(nameEins.getText());
                     controller.feldAktualisieren("Gegner");
                     schiffanzeigenZuruecksetzen();
+                    zuege.setText("Anzahl an Zügen: 0");
                     setVisible(false);
+                    spielFensterSichtbar();
                 }
             });
 
@@ -919,7 +923,17 @@ public class View extends JFrame {
                     localButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            System.out.println("Lokaler Multiplayer\n");
                             controller.setModus("lokal_mp");
+                            controller.spielfelderInitialisieren();
+                            controller.setSpielerNameEins(nameEins.getText());
+                            controller.setSpielerNameZwei(nameZwei.getText());
+                            containerFuellen();
+                            status.setText(nameEins.getText());
+                            controller.feldAktualisieren("Gegner");
+                            schiffanzeigenZuruecksetzen();
+                            zuege.setText("Anzahl an Zügen: 0");
+                            setVisible(false);
                             spielFensterSichtbar();
                         }
                     });
