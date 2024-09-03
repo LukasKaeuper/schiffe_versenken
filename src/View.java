@@ -334,6 +334,12 @@ public class View extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 container.removeAll();
+                if (controller.istBeendet()){
+                    setGewonnen(controller.getName());
+                }
+                else{
+                    nameAktualisieren(controller.getSpieler(), controller.getName());
+                }
                 containerFuellen();
             }
         });
@@ -739,8 +745,8 @@ public class View extends JFrame {
         status.setText("Spieler " + spieler);
     }
 
-    public void setGewonnen(int spieler) {
-        status.setText("Spieler " + spieler + " hat gewonnen!");
+    public void setGewonnen(String gewinner) {
+        status.setText(gewinner + " hat gewonnen!");
     }
 
     private static class AbgeschossenBorder implements Border {
