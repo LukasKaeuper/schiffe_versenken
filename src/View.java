@@ -25,6 +25,7 @@ public class View extends JFrame {
     private GamePanel panelSpielfeldGegner;
     private Controller controller;
     private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
+    private ImageIcon wasser_unmoeglich = new ImageIcon("Bilder/Wasser/wasser_unmoeglich.gif");
     Font font1 = new Font("SansSerif", Font.BOLD, 20);
     Menu menu;
     JButton zurueckHauptmenue = new JButton("Hauptmenü");
@@ -453,11 +454,11 @@ public class View extends JFrame {
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            System.out.println("spieler 1 aktualisiert, Anzahl Zuege: " + anzahlZuege);
+            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
         }
         else if (spieler == 2) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            System.out.println("spieler 2 aktualisiert, Anzahl Zuege: " + anzahlZuege);
+            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
         }
     }
 
@@ -470,13 +471,8 @@ public class View extends JFrame {
         }
     }
 
-    public void bestenlisteEintragen(int spieler, String name){
-        if (spieler == 1) {
-
-        }
-        else if (spieler == 2) {
-
-        }
+    public void bestenlisteEintragen(String name, int anzahlZuege){
+        bestenliste.eintragHinzufuegen(name,anzahlZuege);
     }
 
     public void spielFensterSichtbar(){
@@ -715,12 +711,16 @@ public class View extends JFrame {
                 buttonSpielfeldGegner[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldGegner[i][j].getWidth(), buttonSpielfeldGegner[i][j].getHeight(), Image.SCALE_DEFAULT)));
             }
         } else if (spieler.equals("Gegner") && temp.equals("unmoeglich")) {
-            buttonSpielfeldGegner[i][j].setText("X");
-            buttonSpielfeldGegner[i][j].setBackground(null);
-            buttonSpielfeldGegner[i][j].setForeground(Color.RED);
-            buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 40));
-            buttonSpielfeldGegner[i][j].setIcon(null);
+            buttonSpielfeldGegner[i][j].setText(null);
+            //buttonSpielfeldGegner[i][j].setBackground(null);
+            //buttonSpielfeldGegner[i][j].setForeground(Color.RED);
+            //buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+            //buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 40));
+            //buttonSpielfeldGegner[i][j].setIcon(null);
+            buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
+            if (buttonSpielfeldGegner[i][j].getIcon() == null) {
+                buttonSpielfeldGegner[i][j].setIcon(new ImageIcon(wasser_unmoeglich.getImage().getScaledInstance(buttonSpielfeldGegner[i][j].getWidth(), buttonSpielfeldGegner[i][j].getHeight(), Image.SCALE_DEFAULT)));
+            }
         } else if (spieler.equals("Gegner") && temp.equals("unmoeglich_getroffen")) {
             buttonSpielfeldGegner[i][j].setText(null);
 //            buttonSpielfeldGegner[i][j].setText("O");
@@ -739,10 +739,6 @@ public class View extends JFrame {
             buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
             buttonSpielfeldGegner[i][j].setIcon(null);
         }
-    }
-
-    public void setSpieler(int spieler) {
-        status.setText("Spieler " + spieler);
     }
 
     public void setGewonnen(String gewinner) {
