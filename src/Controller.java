@@ -33,8 +33,6 @@ public class Controller {
             if (model.getWert(n, m, "Gegner").equals("Wasser") || model.getWert(n, m, "Gegner").equals("Schiff")) {
                 System.out.println("spieler: " + model.getSpieler());
                 model.schiessen(n, m);
-                view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
-                view.nameAktualisieren(model.getSpieler(), model.getName());
                 if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen") && !modus.equals("sp")) {
                     model.spielerWechseln("lokal_mp");
                     view.rundenwechselBestaetigen();
@@ -52,6 +50,8 @@ public class Controller {
             }
             feldAktualisieren("Eigen");
             feldAktualisieren("Gegner");
+            view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
+            view.nameAktualisieren(model.getSpieler(), model.getName());
         }
 
     }
