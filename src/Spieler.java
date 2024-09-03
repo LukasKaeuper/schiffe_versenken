@@ -1,4 +1,3 @@
-import java.util.Date;
 
 public class Spieler {
     private String name;            // Name des Spielers
