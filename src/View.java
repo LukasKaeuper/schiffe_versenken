@@ -334,6 +334,7 @@ public class View extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 container.removeAll();
+                nameAktualisieren(controller.getSpieler(), controller.getName());
                 containerFuellen();
             }
         });

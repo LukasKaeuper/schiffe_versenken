@@ -90,4 +90,12 @@ public class Controller {
     public String getSpielerNameZwei() {
         return model.getSpielerNameZwei();
     }
+
+    public int getSpieler(){
+        return model.getSpieler();
+    }
+
+    public String getName(){
+        return model.getName();
+    }
 }
