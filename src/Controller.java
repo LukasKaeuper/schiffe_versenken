@@ -21,6 +21,7 @@ public class Controller {
     class SpielfeldListener implements ActionListener {
         public SpielfeldListener() {
             feldAktualisieren("Eigen");
+            feldAktualisieren("Eigen");
         }
 
         @Override
@@ -55,8 +56,8 @@ public class Controller {
             }
             feldAktualisieren("Eigen");
             feldAktualisieren("Gegner");
+            feldAktualisieren("Gegner");
         }
-
     }
 
     public void feldAktualisieren(String spieler) {
