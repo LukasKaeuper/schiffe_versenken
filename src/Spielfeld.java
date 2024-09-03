@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -48,16 +50,10 @@ public class Spielfeld {
     public void schiffePlatzieren(int laenge){
         Random random = new Random();
         boolean platziert = false;
-        int versuche = 0;
-        int maxVersuche = 1000; // Maximale Anzahl der Versuche zum Platzieren des Schiffs
+        LocalDateTime start = LocalDateTime.now();
 
         while (!platziert) {
-            if (versuche >= maxVersuche) {
-                System.out.println("Konnte kein Schiff platzieren nach " + maxVersuche + " Versuchen.");
-                break; // Beende die Schleife, wenn die maximale Anzahl an Versuchen erreicht wurde
-            }
 
-            versuche++;
             boolean horizontal = random.nextBoolean();
             int x = random.nextInt(spalte);
             int y = random.nextInt(reihe);
@@ -79,6 +75,26 @@ public class Spielfeld {
                 schiffe.add(neuesSchiff);
                 neuesSchiff.ausgabe();
                 platziert = true;
+            }
+
+            if (ChronoUnit.SECONDS.between(start, LocalDateTime.now()) >= 2){
+                System.out.println("Timeout bei Initialisierung, Neustart\n");
+                for (Schiff temp : schiffe){
+                    schiffe.remove(temp);
+                }
+                initialisiereSpielfeld();
+                schiffePlatzieren(5);
+                schiffePlatzieren(4);
+                schiffePlatzieren(4);
+                schiffePlatzieren(3);
+                schiffePlatzieren(3);
+                schiffePlatzieren(3);
+                schiffePlatzieren(2);
+                schiffePlatzieren(2);
+                schiffePlatzieren(2);
+                schiffePlatzieren(2);
+                anzeigen();
+                return;
             }
         }
     }
