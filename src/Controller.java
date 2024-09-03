@@ -43,15 +43,15 @@ public class Controller {
                     model.ki_schiessen();
                 }
             }
+            view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
+            view.nameAktualisieren(model.getSpieler(), model.getName());
             if (model.beendet()) {
-                view.setGewonnen(model.getSpieler());
+                view.setGewonnen(model.getName());
                 view.listenerEntfernen();
                 //model.zuruecksetzen();
             }
             feldAktualisieren("Eigen");
             feldAktualisieren("Gegner");
-            view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
-            view.nameAktualisieren(model.getSpieler(), model.getName());
         }
 
     }
@@ -97,5 +97,9 @@ public class Controller {
 
     public String getName(){
         return model.getName();
+    }
+
+    public boolean istBeendet(){
+        return model.beendet();
     }
 }
