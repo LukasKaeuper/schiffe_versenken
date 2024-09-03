@@ -9,18 +9,18 @@ public class Controller {
 
     public Controller() {
         this.model = new Model(this);
-        this.view = new View(new SingleplayerListener(), this, 10);
-        this.view.erstelleSpielfeldListener(new SpielfeldListener(), 10);
+        this.view = new View(this);
         this.modus = "lokal_mp";
     }
 
-    public void viewAktuakisieren() {
-        view = new View(new SingleplayerListener(), new Controller(), getSpalte());
+    public void spielfelderInitialisieren() {
+        model.spielfeldInitialisieren();
+        this.view.erstelleSpielfeldListener(new SpielfeldListener());
     }
 
     class SpielfeldListener implements ActionListener {
         public SpielfeldListener() {
-            FeldAktualisieren("Eigen", getSpalte());
+            feldAktualisieren("Eigen");
         }
 
         @Override
@@ -45,22 +45,21 @@ public class Controller {
             }
             if (model.beendet()) {
                 view.setGewonnen(model.getSpieler());
-                view.listenerEntfernen(this);
+                view.listenerEntfernen();
                 //model.zuruecksetzen();
             }
-            FeldAktualisieren("Eigen", getSpalte());
-            FeldAktualisieren("Gegner", getSpalte());
+            feldAktualisieren("Eigen");
+            feldAktualisieren("Gegner");
             view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
-            if (!model.beendet()){
-                view.nameAktualisieren(model.getSpieler(), model.getName());
-            }
+            view.nameAktualisieren(model.getSpieler(), model.getName());
         }
+
     }
 
-    public void FeldAktualisieren(String spieler, int x) {
+    public void feldAktualisieren(String spieler) {
         String temp;
-        for (int i=0; i< x; i++) {
-            for (int j = 0; j < x; j++) {
+        for (int i=0; i<10; i++) {
+            for (int j = 0; j < 10; j++) {
                 temp = model.getWert(i, j, spieler);
                 view.setButton(i, j, temp, spieler);
             }
@@ -72,16 +71,8 @@ public class Controller {
         view.schiffanzeigeAktualisieren(laenge, spieler);
     }
 
-    class SingleplayerListener implements ActionListener{
-        public SingleplayerListener() {}
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("Singleplayer\n");
-            modus = "sp";
-            view.spielFensterSichtbar(true);
-            FeldAktualisieren("Eigen", getSpalte());
-        }
+    public void setModus(String modus){
+        this.modus = modus;
     }
 
     public void setSpielerNameEins(String name) {
@@ -98,41 +89,5 @@ public class Controller {
 
     public String getSpielerNameZwei() {
         return model.getSpielerNameZwei();
-    }
-
-    public void setRegelAus(boolean value){
-        model.setRegelAus(value);
-    }
-
-    public boolean getRegelAus(){
-        return model.getRegelAus();
-    }
-
-    public boolean getFeldGroesser() {
-        return model.getFeldGroesser();
-    }
-
-    public void setFeldGroesser(boolean feldGroesser) {
-        model.setFeldGroesser(feldGroesser);
-    }
-
-    public void setSpalte(int spalte){
-        model.setSpalte(spalte);
-    }
-
-    public int getSpalte(){
-        return model.getSpalte();
-    }
-
-    public void setReihe(int reihe){
-        model.setReihe(reihe);
-    }
-
-    public int getReihe(){
-        return model.getReihe();
-    }
-
-    public void spielfeldAktualisiern(int i){
-        model.spielfeldaktualisieren(i);
     }
 }

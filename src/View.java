@@ -6,63 +6,55 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class View extends JFrame {
-    private Controller controller;
-    private JButton[][] buttonSpielfeldEigen;
-    private JButton[][] buttonSpielfeldGegner;
+    private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];
+    private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];
     private JTextField status;
     private JTextField zuege;
-    private JTextField nameEins;
-    private JTextField nameZwei;
-    private int spielerEinsZuege;
-    private int spielerZweiZuege;
+    private JTextField nameEins = new JTextField("Lukas", 15);;
+    private JTextField nameZwei = new JTextField("Marten", 15);;
     private JPanel schiffanzeigeEigen;
     private JPanel schiffanzeigeGegner;
     private JPanel container;
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
-    private boolean gewonnen = false;
+    private Controller controller;
     private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
-
+    Font font1 = new Font("SansSerif", Font.BOLD, 20);
+    Menu menu;
+    JButton zurueckHauptmenue = new JButton("Hauptmenü");
+    JButton bestenlistebutton = new JButton("Bestenliste");
 
     Bestenliste bestenliste = new Bestenliste();
 
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
 
-    public View(ActionListener sp, Controller controller, int x) {
+    public View(Controller controller) {
         super("Schiffe Versenken");
+        menu = new Menu();
         this.controller = controller;
-        new Menu(sp);
-        this.buttonSpielfeldEigen = new JButton[x][x];
-        this.buttonSpielfeldGegner = new JButton[x][x];
-        controller.setSpielerNameEins("Spieler 1");
-        controller.setSpielerNameZwei("Spieler 2");
-        fensterGenerieren(x);
+        fensterGenerieren();
     }
 
-    private void fensterGenerieren(int x) {
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(1920, 1080);
+    private void fensterGenerieren() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(1600, 1000);
         setLayout(new BorderLayout());
 
-        Font font1 = new Font("SansSerif", Font.BOLD, 20);
+        zuege = new JTextField("Anzahl an Zügen: 0");
 
-
-        status = new JTextField(controller.getSpielerNameEins());
+        status = new JTextField(nameEins.getText());
         status.setHorizontalAlignment(JTextField.CENTER);
         status.setFont(font1);
         status.setSize(1500,200);
         add(status, BorderLayout.NORTH);
         status.setEditable(false);
         status.setCaretColor(UIManager.getColor("Panel.background"));
-
-        zuege = new JTextField("Anzahl an Zügen: 0");
 
         add(zuege, BorderLayout.SOUTH);
         zuege.setHorizontalAlignment(JTextField.CENTER);
@@ -83,8 +75,8 @@ public class View extends JFrame {
         schiffanzeigeGegner.setPreferredSize(anzeigeSize);
         schiffanzeigenFuellen();
 
-        panelSpielfeldEigen = new GamePanel("Eigen", x);
-        panelSpielfeldGegner = new GamePanel("Gegner", x);
+        panelSpielfeldEigen = new GamePanel("Eigen");
+        panelSpielfeldGegner = new GamePanel("Gegner");
 
         Dimension panelSize = new Dimension(700, 700);
         panelSpielfeldEigen.setPreferredSize(panelSize);
@@ -94,49 +86,22 @@ public class View extends JFrame {
         container.setLayout(new GridBagLayout());
 
         containerFuellen();
-        JButton bestenlistebutton = new JButton("Bestenliste");
         bestenlistebutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(getGewonnen()) {
-                    bestenliste.eintragHinzufuegen(controller.getSpielerNameEins(), spielerEinsZuege);
-                    bestenlisteGenerieren();
-                }
-                if(getGewonnen() && spielerZweiZuege != 0) {
-                    bestenliste.eintragHinzufuegen(controller.getSpielerNameZwei(), spielerZweiZuege);
-                }
-                else {
-                    status.setText("Bedingung nicht erfüllt");
-                }
+                bestenlisteGenerieren();
             }
         });
 
-        JButton zurueckHauptmenue = new JButton("Hauptmenü");
         zurueckHauptmenue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                listenerEntfernen();
+                setVisible(false);
+                menu.setVisible(true);
+                containerFuellen();
             }
         });
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 2;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        c.insets = new Insets(10, 0, 10, 10); // Abstände um den Button herum
-        c.fill = GridBagConstraints.NONE;
-        container.add(bestenlistebutton, c);
-        c.gridx = 1;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.EAST;
-        c.insets = new Insets(10, 0, 10, 10); // Abstände um den Button herum
-        c.fill = GridBagConstraints.NONE;
-        container.add(zurueckHauptmenue, c);
-
 
 
 //        Dimension textFieldSize = new Dimension(50, 30);
@@ -192,6 +157,12 @@ public class View extends JFrame {
         }
     }
 
+    public void schiffanzeigenZuruecksetzen(){
+        schiffanzeigeEigen.removeAll();
+        schiffanzeigeGegner.removeAll();
+        schiffanzeigenFuellen();
+    }
+
     private class Schiffeintrag extends JPanel{
         private int laenge;
         private boolean abgeschossen;
@@ -235,8 +206,6 @@ public class View extends JFrame {
         String name;
         int anzahlZuege;
         String datumZeit;
-        String modus;
-        String abstandsregel;
 
         public Eintrag(String name, int anzahlZuege, String datumZeit) {
             this.name = name;
@@ -256,22 +225,6 @@ public class View extends JFrame {
             return datumZeit;
         }
 
-        public String getModus(){
-            return modus;
-        }
-
-        public void setModus(String modus){
-            this.modus = modus;
-        }
-
-        public String getAbstandsregel(){
-            return abstandsregel;
-        }
-
-        public void setAbstandsregel(String abstandsregel){
-            this.abstandsregel = abstandsregel;
-        }
-
         @Override
         public String toString() {
             return name + "," + anzahlZuege + "," + datumZeit;
@@ -279,8 +232,8 @@ public class View extends JFrame {
     }
 
     public class Bestenliste {
-        private String dateiName = "bestenliste.csv";
         private ArrayList<Eintrag> eintraege;
+        private String dateiName = "bestenliste.csv";
 
         public Bestenliste() {
             eintraege = new ArrayList<>();
@@ -380,7 +333,8 @@ public class View extends JFrame {
         zurueckbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                container.removeAll();
+                containerFuellen();
             }
         });
 
@@ -388,8 +342,9 @@ public class View extends JFrame {
         zurueckHauptmenue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                spielFensterSichtbar(false);
-                setDefaultCloseOperation(EXIT_ON_CLOSE);
+                setVisible(false);
+                container.removeAll();
+                menu.setVisible(true);
             }
         });
 
@@ -418,21 +373,85 @@ public class View extends JFrame {
         gbc.insets = new Insets(10, 0, 10, 100); // Abstände um den Button herum
         gbc.fill = GridBagConstraints.NONE;
         container.add(zurueckHauptmenue, gbc);
+    }
 
+    public void bestenlisteGenerierenImMenue(){
+        panelSpielfeldEigen.setVisible(false);
+        panelSpielfeldGegner.setVisible(false);
+        schiffanzeigeEigen.setVisible(false);
+        schiffanzeigeGegner.setVisible(false);
+        zuege.setVisible(false);
+        container.removeAll();
+        status.setText("Bestenliste");
 
+        // Bestehende Einträge abrufen
+        ArrayList<Eintrag> eintraege = bestenliste.getEintraege();
+
+        Font font1 = new Font("SansSerif", Font.BOLD, 15);
+
+        // Daten für die Tabelle vorbereiten
+        String[] spaltenNamen = {"Rang", "Name", "Züge", "Datum/Zeit"};
+        String[][] daten = new String[eintraege.size()][4];
+
+        for (int i = 0; i < eintraege.size(); i++) {
+            Eintrag eintrag = eintraege.get(i);
+            daten[i][0] = Integer.toString(i + 1);
+            daten[i][1] = eintrag.getName();
+            daten[i][2] = Integer.toString(eintrag.getAnzahlZuege());
+            daten[i][3] = eintrag.getDatumZeit();
+        }
+
+        // JTable erstellen und in einem JFrame anzeigen
+        JTable tabelle = new JTable(daten, spaltenNamen);
+        tabelle.getTableHeader().setReorderingAllowed(false);
+        tabelle.getTableHeader().setFont(font1);
+        JScrollPane scrollPane = new JScrollPane(tabelle);
+        tabelle.setFillsViewportHeight(true);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        for (int i = 0; i < tabelle.getColumnCount(); i++) {
+            tabelle.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        JButton zurueckHauptmenue = new JButton("Hauptmenü");
+        zurueckHauptmenue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                container.removeAll();
+                menu.setVisible(true);
+            }
+        });
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 1; // Position der Tabelle in der GridBagLayout
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH; // Tabelle füllt den verfügbaren Raum aus
+        gbc.insets = new Insets(100, 400, 100, 400); // Abstand um die Tabelle herum
+        container.add(scrollPane, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 0); // Abstände um den Button herum
+        gbc.fill = GridBagConstraints.NONE;
+        container.add(zurueckHauptmenue, gbc);
     }
 
 
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            spielerEinsZuege = anzahlZuege;
-            System.out.println("spieler 1 aktualisiert, Anzahl Zuege: " + spielerEinsZuege);
+            System.out.println("spieler 1 aktualisiert, Anzahl Zuege: " + anzahlZuege);
         }
         else if (spieler == 2) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            spielerZweiZuege = anzahlZuege;
-            System.out.println("spieler 2 aktualisiert, Anzahl Zuege: " + spielerZweiZuege);
+            System.out.println("spieler 2 aktualisiert, Anzahl Zuege: " + anzahlZuege);
         }
     }
 
@@ -445,8 +464,17 @@ public class View extends JFrame {
         }
     }
 
-    public void spielFensterSichtbar(boolean sichtbar){
-        setVisible(sichtbar);
+    public void bestenlisteEintragen(int spieler, String name){
+        if (spieler == 1) {
+
+        }
+        else if (spieler == 2) {
+
+        }
+    }
+
+    public void spielFensterSichtbar(){
+        setVisible(true);
     }
 
     public void rundenwechselBestaetigen() {
@@ -499,12 +527,6 @@ public class View extends JFrame {
                 container.remove(buttonPanel);
                 //add(container, BorderLayout.CENTER);
 
-                panelSpielfeldEigen.setVisible(true);
-                panelSpielfeldGegner.setVisible(true);
-                schiffanzeigeEigen.setVisible(true);
-                schiffanzeigeGegner.setVisible(true);
-                zuege.setVisible(true);
-
                 // Panel neu validieren und neu zeichnen
 //                buttonPanel.revalidate();
 //                buttonPanel.repaint();
@@ -536,22 +558,46 @@ public class View extends JFrame {
         c.weightx = 0.5;
         c.weighty = 1;
         container.add(schiffanzeigeGegner, c);
+        c.gridx = 2;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(0, 5, 10, 0); // Abstände um den Button herum
+        c.fill = GridBagConstraints.NONE;
+        container.add(bestenlistebutton, c);
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.EAST;
+        c.insets = new Insets(0, 0, 10, 5); // Abstände um den Button herum
+        c.fill = GridBagConstraints.NONE;
+        container.add(zurueckHauptmenue, c);
+
+        panelSpielfeldEigen.setVisible(true);
+        panelSpielfeldGegner.setVisible(true);
+        schiffanzeigeEigen.setVisible(true);
+        schiffanzeigeGegner.setVisible(true);
+        zuege.setVisible(true);
     }
 
-    public void listenerEntfernen(ActionListener al) {
-        for (int i = 0; i < controller.getSpalte(); i++) {
-            for (int j = 0; j < controller.getSpalte(); j++) {
-                this.buttonSpielfeldGegner[i][j].removeActionListener(al);
+    public void listenerEntfernen() {
+        for (ActionListener al: buttonSpielfeldGegner[1][1].getActionListeners()) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    this.buttonSpielfeldGegner[i][j].removeActionListener(al);
+                }
             }
         }
     }
 
     class GamePanel extends JPanel {
-        public GamePanel(String spieler, int x) {
-            setLayout(new GridLayout(x, x));
+        public GamePanel(String spieler) {
+            setLayout(new GridLayout(10, 10));
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            for (int i = 0; i < x; i++) {
-                for (int j = 0; j < x; j++) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
                     if (spieler.equals("Eigen")) {
                         buttonSpielfeldEigen[i][j] = new JButton();
                         add(buttonSpielfeldEigen[i][j]);
@@ -564,9 +610,9 @@ public class View extends JFrame {
         }
     }
 
-    public void erstelleSpielfeldListener(ActionListener al, int x) {
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < x; j++) {
+    public void erstelleSpielfeldListener(ActionListener al) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
                 this.buttonSpielfeldGegner[i][j].setActionCommand("" + i + j);
                 this.buttonSpielfeldGegner[i][j].addActionListener(al);
             }
@@ -695,7 +741,6 @@ public class View extends JFrame {
 
     public void setGewonnen(int spieler) {
         status.setText("Spieler " + spieler + " hat gewonnen!");
-        setGewonnen(true);
     }
 
     private static class AbgeschossenBorder implements Border {
@@ -727,16 +772,16 @@ public class View extends JFrame {
 
     public class Menu extends JFrame {
 
-        public Menu(ActionListener sp) {
+        public Menu() {
             // Fenster initialisieren
             setTitle("Schiffe Versenken");
-            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setSize(800, 600);
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
 
             // Hintergrundbild
-            final BufferedImage backgroundImage;
+            BufferedImage backgroundImage;
             try {
                 backgroundImage = ImageIO.read(new File("Bilder/Logo/SchiffeVersenkenLogo.png"));
             } catch (IOException e) {
@@ -750,6 +795,7 @@ public class View extends JFrame {
                     g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
                 }
             };
+
             setContentPane(background);
             background.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
@@ -787,16 +833,18 @@ public class View extends JFrame {
             buttonPanel.add(regelButton);
             buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-            JButton bestenlisteHauptmenueButton = new JButton("Bestenliste");
-            bestenlisteHauptmenueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            buttonPanel.add(bestenlisteHauptmenueButton);
+            JButton bestenlisteMenue = new JButton("Bestenliste");
+            bestenlisteMenue.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(bestenlisteMenue);
 
-            bestenlisteHauptmenueButton.addActionListener(new ActionListener() {
+            bestenlisteMenue.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    spielFensterSichtbar(true);
-                    bestenlisteGenerieren();
-                    System.out.println("Bestenliste gedrückt");
+                    spielFensterSichtbar();
+                    containerFuellen();
+                    schiffanzeigenZuruecksetzen();
+                    setVisible(false);
+                    bestenlisteGenerierenImMenue();
                 }
             });
 
@@ -805,6 +853,7 @@ public class View extends JFrame {
             hoverFrame.setSize(600, 600);
             hoverFrame.setLayout(new FlowLayout());
             hoverFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
 
             // Create the label for hover text
             JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/>Regeln<br/><br/>Die Schiffe dürfen nicht aneinander liegen sondern haben immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie abfeuern möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: Insgesamt 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
@@ -833,7 +882,7 @@ public class View extends JFrame {
             multiPlayerButton.setMaximumSize(buttonSize);
             settingsButton.setMaximumSize(buttonSize);
             regelButton.setMaximumSize(buttonSize);
-            bestenlisteHauptmenueButton.setMaximumSize(buttonSize);
+            bestenlisteMenue.setMaximumSize(buttonSize);
 
             // Button Panel in die Mitte setzen
             gbc.gridx = 0;
@@ -845,7 +894,23 @@ public class View extends JFrame {
 
             // ActionListener für die Buttons
 
-            singlePlayerButton.addActionListener(sp);
+            singlePlayerButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Singleplayer\n");
+                    controller.setModus("sp");
+                    controller.spielfelderInitialisieren();
+                    controller.setSpielerNameEins(nameEins.getText());
+                    controller.setSpielerNameZwei(nameZwei.getText());
+                    containerFuellen();
+                    status.setText(nameEins.getText());
+                    controller.feldAktualisieren("Gegner");
+                    schiffanzeigenZuruecksetzen();
+                    zuege.setText("Anzahl an Zügen: 0");
+                    setVisible(false);
+                    spielFensterSichtbar();
+                }
+            });
 
             multiPlayerButton.addActionListener(new ActionListener() {
                 @Override
@@ -862,7 +927,18 @@ public class View extends JFrame {
                     localButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            spielFensterSichtbar(true);
+                            System.out.println("Lokaler Multiplayer\n");
+                            controller.setModus("lokal_mp");
+                            controller.spielfelderInitialisieren();
+                            controller.setSpielerNameEins(nameEins.getText());
+                            controller.setSpielerNameZwei(nameZwei.getText());
+                            containerFuellen();
+                            status.setText(nameEins.getText());
+                            controller.feldAktualisieren("Gegner");
+                            schiffanzeigenZuruecksetzen();
+                            zuege.setText("Anzahl an Zügen: 0");
+                            setVisible(false);
+                            spielFensterSichtbar();
                         }
                     });
 
@@ -876,9 +952,37 @@ public class View extends JFrame {
                     }
                 });
 
+                    JButton zurueckButton = new JButton("zurück");
+                    zurueckButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    zurueckButton.setMaximumSize(buttonSize);
+
+                zurueckButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        buttonPanel.removeAll();
+
+                        buttonPanel.add(singlePlayerButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(multiPlayerButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(settingsButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(regelButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(bestenlisteMenue);
+
+                        buttonPanel.revalidate();
+                        buttonPanel.repaint();
+
+                    }
+                });
+
+
                     buttonPanel.add(localButton);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
                     buttonPanel.add(onlineButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
+                    buttonPanel.add(zurueckButton);
 
                     // Panel neu validieren und neu zeichnen
                     buttonPanel.revalidate();
@@ -889,159 +993,69 @@ public class View extends JFrame {
             settingsButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JFrame meinJFrame = new JFrame();
-                    Container container = meinJFrame.getContentPane();
-                    container.setLayout(new GridBagLayout());
-                    GridBagConstraints gbc = new GridBagConstraints();
-                    gbc.insets = new Insets(10, 10, 10, 10);
-                    //System.out.println("Einstellungen Button gedrückt");
-                    meinJFrame.setSize(500, 500);
+                    buttonPanel.removeAll();
 
-                    // Textfeld wird erstellt
-                    // Text und Spaltenanzahl werden dabei direkt gesetzt
-                    nameEins = new JTextField("Lukas", 15);
-                    gbc.gridx = 1;
-                    gbc.gridy = 0;
-                    container.add(nameEins, gbc);
+
+                    buttonPanel.setOpaque(true);  // Macht das Panel transparent
+                    buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
                     JLabel labelSpielerEins = new JLabel("Name Spieler 1:");
-                    gbc.gridx = 0;
-                    gbc.gridy = 0;
-                    container.add(labelSpielerEins, gbc);
+                    buttonPanel.add(labelSpielerEins);
+
+                    buttonPanel.add(nameEins);
 
                     JLabel labelSpielerZwei = new JLabel("Name Spieler 2:");
-                    gbc.gridx = 0;
-                    gbc.gridy = 1;
-                    container.add(labelSpielerZwei, gbc);
+                    buttonPanel.add(labelSpielerZwei);
+
+                    buttonPanel.add(nameZwei);
 
                     JLabel labelBestenliste = new JLabel("Bestenliste löschen");
-                    gbc.gridx = 0;
-                    gbc.gridy = 3;
-                    container.add(labelBestenliste, gbc);
-
-                    JLabel labelRegelAus = new JLabel("1 Kästchen Abstandsregel ausschalten");
-                    gbc.gridx = 0;
-                    gbc.gridy = 4;
-                    container.add(labelRegelAus, gbc);
-
-                    JLabel labelFeldGroesser = new JLabel("20x20 Feld");
-                    gbc.gridx = 0;
-                    gbc.gridy = 5;
-                    container.add(labelFeldGroesser, gbc);
-
-                    // Textfeld wird erstellt
-                    // Text und Spaltenanzahl werden dabei direkt gesetzt
-                    nameZwei = new JTextField("Marten", 15);
-                    gbc.gridx = 1;
-                    gbc.gridy = 1;
-                    container.add(nameZwei, gbc);
-
-                    JButton buttonOK = new JButton("OK");
-                    gbc.gridx = 1;
-                    gbc.gridy = 2;
-                    container.add(buttonOK, gbc);
+                    buttonPanel.add(labelBestenliste);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
                     JButton loeschen = new JButton("OK");
+
                     loeschen.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             bestenliste.alleEintraegeLoeschen();
-                            System.out.println("gelöscht");
-                            meinJFrame.dispose();
                         }
                     });
 
-                    gbc.gridx = 1;
-                    gbc.gridy = 3;
-                    container.add(loeschen, gbc);
+                    buttonPanel.add(loeschen);
+                    JButton zurueckButton = new JButton("zurück");
+                    zurueckButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0,30)));
+                    buttonPanel.add(zurueckButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0,10)));
 
-                    buttonOK.addActionListener(new ActionListener() {
+                    zurueckButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            controller.setSpielerNameEins(nameEins.getText());
-                            controller.setSpielerNameZwei(nameZwei.getText());
-                            nameAktualisieren(1, controller.getSpielerNameEins());
-                            System.out.println(controller.getSpielerNameEins());
-                            System.out.println(controller.getSpielerNameZwei());
-                            meinJFrame.dispose();
+                            buttonPanel.removeAll();
+
+                            buttonPanel.setOpaque(false);
+
+                            buttonPanel.add(singlePlayerButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(multiPlayerButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(settingsButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(regelButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(bestenlisteMenue);
+
+                            buttonPanel.revalidate();
+                            buttonPanel.repaint();
                         }
                     });
-
-                    JToggleButton toggleButtonRegelAus = new JToggleButton("OFF");
-                    toggleButtonRegelAus.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            // Prüfe den Zustand des Buttons und setze den boolean Wert über den Controller
-                            if (toggleButtonRegelAus.isSelected()) {
-                                toggleButtonRegelAus.setText("ON");
-                                controller.setRegelAus(true);
-                                controller.spielfeldAktualisiern(10);
-                            } else {
-                                toggleButtonRegelAus.setText("OFF");
-                                controller.setRegelAus(false);
-                                controller.spielfeldAktualisiern(10);
-
-                            }
-
-                            // Ausgabe des aktuellen Wertes über den Controller
-                            System.out.println("Boolean value is: " + controller.getRegelAus());
-                        }
-                    });
-
-                    gbc.gridx = 1;
-                    gbc.gridy = 4;
-                    container.add(toggleButtonRegelAus, gbc);
-
-                    JToggleButton toggleButtonFeldGroesser = new JToggleButton("OFF");
-                    toggleButtonFeldGroesser.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            // Prüfe den Zustand des Buttons und setze den boolean Wert über den Controller
-                            if (toggleButtonFeldGroesser.isSelected()) {
-                                toggleButtonFeldGroesser.setText("ON");
-                                controller.setFeldGroesser(true);
-                                controller.setReihe(20);
-                                controller.setSpalte(20);
-                                controller.spielfeldAktualisiern(20);
-                                controller.viewAktuakisieren();
-                                System.out.println(controller.getReihe());
-                            } else {
-                                toggleButtonFeldGroesser.setText("OFF");
-                                controller.setFeldGroesser(false);
-                                controller.setReihe(10);
-                                controller.setSpalte(10);
-                                controller.spielfeldAktualisiern(10);
-                                controller.viewAktuakisieren();
-
-                                System.out.println(controller.getReihe());
-                            }
-
-                            // Ausgabe des aktuellen Wertes über den Controller
-                            System.out.println("Boolean value is: " + controller.getFeldGroesser());
-                        }
-                    });
-
-                    gbc.gridx = 1;
-                    gbc.gridy = 5;
-                    container.add(toggleButtonFeldGroesser, gbc);
-
-                    meinJFrame.setVisible(true);
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
                 }
             });
-
             setVisible(true);
         }
-    }
 
-    public boolean getGewonnen() {
-        return gewonnen;
-    }
-
-    public void setGewonnen(boolean gewonnen) {
-        this.gewonnen = gewonnen;
-    }
-
-    public int getSpalte(){
-        return controller.getSpalte();
     }
 }

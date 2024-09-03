@@ -5,8 +5,8 @@ import java.nio.file.Path;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Model {
-    private Spielfeld spielfeldLinks = new Spielfeld(10,10,false);
-    private Spielfeld spielfeldRechts = new Spielfeld(10,10,false);
+    private Spielfeld spielfeldLinks;
+    private Spielfeld spielfeldRechts;
     private int spieler = 1;
     private int kiSchussX;
     private int kiSchussY;
@@ -16,14 +16,14 @@ public class Model {
 
     public Model(Controller controller) {
         playSound("ambience.wav", true, -10f);
-        this.kiSchussX = ThreadLocalRandom.current().nextInt(0, spielfeldLinks.getSpalte());
-        this.kiSchussY = ThreadLocalRandom.current().nextInt(0, spielfeldLinks.getSpalte());
+        this.kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
+        this.kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
         this.controller = controller;
     }
 
-    public void spielfeldaktualisieren(int i){
-        spielfeldLinks = new Spielfeld(i,i,getRegelAus());
-        spielfeldRechts = new Spielfeld(i,i,getRegelAus());
+    public void spielfeldInitialisieren(){
+        spielfeldLinks = new Spielfeld();
+        spielfeldRechts = new Spielfeld();
     }
 
     public void schiessen(int n, int m) {
@@ -51,8 +51,8 @@ public class Model {
         int laengeVomAbgeschossenenSchiff = 0;
         if (neuesSchiffSuchen) {
             while (!spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff") && !spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Wasser") || spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("unmoeglich") || spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("unmoeglich_getroffen")) {
-                kiSchussX = ThreadLocalRandom.current().nextInt(0, spielfeldLinks.getSpalte());
-                kiSchussY = ThreadLocalRandom.current().nextInt(0, spielfeldLinks.getSpalte());
+                kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
+                kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
             }
         }
         laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(kiSchussX, kiSchussY);
@@ -194,8 +194,8 @@ public class Model {
     public boolean beendet() {
         //return true, wenn ein Endkriterium erreicht ist → Kein Schiff übrig, dass nicht getroffen wurde
         boolean ende = true;
-        for (int i=0; i<spielfeldLinks.getSpalte(); i++) {
-            for (int j = 0; j < spielfeldLinks.getSpalte(); j++) {
+        for (int i=0; i<10; i++) {
+            for (int j = 0; j < 10; j++) {
                 if (spielfeldRechts.getWert(i, j).equals("Schiff")) {
                     ende = false;
                 }
@@ -241,52 +241,19 @@ public class Model {
         return spielfeldLinks.getSpieler().getName();
     }
 
-    public String getSpielerNameEins() {
-
-        return spielfeldLinks.getSpieler().getName();
-    }
-
     public void setSpielerNameEins(String name) {
         spielfeldLinks.getSpieler().setName(name);
     }
 
-    public String getSpielerNameZwei() {
-        return spielfeldRechts.getSpieler().getName();
+    public String getSpielerNameEins() {
+        return spielfeldLinks.getSpieler().getName();
     }
 
     public void setSpielerNameZwei(String name) {
         spielfeldRechts.getSpieler().setName(name);
     }
 
-    public void setRegelAus(boolean value){
-        spielfeldLinks.setRegelAus(value);
-    }
-
-    public boolean getRegelAus(){
-        return spielfeldLinks.getRegelAus();
-    }
-
-    public boolean getFeldGroesser() {
-        return spielfeldLinks.getFeldGroesser();
-    }
-
-    public void setFeldGroesser(boolean feldGroesser) {
-        spielfeldLinks.setFeldGroesser(feldGroesser);
-    }
-
-    public void setSpalte(int spalte){
-        spielfeldLinks.setSpalte(spalte);
-    }
-
-    public int getSpalte(){
-        return spielfeldLinks.getSpalte();
-    }
-
-    public void setReihe(int reihe){
-        spielfeldLinks.setReihe(reihe);
-    }
-
-    public int getReihe(){
-        return spielfeldLinks.getReihe();
+    public String getSpielerNameZwei() {
+        return spielfeldRechts.getSpieler().getName();
     }
 }
