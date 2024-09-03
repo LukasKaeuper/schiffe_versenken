@@ -240,23 +240,4 @@ public class Model {
     public String getName() {
         return spielfeldLinks.getSpieler().getName();
     }
-
-    public String getSpielerNameEins() {
-        return spielfeldLinks.getSpieler().getName();
-    }
-
-    public void setSpielerNameEins(String name) {
-        spielfeldLinks.getSpieler().setName(name);
-    }
-
-    public String getSpielerNameZwei() {
-        return spielfeldRechts.getSpieler().getName();
-    }
-
-    public void setSpielerNameZwei(String name) {
-        spielfeldRechts.getSpieler().setName(name);
-    }
-
-
-
 }

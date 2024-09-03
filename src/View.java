@@ -18,8 +18,6 @@ public class View extends JFrame {
     private JTextField zuege;
     private JTextField nameEins = new JTextField("Lukas", 15);;
     private JTextField nameZwei = new JTextField("Marten", 15);;
-    private int spielerEinsZuege;
-    private int spielerZweiZuege;
     private JPanel schiffanzeigeEigen;
     private JPanel schiffanzeigeGegner;
     private JPanel container;
@@ -335,7 +333,6 @@ public class View extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 container.removeAll();
-                status.setText(controller.getSpielerNameEins());
                 containerFuellen();
             }
         });
@@ -449,22 +446,29 @@ public class View extends JFrame {
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            spielerEinsZuege = anzahlZuege;
-            System.out.println("spieler 1 aktualisiert, Anzahl Zuege: " + spielerEinsZuege);
+            System.out.println("spieler 1 aktualisiert, Anzahl Zuege: " + anzahlZuege);
         }
         else if (spieler == 2) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            spielerZweiZuege = anzahlZuege;
-            System.out.println("spieler 2 aktualisiert, Anzahl Zuege: " + spielerZweiZuege);
+            System.out.println("spieler 2 aktualisiert, Anzahl Zuege: " + anzahlZuege);
         }
     }
 
-    public void nameAktualisieren(int spieler, String name){
+    public void nameAktualisieren(int spieler){
         if (spieler == 1) {
-            status.setText(name);
+            status.setText(nameEins.getText());
         }
         else if (spieler == 2) {
-            status.setText(name);
+            status.setText(nameZwei.getText());
+        }
+    }
+
+    public void bestenlisteEintragen(int spieler, String name){
+        if (spieler == 1) {
+
+        }
+        else if (spieler == 2) {
+
         }
     }
 
@@ -893,8 +897,8 @@ public class View extends JFrame {
                     System.out.println("Singleplayer\n");
                     controller.setModus("sp");
                     controller.spielfelderInitialisieren();
-                    controller.setSpielerNameEins(nameEins.getText());
-                    controller.setSpielerNameZwei(nameZwei.getText());
+                    nameEins.getText();
+                    nameZwei.getText();
                     spielFensterSichtbar();
                     containerFuellen();
                     status.setText(nameEins.getText());
@@ -977,33 +981,26 @@ public class View extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     buttonPanel.removeAll();
 
+
                     buttonPanel.setOpaque(true);  // Macht das Panel transparent
                     buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-
-
-
                     JLabel labelSpielerEins = new JLabel("Name Spieler 1:");
-
-
                     buttonPanel.add(labelSpielerEins);
-
 
                     buttonPanel.add(nameEins);
 
                     JLabel labelSpielerZwei = new JLabel("Name Spieler 2:");
-
                     buttonPanel.add(labelSpielerZwei);
-
-                    // Textfeld wird erstellt
-                    // Text und Spaltenanzahl werden dabei direkt gesetzt
 
                     buttonPanel.add(nameZwei);
 
                     JLabel labelBestenliste = new JLabel("Bestenliste löschen");
                     buttonPanel.add(labelBestenliste);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
                     JButton loeschen = new JButton("OK");
+
                     loeschen.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -1011,12 +1008,12 @@ public class View extends JFrame {
                         }
                     });
 
-
                     buttonPanel.add(loeschen);
-
                     JButton zurueckButton = new JButton("zurück");
                     zurueckButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0,30)));
                     buttonPanel.add(zurueckButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0,10)));
 
                     zurueckButton.addActionListener(new ActionListener() {
                         @Override
@@ -1037,10 +1034,8 @@ public class View extends JFrame {
 
                             buttonPanel.revalidate();
                             buttonPanel.repaint();
-
                         }
                     });
-
                     buttonPanel.revalidate();
                     buttonPanel.repaint();
                 }
