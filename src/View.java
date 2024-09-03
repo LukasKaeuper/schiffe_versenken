@@ -715,7 +715,7 @@ public class View extends JFrame {
             setLayout(new BorderLayout());
 
             // Hintergrundbild
-            final BufferedImage backgroundImage;
+            BufferedImage backgroundImage;
             try {
                 backgroundImage = ImageIO.read(new File("Bilder/Logo/SchiffeVersenkenLogo.png"));
             } catch (IOException e) {
@@ -729,6 +729,7 @@ public class View extends JFrame {
                     g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
                 }
             };
+
             setContentPane(background);
             background.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
@@ -770,6 +771,7 @@ public class View extends JFrame {
             hoverFrame.setSize(600, 600);
             hoverFrame.setLayout(new FlowLayout());
             hoverFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
 
             // Create the label for hover text
             JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/>Regeln<br/><br/>Die Schiffe dürfen nicht aneinander liegen sondern haben immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie abfeuern möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: Insgesamt 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
@@ -856,9 +858,35 @@ public class View extends JFrame {
                     }
                 });
 
+                    JButton zurueckButton = new JButton("zurück");
+                    zurueckButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    zurueckButton.setMaximumSize(buttonSize);
+
+                zurueckButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        buttonPanel.removeAll();
+
+                        buttonPanel.add(singlePlayerButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(multiPlayerButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(settingsButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(regelButton);
+
+                        buttonPanel.revalidate();
+                        buttonPanel.repaint();
+
+                    }
+                });
+
+
                     buttonPanel.add(localButton);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
                     buttonPanel.add(onlineButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
+                    buttonPanel.add(zurueckButton);
 
                     // Panel neu validieren und neu zeichnen
                     buttonPanel.revalidate();
@@ -869,41 +897,33 @@ public class View extends JFrame {
             settingsButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JFrame meinJFrame = new JFrame();
-                    Container container = meinJFrame.getContentPane();
-                    container.setLayout(new GridBagLayout());
-                    GridBagConstraints gbc = new GridBagConstraints();
-                    gbc.insets = new Insets(10, 10, 10, 10);
-                    //System.out.println("Einstellungen Button gedrückt");
-                    meinJFrame.setSize(500, 500);
+                    buttonPanel.removeAll();
 
-                    // Textfeld wird erstellt
-                    // Text und Spaltenanzahl werden dabei direkt gesetzt
-                    nameEins = new JTextField("Lukas", 15);
-                    gbc.gridx = 1;
-                    gbc.gridy = 0;
-                    container.add(nameEins, gbc);
+                    buttonPanel.setOpaque(true);  // Macht das Panel transparent
+                    buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+
+
 
                     JLabel labelSpielerEins = new JLabel("Name Spieler 1:");
-                    gbc.gridx = 0;
-                    gbc.gridy = 0;
-                    container.add(labelSpielerEins, gbc);
+
+
+                    buttonPanel.add(labelSpielerEins);
+
+
+                    buttonPanel.add(nameEins);
 
                     JLabel labelSpielerZwei = new JLabel("Name Spieler 2:");
-                    gbc.gridx = 0;
-                    gbc.gridy = 1;
-                    container.add(labelSpielerZwei, gbc);
 
-                    JLabel labelBestenliste = new JLabel("Bestenliste löschen");
-                    gbc.gridx = 0;
-                    gbc.gridy = 3;
-                    container.add(labelBestenliste, gbc);
+                    buttonPanel.add(labelSpielerZwei);
 
                     // Textfeld wird erstellt
                     // Text und Spaltenanzahl werden dabei direkt gesetzt
-                    gbc.gridx = 1;
-                    gbc.gridy = 1;
-                    container.add(nameZwei, gbc);
+
+                    buttonPanel.add(nameZwei);
+
+                    JLabel labelBestenliste = new JLabel("Bestenliste löschen");
+                    buttonPanel.add(labelBestenliste);
 
                     JButton loeschen = new JButton("OK");
                     loeschen.addActionListener(new ActionListener() {
@@ -913,16 +933,40 @@ public class View extends JFrame {
                         }
                     });
 
-                    gbc.gridx = 1;
-                    gbc.gridy = 3;
-                    container.add(loeschen, gbc);
 
+                    buttonPanel.add(loeschen);
 
-                    meinJFrame.setVisible(true);
+                    JButton zurueckButton = new JButton("zurück");
+                    zurueckButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+                    buttonPanel.add(zurueckButton);
+
+                    zurueckButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            buttonPanel.removeAll();
+
+                            buttonPanel.setOpaque(false);
+
+                            buttonPanel.add(singlePlayerButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(multiPlayerButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(settingsButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(regelButton);
+
+                            buttonPanel.revalidate();
+                            buttonPanel.repaint();
+
+                        }
+                    });
+
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
                 }
             });
-
             setVisible(true);
         }
+
     }
 }
