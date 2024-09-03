@@ -25,6 +25,7 @@ public class View extends JFrame {
     private GamePanel panelSpielfeldGegner;
     private Controller controller;
     private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
+    private ImageIcon wasser_unmoeglich = new ImageIcon("Bilder/Wasser/Wasser_unmoeglich.gif");
     Font font1 = new Font("SansSerif", Font.BOLD, 20);
     Menu menu;
     JButton zurueckHauptmenue = new JButton("Hauptmenü");
@@ -723,7 +724,7 @@ public class View extends JFrame {
             //buttonSpielfeldGegner[i][j].setIcon(null);
             buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldGegner[i][j].getIcon() == null) {
-                buttonSpielfeldGegner[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldGegner[i][j].getWidth(), buttonSpielfeldGegner[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldGegner[i][j].setIcon(new ImageIcon(wasser_unmoeglich.getImage().getScaledInstance(buttonSpielfeldGegner[i][j].getWidth(), buttonSpielfeldGegner[i][j].getHeight(), Image.SCALE_DEFAULT)));
             }
         } else if (spieler.equals("Gegner") && temp.equals("unmoeglich_getroffen")) {
             buttonSpielfeldGegner[i][j].setText(null);
