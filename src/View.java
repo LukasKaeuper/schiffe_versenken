@@ -25,7 +25,7 @@ public class View extends JFrame {
     private GamePanel panelSpielfeldGegner;
     private Controller controller;
     private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
-    private ImageIcon wasser_unmoeglich = new ImageIcon("Bilder/Wasser/Wasser_unmoeglich.gif");
+    private ImageIcon wasser_unmoeglich = new ImageIcon("Bilder/Wasser/wasser_unmoeglich.gif");
     Font font1 = new Font("SansSerif", Font.BOLD, 20);
     Menu menu;
     JButton zurueckHauptmenue = new JButton("Hauptmenü");
@@ -471,13 +471,8 @@ public class View extends JFrame {
         }
     }
 
-    public void bestenlisteEintragen(int spieler, String name){
-        if (spieler == 1) {
-
-        }
-        else if (spieler == 2) {
-
-        }
+    public void bestenlisteEintragen(String name, int anzahlZuege){
+        bestenliste.eintragHinzufuegen(name,anzahlZuege);
     }
 
     public void spielFensterSichtbar(){

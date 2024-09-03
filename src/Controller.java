@@ -49,6 +49,8 @@ public class Controller {
             if (model.beendet()) {
                 view.setGewonnen(model.getName());
                 view.listenerEntfernen();
+                view.bestenlisteEintragen(model.getName(),model.getZuege());
+                System.out.println("Bestenliste hinzugefügt");
                 //model.zuruecksetzen();
             }
             feldAktualisieren("Eigen");
