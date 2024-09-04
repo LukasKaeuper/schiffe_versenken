@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -48,31 +50,49 @@ public class Spielfeld {
     public void schiffePlatzieren(int laenge){
         Random random = new Random();
         boolean platziert = false;
+        LocalDateTime start = LocalDateTime.now();
 
-        while(!platziert){
+        while (!platziert) {
+
             boolean horizontal = random.nextBoolean();
             int x = random.nextInt(spalte);
             int y = random.nextInt(reihe);
 
-            if(checkPlatzierung(x,y,laenge, horizontal) && checkAbstand(x,y,laenge, horizontal)){
-                Schiff neuesSchiff = new Schiff(horizontal,laenge,x,y);
+            if (checkPlatzierung(x, y, laenge, horizontal) && checkAbstand(x, y, laenge, horizontal)) {
+                Schiff neuesSchiff = new Schiff(horizontal, laenge, x, y);
 
-                if(horizontal){
-                    for(int i = 0; i < laenge; i++){
+                if (horizontal) {
+                    for (int i = 0; i < laenge; i++) {
                         spielfeld[y][x + i] = schiff;
-                        //System.out.println("neue Koordinate");
-                        neuesSchiff.neueKoordinate(y, x+i);
+                        neuesSchiff.neueKoordinate(y, x + i);
                     }
                 } else {
-                    for(int i = 0; i < laenge; i++){
+                    for (int i = 0; i < laenge; i++) {
                         spielfeld[y + i][x] = schiff;
-                        //System.out.println("neue Koordinate");
-                        neuesSchiff.neueKoordinate(y+i, x);
+                        neuesSchiff.neueKoordinate(y + i, x);
                     }
                 }
                 schiffe.add(neuesSchiff);
                 neuesSchiff.ausgabe();
                 platziert = true;
+            }
+
+            if (ChronoUnit.SECONDS.between(start, LocalDateTime.now()) >= 2){
+                System.out.println("Timeout bei Initialisierung, Neustart\n");
+                schiffe.clear();
+                initialisiereSpielfeld();
+                schiffePlatzieren(5);
+                schiffePlatzieren(4);
+                schiffePlatzieren(4);
+                schiffePlatzieren(3);
+                schiffePlatzieren(3);
+                schiffePlatzieren(3);
+                schiffePlatzieren(2);
+                schiffePlatzieren(2);
+                schiffePlatzieren(2);
+                schiffePlatzieren(2);
+                anzeigen();
+                return;
             }
         }
     }
@@ -259,6 +279,18 @@ public class Spielfeld {
                 spielfeld[x][y+1] = unmoeglich;
             }
         }
+    }
+
+    public boolean schiffUebrich(){
+        boolean schiffGefunden = false;
+        for (int i=0; i<10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (spielfeld[i][j] == schiff) {
+                    schiffGefunden = true;
+                }
+            }
+        }
+        return schiffGefunden;
     }
 
     public Spieler getSpieler() {

@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.File;
 import java.io.IOException;
-
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -19,15 +19,29 @@ public class View extends JFrame {
     private JTextField zuege;
     private JTextField nameEins = new JTextField("Lukas", 15);;
     private JTextField nameZwei = new JTextField("Marten", 15);;
-    private int spielerEinsZuege;
-    private int spielerZweiZuege;
     private JPanel schiffanzeigeEigen;
     private JPanel schiffanzeigeGegner;
     private JPanel container;
     private GamePanel panelSpielfeldEigen;
     private GamePanel panelSpielfeldGegner;
     private Controller controller;
-    private ImageIcon wasser = new ImageIcon("Bilder/Wasser/NEU_Wasser.gif");
+    private ImageIcon wasser;
+    private ImageIcon wasser_unmoeglich;
+    private ImageIcon uboot_einzel;
+    private ImageIcon uboot_horizontal_hinten;
+    private ImageIcon uboot_horizontal_mitte;
+    private ImageIcon uboot_horizontal_vorne;
+    private ImageIcon uboot_vertikal_hinten;
+    private ImageIcon uboot_vertikal_mitte;
+    private ImageIcon uboot_vertikal_vorne;
+    private ImageIcon uboot_horizontal_hinten_feuer;
+    private ImageIcon uboot_horizontal_mitte_feuer;
+    private ImageIcon uboot_horizontal_vorne_feuer;
+    private ImageIcon uboot_vertikal_hinten_feuer;
+    private ImageIcon uboot_vertikal_mitte_feuer;
+    private ImageIcon uboot_vertikal_vorne_feuer;
+    private ArrayList<ImageIcon> schiffGifs = new ArrayList<>();
+    private ArrayList<ImageIcon> andereGifs = new ArrayList<>();
     Font font1 = new Font("SansSerif", Font.BOLD, 20);
     Menu menu;
     JButton zurueckHauptmenue = new JButton("Hauptmenü");
@@ -42,6 +56,38 @@ public class View extends JFrame {
         menu = new Menu();
         this.controller = controller;
         fensterGenerieren();
+
+        uboot_einzel = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_einzel.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_horizontal_hinten = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_hinten.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_horizontal_mitte = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_mitte.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_horizontal_vorne = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_vorne.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_vertikal_hinten = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_hinten.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_vertikal_mitte = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_mitte.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_vertikal_vorne = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_vorne.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_horizontal_hinten_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_hinten_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_horizontal_mitte_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_mitte_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_horizontal_vorne_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_vorne_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_vertikal_hinten_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_hinten_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_vertikal_mitte_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_mitte_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_vertikal_vorne_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_vorne_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        wasser = new ImageIcon(new ImageIcon("Bilder/Wasser/wasser.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        wasser_unmoeglich = new ImageIcon(new ImageIcon("Bilder/Wasser/wasser_unmöglich_kreis.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+
+        schiffGifs.add(uboot_einzel);
+        schiffGifs.add(uboot_horizontal_hinten);
+        schiffGifs.add(uboot_horizontal_mitte);
+        schiffGifs.add(uboot_horizontal_vorne);
+        schiffGifs.add(uboot_vertikal_hinten);
+        schiffGifs.add(uboot_vertikal_mitte);
+        schiffGifs.add(uboot_vertikal_vorne);
+        schiffGifs.add(uboot_horizontal_hinten_feuer);
+        schiffGifs.add(uboot_horizontal_mitte_feuer);
+        schiffGifs.add(uboot_horizontal_vorne_feuer);
+        schiffGifs.add(uboot_vertikal_hinten_feuer);
+        schiffGifs.add(uboot_vertikal_mitte_feuer);
+        schiffGifs.add(uboot_vertikal_vorne_feuer);
+        andereGifs.add(wasser);
+        andereGifs.add(wasser_unmoeglich);
     }
 
     private void fensterGenerieren() {
@@ -92,12 +138,6 @@ public class View extends JFrame {
         bestenlistebutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(spielerEinsZuege != 0) {
-                    bestenliste.eintragHinzufuegen(controller.getSpielerNameEins(), spielerEinsZuege);
-                }
-                else if(spielerZweiZuege != 0) {
-                    bestenliste.eintragHinzufuegen(controller.getSpielerNameZwei(), spielerZweiZuege);
-                }
                 bestenlisteGenerieren();
             }
         });
@@ -105,9 +145,11 @@ public class View extends JFrame {
         zurueckHauptmenue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                listenerEntfernen();
                 setVisible(false);
                 menu.setVisible(true);
                 containerFuellen();
+                iconsEntfernen();
             }
         });
 
@@ -118,6 +160,15 @@ public class View extends JFrame {
 
         add(container, BorderLayout.CENTER);
         pack();
+    }
+
+    private void iconsEntfernen() {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                buttonSpielfeldEigen[i][j].setIcon(null);
+                buttonSpielfeldGegner[i][j].setIcon(null);
+            }
+        }
     }
 
     private void schiffanzeigenFuellen() {
@@ -341,7 +392,17 @@ public class View extends JFrame {
         zurueckbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                container.removeAll();
+                if (controller.istBeendet() == 1){
+                    setGewonnen(controller.getSpielerNameZwei());
+                }
+                else if(controller.istBeendet() == 2){
+                    setGewonnen(controller.getSpielerNameEins());
+                }
+                else{
+                    nameAktualisieren(controller.getSpieler(), controller.getSpielerNameEins());
+                }
+                containerFuellen();
             }
         });
 
@@ -349,9 +410,11 @@ public class View extends JFrame {
         zurueckHauptmenue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                listenerEntfernen();
                 setVisible(false);
                 container.removeAll();
                 menu.setVisible(true);
+                iconsEntfernen();
             }
         });
 
@@ -380,21 +443,85 @@ public class View extends JFrame {
         gbc.insets = new Insets(10, 0, 10, 100); // Abstände um den Button herum
         gbc.fill = GridBagConstraints.NONE;
         container.add(zurueckHauptmenue, gbc);
+    }
 
+    public void bestenlisteGenerierenImMenue(){
+        panelSpielfeldEigen.setVisible(false);
+        panelSpielfeldGegner.setVisible(false);
+        schiffanzeigeEigen.setVisible(false);
+        schiffanzeigeGegner.setVisible(false);
+        zuege.setVisible(false);
+        container.removeAll();
+        status.setText("Bestenliste");
 
+        // Bestehende Einträge abrufen
+        ArrayList<Eintrag> eintraege = bestenliste.getEintraege();
+
+        Font font1 = new Font("SansSerif", Font.BOLD, 15);
+
+        // Daten für die Tabelle vorbereiten
+        String[] spaltenNamen = {"Rang", "Name", "Züge", "Datum/Zeit"};
+        String[][] daten = new String[eintraege.size()][4];
+
+        for (int i = 0; i < eintraege.size(); i++) {
+            Eintrag eintrag = eintraege.get(i);
+            daten[i][0] = Integer.toString(i + 1);
+            daten[i][1] = eintrag.getName();
+            daten[i][2] = Integer.toString(eintrag.getAnzahlZuege());
+            daten[i][3] = eintrag.getDatumZeit();
+        }
+
+        // JTable erstellen und in einem JFrame anzeigen
+        JTable tabelle = new JTable(daten, spaltenNamen);
+        tabelle.getTableHeader().setReorderingAllowed(false);
+        tabelle.getTableHeader().setFont(font1);
+        JScrollPane scrollPane = new JScrollPane(tabelle);
+        tabelle.setFillsViewportHeight(true);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        for (int i = 0; i < tabelle.getColumnCount(); i++) {
+            tabelle.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        JButton zurueckHauptmenue = new JButton("Hauptmenü");
+        zurueckHauptmenue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                container.removeAll();
+                menu.setVisible(true);
+            }
+        });
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 1; // Position der Tabelle in der GridBagLayout
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH; // Tabelle füllt den verfügbaren Raum aus
+        gbc.insets = new Insets(100, 400, 100, 400); // Abstand um die Tabelle herum
+        container.add(scrollPane, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 0); // Abstände um den Button herum
+        gbc.fill = GridBagConstraints.NONE;
+        container.add(zurueckHauptmenue, gbc);
     }
 
 
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            spielerEinsZuege = anzahlZuege;
-            System.out.println("spieler 1 aktualisiert, Anzahl Zuege: " + spielerEinsZuege);
+//            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
         }
         else if (spieler == 2) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            spielerZweiZuege = anzahlZuege;
-            System.out.println("spieler 2 aktualisiert, Anzahl Zuege: " + spielerZweiZuege);
+//            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
         }
     }
 
@@ -405,6 +532,10 @@ public class View extends JFrame {
         else if (spieler == 2) {
             status.setText(name);
         }
+    }
+
+    public void bestenlisteEintragen(String name, int anzahlZuege){
+        bestenliste.eintragHinzufuegen(name,anzahlZuege);
     }
 
     public void spielFensterSichtbar(){
@@ -454,6 +585,11 @@ public class View extends JFrame {
                 //System.out.println("neue Runde gedrückt");
 
                 buttonPanel.removeAll();
+                iconsEntfernen();
+                controller.feldAktualisieren("Eigen");
+                controller.feldAktualisieren("Eigen");
+                controller.feldAktualisieren("Gegner");
+                controller.feldAktualisieren("Gegner");
 
                 //container = new JPanel();
 
@@ -516,10 +652,12 @@ public class View extends JFrame {
         zuege.setVisible(true);
     }
 
-    public void listenerEntfernen(ActionListener al) {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                this.buttonSpielfeldGegner[i][j].removeActionListener(al);
+    public void listenerEntfernen() {
+        for (ActionListener al: buttonSpielfeldGegner[1][1].getActionListeners()) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    this.buttonSpielfeldGegner[i][j].removeActionListener(al);
+                }
             }
         }
     }
@@ -553,28 +691,32 @@ public class View extends JFrame {
 
     public void setButton(int i, int j, String temp, String spieler) {
         if (spieler.equals("Eigen") && temp.equals("Schiff")) {
-            buttonSpielfeldEigen[i][j].setText("X");
-            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
-            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
+            buttonSpielfeldEigen[i][j].setText(null);
+//            buttonSpielfeldEigen[i][j].setText("X");
+//            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
+//            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldEigen[i][j].setIcon(null);
+//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+//            buttonSpielfeldEigen[i][j].setIcon(null);
+            schiffGifEinfuegen(i, j, buttonSpielfeldEigen, false);
         } else if (spieler.equals("Eigen") && temp.equals("Schiff_getroffen")) {
-            buttonSpielfeldEigen[i][j].setText("X");
-            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
-            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
+            buttonSpielfeldEigen[i][j].setText(null);
+//            buttonSpielfeldEigen[i][j].setText("X");
+//            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
+//            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
-            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldEigen[i][j].setIcon(null);
+//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+//            buttonSpielfeldEigen[i][j].setIcon(null);
+            schiffGifEinfuegen(i, j, buttonSpielfeldEigen, false);
         } else if (spieler.equals("Eigen") && temp.equals("Wasser")) {
             buttonSpielfeldEigen[i][j].setText(null);
 //            buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
 //            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-              buttonSpielfeldEigen[i][j].setBackground(Color.decode("#4F84c9"));
+              //buttonSpielfeldEigen[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
-                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldEigen[i][j].setIcon(wasser);
             }
         } else if (spieler.equals("Eigen") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldEigen[i][j].setText(null);
@@ -582,17 +724,19 @@ public class View extends JFrame {
 //            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
+//            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
-                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldEigen[i][j].setIcon(wasser);
             }
         } else if (spieler.equals("Eigen") && temp.equals("Komplettes_Schiff_getroffen")) {
-            buttonSpielfeldEigen[i][j].setText("X");
-            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
-            buttonSpielfeldEigen[i][j].setForeground(Color.RED);
+            buttonSpielfeldEigen[i][j].setText(null);
+//            buttonSpielfeldEigen[i][j].setText("X");
+//            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
+//            buttonSpielfeldEigen[i][j].setForeground(Color.RED);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
-            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldEigen[i][j].setIcon(null);
+//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+//            buttonSpielfeldEigen[i][j].setIcon(null);
+            schiffGifEinfuegen(i, j, buttonSpielfeldEigen, true);
         } else if (spieler.equals("Eigen") && temp.equals("unmoeglich")) {
             buttonSpielfeldEigen[i][j].setText(null);
 //            buttonSpielfeldEigen[i][j].setText("O");
@@ -600,9 +744,9 @@ public class View extends JFrame {
 //            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#4F84c9"));
+            //buttonSpielfeldEigen[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
-                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldEigen[i][j].setIcon(wasser);
             }
         } else if (spieler.equals("Eigen") && temp.equals("unmoeglich_getroffen")) {
             buttonSpielfeldEigen[i][j].setText(null);
@@ -611,24 +755,27 @@ public class View extends JFrame {
 //            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
+            //buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
-                buttonSpielfeldEigen[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldEigen[i][j].getWidth(), buttonSpielfeldEigen[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldEigen[i][j].setIcon(wasser);
             }
         } else if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen")) {
-            buttonSpielfeldGegner[i][j].setText("X");
-            buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
-            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
-            buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
-            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldGegner[i][j].setIcon(null);
+            buttonSpielfeldGegner[i][j].setText(null);
+            //buttonSpielfeldGegner[i][j].setText("X");
+            //buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
+            //buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
+            //buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
+            //buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+            schiffGifEinfuegen(i, j, buttonSpielfeldGegner, false);
         } else if (spieler.equals("Gegner") && temp.equals("Komplettes_Schiff_getroffen")) {
-            buttonSpielfeldGegner[i][j].setText("X");
-            buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
-            buttonSpielfeldGegner[i][j].setForeground(Color.RED);
-            buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
-            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldGegner[i][j].setIcon(null);
+            buttonSpielfeldGegner[i][j].setText(null);
+//            buttonSpielfeldGegner[i][j].setText("X");
+//            buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
+//            buttonSpielfeldGegner[i][j].setForeground(Color.RED);
+//            buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
+//            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+//            buttonSpielfeldGegner[i][j].setIcon(null);
+            schiffGifEinfuegen(i, j, buttonSpielfeldGegner, true);
         } else if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldGegner[i][j].setText(null);
 //            buttonSpielfeldGegner[i][j].setText("O");
@@ -636,17 +783,22 @@ public class View extends JFrame {
 //            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-              buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
+              //buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldGegner[i][j].getIcon() == null) {
-                buttonSpielfeldGegner[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldGegner[i][j].getWidth(), buttonSpielfeldGegner[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldGegner[i][j].setIcon(wasser);
             }
         } else if (spieler.equals("Gegner") && temp.equals("unmoeglich")) {
-            buttonSpielfeldGegner[i][j].setText("X");
-            buttonSpielfeldGegner[i][j].setBackground(null);
-            buttonSpielfeldGegner[i][j].setForeground(Color.RED);
-            buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 40));
-            buttonSpielfeldGegner[i][j].setIcon(null);
+            buttonSpielfeldGegner[i][j].setText(null);
+            //buttonSpielfeldGegner[i][j].setBackground(null);
+            //buttonSpielfeldGegner[i][j].setForeground(Color.RED);
+            //buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
+            //buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 40));
+            //buttonSpielfeldGegner[i][j].setIcon(null);
+            //buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
+            if (buttonSpielfeldGegner[i][j].getIcon() == null) {
+                buttonSpielfeldGegner[i][j].setIcon(wasser_unmoeglich);
+            }
+            //buttonSpielfeldGegner[i][j].setBackground(Color.RED);
         } else if (spieler.equals("Gegner") && temp.equals("unmoeglich_getroffen")) {
             buttonSpielfeldGegner[i][j].setText(null);
 //            buttonSpielfeldGegner[i][j].setText("O");
@@ -654,9 +806,9 @@ public class View extends JFrame {
 //            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
+            //buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldGegner[i][j].getIcon() == null) {
-                buttonSpielfeldGegner[i][j].setIcon(new ImageIcon(wasser.getImage().getScaledInstance(buttonSpielfeldGegner[i][j].getWidth(), buttonSpielfeldGegner[i][j].getHeight(), Image.SCALE_DEFAULT)));
+                buttonSpielfeldGegner[i][j].setIcon(wasser);
             }
         } else {
             buttonSpielfeldGegner[i][j].setText("");
@@ -667,12 +819,176 @@ public class View extends JFrame {
         }
     }
 
-    public void setSpieler(int spieler) {
-        status.setText("Spieler " + spieler);
+    private void schiffGifEinfuegen(int i, int j, JButton[][] spielfeldButtons, boolean kaputt){
+        if (j-1 < 0 && i-1 < 0){
+            if (!schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                spielfeldButtons[i][j].setIcon(uboot_einzel);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+            }
+        }
+        else if (j+1 > 9 && i-1 < 0){
+            if (!schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
+                spielfeldButtons[i][j].setIcon(uboot_einzel);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+            }
+        }
+        else if (j+1 > 9 && i+1 > 9){
+            if (!schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
+                spielfeldButtons[i][j].setIcon(uboot_einzel);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+            }
+        }
+        else if (j-1 < 0 && i+1 > 9){
+            if (!schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                spielfeldButtons[i][j].setIcon(uboot_einzel);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+            }
+        }
+        else if (i+1 > 9){
+            if (!schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j+1].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
+                spielfeldButtons[i][j].setIcon(uboot_einzel);
+            }
+            else if (andereGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon()) || spielfeldButtons[i][j+1].getIcon() == null || spielfeldButtons[i][j-1].getIcon() == null){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && andereGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+            }
+        }
+        else if (j+1 > 9){
+            if (!schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
+                spielfeldButtons[i][j].setIcon(uboot_einzel);
+            }
+            else if (andereGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) || spielfeldButtons[i-1][j].getIcon() == null || spielfeldButtons[i+1][j].getIcon() == null){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && andereGifs.contains(spielfeldButtons[i+1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+            }
+        }
+        else if (i-1 < 0){
+            if (!schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j+1].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
+                spielfeldButtons[i][j].setIcon(uboot_einzel);
+            }
+            else if (andereGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon()) || spielfeldButtons[i][j+1].getIcon() == null || spielfeldButtons[i][j-1].getIcon() == null){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && andereGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+            }
+        }
+        else if (j-1 < 0){
+            if (!schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                spielfeldButtons[i][j].setIcon(uboot_einzel);
+            }
+            else if (andereGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) || spielfeldButtons[i-1][j].getIcon() == null || spielfeldButtons[i+1][j].getIcon() == null){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && andereGifs.contains(spielfeldButtons[i+1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+            }
+        }
+        else{
+            if (!schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j+1].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
+                spielfeldButtons[i][j].setIcon(uboot_einzel);
+            }
+            else if (andereGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) || spielfeldButtons[i-1][j].getIcon() == null || spielfeldButtons[i+1][j].getIcon() == null){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && andereGifs.contains(spielfeldButtons[i+1][j].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+            }
+            else if (andereGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon()) || spielfeldButtons[i][j+1].getIcon() == null || spielfeldButtons[i][j-1].getIcon() == null){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte);
+            }
+            else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && andereGifs.contains(spielfeldButtons[i][j+1].getIcon())){
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+            }
+        }
     }
 
-    public void setGewonnen(int spieler) {
-        status.setText("Spieler " + spieler + " hat gewonnen!");
+    public void setGewonnen(String gewinner) {
+        status.setText(gewinner + " hat gewonnen!");
     }
 
     private static class AbgeschossenBorder implements Border {
@@ -713,7 +1029,7 @@ public class View extends JFrame {
             setLayout(new BorderLayout());
 
             // Hintergrundbild
-            final BufferedImage backgroundImage;
+            BufferedImage backgroundImage;
             try {
                 backgroundImage = ImageIO.read(new File("Bilder/Logo/SchiffeVersenkenLogo.png"));
             } catch (IOException e) {
@@ -727,6 +1043,7 @@ public class View extends JFrame {
                     g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
                 }
             };
+
             setContentPane(background);
             background.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
@@ -759,18 +1076,35 @@ public class View extends JFrame {
             buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
             // Regel Button
-            JButton regelButton = new JButton("Regeln");
+            JButton regelButton = new JButton("Hilfe");
             regelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             buttonPanel.add(regelButton);
+            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+            JButton bestenlisteMenue = new JButton("Bestenliste");
+            bestenlisteMenue.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(bestenlisteMenue);
+
+            bestenlisteMenue.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    spielFensterSichtbar();
+                    containerFuellen();
+                    schiffanzeigenZuruecksetzen();
+                    setVisible(false);
+                    bestenlisteGenerierenImMenue();
+                }
+            });
 
             // Create the hover window
-            JFrame hoverFrame = new JFrame("Regeln");
+            JFrame hoverFrame = new JFrame("Hilfe");
             hoverFrame.setSize(600, 600);
             hoverFrame.setLayout(new FlowLayout());
             hoverFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
+
             // Create the label for hover text
-            JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/>Regeln<br/><br/>Die Schiffe dürfen nicht aneinander liegen sondern haben immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie abfeuern möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: Insgesamt 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
+            JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/><br/><br/>Namen<br/><br/>Um die Namen für Spieler 1 und Spieler 2 zu ändern müssen Sie in die Einstellungen gehen<br/><br/><br/><br/>Regeln<br/><br/>Die Schiffe werden automatisch gesetzt und dürfen nicht aneinander liegen sondern haben<br> immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie schießen möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
             hoverTextLabel.setForeground(Color.BLACK);
 
             // Add the label to the hover window
@@ -796,6 +1130,7 @@ public class View extends JFrame {
             multiPlayerButton.setMaximumSize(buttonSize);
             settingsButton.setMaximumSize(buttonSize);
             regelButton.setMaximumSize(buttonSize);
+            bestenlisteMenue.setMaximumSize(buttonSize);
 
             // Button Panel in die Mitte setzen
             gbc.gridx = 0;
@@ -814,13 +1149,14 @@ public class View extends JFrame {
                     controller.setModus("sp");
                     controller.spielfelderInitialisieren();
                     controller.setSpielerNameEins(nameEins.getText());
-                    controller.setSpielerNameZwei(nameZwei.getText());
-                    spielFensterSichtbar();
+                    controller.setSpielerNameZwei("Computergegner");
                     containerFuellen();
                     status.setText(nameEins.getText());
                     controller.feldAktualisieren("Gegner");
                     schiffanzeigenZuruecksetzen();
+                    zuege.setText("Anzahl an Zügen: 0");
                     setVisible(false);
+                    spielFensterSichtbar();
                 }
             });
 
@@ -839,7 +1175,17 @@ public class View extends JFrame {
                     localButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            System.out.println("Lokaler Multiplayer\n");
                             controller.setModus("lokal_mp");
+                            controller.spielfelderInitialisieren();
+                            controller.setSpielerNameEins(nameEins.getText());
+                            controller.setSpielerNameZwei(nameZwei.getText());
+                            containerFuellen();
+                            status.setText(nameEins.getText());
+                            controller.feldAktualisieren("Gegner");
+                            schiffanzeigenZuruecksetzen();
+                            zuege.setText("Anzahl an Zügen: 0");
+                            setVisible(false);
                             spielFensterSichtbar();
                         }
                     });
@@ -854,9 +1200,37 @@ public class View extends JFrame {
                     }
                 });
 
+                    JButton zurueckButton = new JButton("zurück");
+                    zurueckButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    zurueckButton.setMaximumSize(buttonSize);
+
+                zurueckButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        buttonPanel.removeAll();
+
+                        buttonPanel.add(singlePlayerButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(multiPlayerButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(settingsButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(regelButton);
+                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                        buttonPanel.add(bestenlisteMenue);
+
+                        buttonPanel.revalidate();
+                        buttonPanel.repaint();
+
+                    }
+                });
+
+
                     buttonPanel.add(localButton);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
                     buttonPanel.add(onlineButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
+                    buttonPanel.add(zurueckButton);
 
                     // Panel neu validieren und neu zeichnen
                     buttonPanel.revalidate();
@@ -867,43 +1241,28 @@ public class View extends JFrame {
             settingsButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JFrame meinJFrame = new JFrame();
-                    Container container = meinJFrame.getContentPane();
-                    container.setLayout(new GridBagLayout());
-                    GridBagConstraints gbc = new GridBagConstraints();
-                    gbc.insets = new Insets(10, 10, 10, 10);
-                    //System.out.println("Einstellungen Button gedrückt");
-                    meinJFrame.setSize(500, 500);
+                    buttonPanel.removeAll();
 
-                    // Textfeld wird erstellt
-                    // Text und Spaltenanzahl werden dabei direkt gesetzt
-                    nameEins = new JTextField("Lukas", 15);
-                    gbc.gridx = 1;
-                    gbc.gridy = 0;
-                    container.add(nameEins, gbc);
+
+                    buttonPanel.setOpaque(true);  // Macht das Panel transparent
+                    buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
                     JLabel labelSpielerEins = new JLabel("Name Spieler 1:");
-                    gbc.gridx = 0;
-                    gbc.gridy = 0;
-                    container.add(labelSpielerEins, gbc);
+                    buttonPanel.add(labelSpielerEins);
+
+                    buttonPanel.add(nameEins);
 
                     JLabel labelSpielerZwei = new JLabel("Name Spieler 2:");
-                    gbc.gridx = 0;
-                    gbc.gridy = 1;
-                    container.add(labelSpielerZwei, gbc);
+                    buttonPanel.add(labelSpielerZwei);
+
+                    buttonPanel.add(nameZwei);
 
                     JLabel labelBestenliste = new JLabel("Bestenliste löschen");
-                    gbc.gridx = 0;
-                    gbc.gridy = 3;
-                    container.add(labelBestenliste, gbc);
-
-                    // Textfeld wird erstellt
-                    // Text und Spaltenanzahl werden dabei direkt gesetzt
-                    gbc.gridx = 1;
-                    gbc.gridy = 1;
-                    container.add(nameZwei, gbc);
+                    buttonPanel.add(labelBestenliste);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
                     JButton loeschen = new JButton("OK");
+
                     loeschen.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -911,16 +1270,40 @@ public class View extends JFrame {
                         }
                     });
 
-                    gbc.gridx = 1;
-                    gbc.gridy = 3;
-                    container.add(loeschen, gbc);
+                    buttonPanel.add(loeschen);
+                    JButton zurueckButton = new JButton("zurück");
+                    zurueckButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0,30)));
+                    buttonPanel.add(zurueckButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0,10)));
 
+                    zurueckButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            buttonPanel.removeAll();
 
-                    meinJFrame.setVisible(true);
+                            buttonPanel.setOpaque(false);
+
+                            buttonPanel.add(singlePlayerButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(multiPlayerButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(settingsButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(regelButton);
+                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                            buttonPanel.add(bestenlisteMenue);
+
+                            buttonPanel.revalidate();
+                            buttonPanel.repaint();
+                        }
+                    });
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
                 }
             });
-
             setVisible(true);
         }
+
     }
 }

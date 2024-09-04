@@ -21,6 +21,7 @@ public class Controller {
     class SpielfeldListener implements ActionListener {
         public SpielfeldListener() {
             feldAktualisieren("Eigen");
+            feldAktualisieren("Eigen");
         }
 
         @Override
@@ -31,29 +32,39 @@ public class Controller {
             int n = Integer.parseInt(dummy.substring(0, 1));
             int m = Integer.parseInt(dummy.substring(dummy.length() - 1));
             if (model.getWert(n, m, "Gegner").equals("Wasser") || model.getWert(n, m, "Gegner").equals("Schiff")) {
-                System.out.println("spieler: " + model.getSpieler());
+                System.out.println("Spieler: " + model.getSpielerNameEins());
                 model.schiessen(n, m);
+                view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
                 if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen") && !modus.equals("sp")) {
                     model.spielerWechseln("lokal_mp");
                     view.rundenwechselBestaetigen();
-                    view.setSpieler(model.getSpieler());
+                    view.nameAktualisieren(model.getSpieler(), model.getSpielerNameEins());
+                    view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
                 }
                 if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen") && modus.equals("sp")) {
                     model.spielerWechseln("sp");
                     model.ki_schiessen();
+                    view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
                 }
             }
-            if (model.beendet()) {
-                view.setGewonnen(model.getSpieler());
-                view.listenerEntfernen(this);
-                //model.zuruecksetzen();
+            switch(model.beendet()){
+                case 1:
+                    view.setGewonnen(model.getSpielerNameZwei());
+                    view.listenerEntfernen();
+                    view.bestenlisteEintragen(model.getSpielerNameZwei(),model.getZuegeKI());
+                    System.out.println("Bestenliste hinzugefügt");
+                    break;
+                case 2:
+                    view.setGewonnen(model.getSpielerNameEins());
+                    view.listenerEntfernen();
+                    view.bestenlisteEintragen(model.getSpielerNameEins(),model.getZuege());
+                    System.out.println("Bestenliste hinzugefügt");
+                    break;
             }
             feldAktualisieren("Eigen");
             feldAktualisieren("Gegner");
-            view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
-            view.nameAktualisieren(model.getSpieler(), model.getName());
+            feldAktualisieren("Gegner");
         }
-
     }
 
     public void feldAktualisieren(String spieler) {
@@ -89,5 +100,13 @@ public class Controller {
 
     public String getSpielerNameZwei() {
         return model.getSpielerNameZwei();
+    }
+
+    public int getSpieler(){
+        return model.getSpieler();
+    }
+
+    public int istBeendet(){
+        return model.beendet();
     }
 }
