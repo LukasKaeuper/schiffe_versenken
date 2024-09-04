@@ -46,10 +46,10 @@ public class View extends JFrame {
     private ImageIcon uboot_vertikal_vorne_feuer;                                               // Icon für die vordere Seite eines vertikalen U-Boots nach einem Treffer
     private ArrayList<ImageIcon> schiffGifs = new ArrayList<>();                                // Liste der Schiff-Icons
     private ArrayList<ImageIcon> andereGifs = new ArrayList<>();                                // Liste der anderen Icons
-    Font font1 = new Font("SansSerif", Font.BOLD, 20);                               // Schriftart für die Textfelder
-    Menu menu;                                                                                  // Hauptmenü
-    JButton zurueckHauptmenue = new JButton("Hauptmenü");                                  // Schaltfläche zum Zurückkehren zum Hauptmenü
-    JButton bestenlistebutton = new JButton("Bestenliste");                                // Schaltfläche zur Anzeige der Bestenliste
+    private Font font1 = new Font("SansSerif", Font.BOLD, 20);                               // Schriftart für die Textfelder
+    private Menu menu;                                                                                  // Hauptmenü
+    private JButton zurueckHauptmenueImSpiel = new JButton("Hauptmenü");                                  // Schaltfläche zum Zurückkehren zum Hauptmenü
+    private JButton bestenlistebuttonImSpiel = new JButton("Bestenliste");                                // Schaltfläche zur Anzeige der Bestenliste
 
     Bestenliste bestenliste = new Bestenliste();                                                // Instanz der Bestenliste
 
@@ -148,14 +148,14 @@ public class View extends JFrame {
         container.setLayout(new GridBagLayout());
 
         containerFuellen();
-        bestenlistebutton.addActionListener(new ActionListener() {
+        bestenlistebuttonImSpiel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bestenlisteGenerieren();
             }
         });
 
-        zurueckHauptmenue.addActionListener(new ActionListener() {
+        zurueckHauptmenueImSpiel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 listenerEntfernen();
@@ -769,7 +769,7 @@ public class View extends JFrame {
         c.anchor = GridBagConstraints.WEST;
         c.insets = new Insets(0, 5, 10, 0); // Abstände um den Button herum
         c.fill = GridBagConstraints.NONE;
-        container.add(bestenlistebutton, c);
+        container.add(bestenlistebuttonImSpiel, c);
         c.gridx = 1;
         c.gridy = 1;
         c.weightx = 1;
@@ -777,7 +777,7 @@ public class View extends JFrame {
         c.anchor = GridBagConstraints.EAST;
         c.insets = new Insets(0, 0, 10, 5); // Abstände um den Button herum
         c.fill = GridBagConstraints.NONE;
-        container.add(zurueckHauptmenue, c);
+        container.add(zurueckHauptmenueImSpiel, c);
 
         panelSpielfeldEigen.setVisible(true);
         panelSpielfeldGegner.setVisible(true);
@@ -1241,8 +1241,9 @@ public class View extends JFrame {
             multiPlayerButton.addActionListener(multiplayerButtonListener());
             loeschenButton.addActionListener(loeschenButtonListener());
             zurueckButton.addActionListener(zurueckButtonListener());
-            bestenlistebutton.addActionListener(bestenlisteButtonListener());
+            bestenlisteButtonMenue.addActionListener(bestenlisteButtonListener());
             settingsButton.addActionListener(settingsButtonListener());
+            localButton.addActionListener(lokalButtonListener());
         }
 
         private ActionListener settingsButtonListener(){
@@ -1288,14 +1289,12 @@ public class View extends JFrame {
 
                     localButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                     localButton.setMaximumSize(buttonSize);
-                    localButton.addActionListener(lokalButtonListener());
 
                     onlineButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                     onlineButton.setMaximumSize(buttonSize);
 
                     zurueckButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                     zurueckButton.setMaximumSize(buttonSize);
-                    zurueckButton.addActionListener(zurueckButtonListener());
 
                     buttonPanel.add(localButton);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
