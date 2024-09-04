@@ -1266,7 +1266,7 @@ public class View extends JFrame {
                     buttonPanel.add(Box.createRigidArea(new Dimension(0,30)));
                     buttonPanel.add(zurueckButtonEinstellungen);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0,10)));
-                    zurueckButtonEinstellungen.addActionListener(zurueckButtonListener());
+                    zurueckButtonEinstellungen.addActionListener(zurueckButtonEinstellungenListener());
 
                     buttonPanel.revalidate();
                     buttonPanel.repaint();
@@ -1278,7 +1278,22 @@ public class View extends JFrame {
             return new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    buttonPanel.removeAll();
 
+                    buttonPanel.setOpaque(false);
+
+                    buttonPanel.add(singlePlayerButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(multiPlayerButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(settingsButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(hilfeButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(bestenlisteButtonMenue);
+
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
                 }
             };
         }
