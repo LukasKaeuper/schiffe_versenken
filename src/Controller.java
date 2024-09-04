@@ -32,13 +32,13 @@ public class Controller {
             int n = Integer.parseInt(dummy.substring(0, 1));
             int m = Integer.parseInt(dummy.substring(dummy.length() - 1));
             if (model.getWert(n, m, "Gegner").equals("Wasser") || model.getWert(n, m, "Gegner").equals("Schiff")) {
-                System.out.println("Spieler: " + model.getName());
+                System.out.println("Spieler: " + model.getSpielerNameEins());
                 model.schiessen(n, m);
                 view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
                 if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen") && !modus.equals("sp")) {
                     model.spielerWechseln("lokal_mp");
                     view.rundenwechselBestaetigen();
-                    view.nameAktualisieren(model.getSpieler(), model.getName());
+                    view.nameAktualisieren(model.getSpieler(), model.getSpielerNameEins());
                     view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
                 }
                 if (model.getWert(n, m, "Gegner").equals("Wasser_getroffen") && modus.equals("sp")) {
@@ -49,25 +49,18 @@ public class Controller {
             }
             switch(model.beendet()){
                 case 1:
-                    view.setGewonnen("Computergegner");
+                    view.setGewonnen(model.getSpielerNameZwei());
                     view.listenerEntfernen();
-                    view.bestenlisteEintragen("Computergegner",model.getZuegeKI());
+                    view.bestenlisteEintragen(model.getSpielerNameZwei(),model.getZuegeKI());
                     System.out.println("Bestenliste hinzugefügt");
                     break;
                 case 2:
-                    view.setGewonnen(model.getName());
+                    view.setGewonnen(model.getSpielerNameEins());
                     view.listenerEntfernen();
-                    view.bestenlisteEintragen(model.getName(),model.getZuege());
+                    view.bestenlisteEintragen(model.getSpielerNameEins(),model.getZuege());
                     System.out.println("Bestenliste hinzugefügt");
                     break;
             }
-//            if (model.beendet()) {
-//                view.setGewonnen(model.getName());
-//                view.listenerEntfernen();
-//                view.bestenlisteEintragen(model.getName(),model.getZuege());
-//                System.out.println("Bestenliste hinzugefügt");
-//                //model.zuruecksetzen();
-//            }
             feldAktualisieren("Eigen");
             feldAktualisieren("Gegner");
             feldAktualisieren("Gegner");
@@ -113,11 +106,7 @@ public class Controller {
         return model.getSpieler();
     }
 
-    public String getName(){
-        return model.getName();
-    }
-
-    public boolean istBeendet(){
-        return (model.beendet() == 1 || model.beendet() == 2);
+    public int istBeendet(){
+        return model.beendet();
     }
 }

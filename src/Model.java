@@ -57,8 +57,10 @@ public class Model {
             }
         }
         laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(kiSchussX, kiSchussY);
-        spielfeldRechts.getSpieler().zugErhoehen();
+//        spielfeldRechts.getSpieler().zugErhoehen();
+//        System.out.print("KI Zug erhöht auf: " + spielfeldRechts.getSpieler().getAnzahlZuege() + "\n");
         System.out.println("KI Schuss bei: (" + kiSchussX + ", " + kiSchussY + ")");
+
         if (spielfeldLinks.getWert(kiSchussX, kiSchussY).equals("Schiff_getroffen")) {
             neuesSchiffSuchen = false;
             int ursprungsTrefferX = kiSchussX;
@@ -69,7 +71,8 @@ public class Model {
             while (!spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY).equals("Wasser_getroffen")) {
                 if (letzterTrefferX+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("unmoeglich") && !spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("unmoeglich_getroffen") && (suchRichtung.equals("süden") || suchRichtung.equals("unbekannt"))) {
                     laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(letzterTrefferX+1, letzterTrefferY);
-                    spielfeldRechts.getSpieler().zugErhoehen();
+//                    spielfeldRechts.getSpieler().zugErhoehen();
+//                    System.out.print("KI Zug erhöht auf: " + spielfeldRechts.getSpieler().getAnzahlZuege() + "\n");
                     System.out.println("KI Schuss bei: (" + Integer.toString(letzterTrefferX+1) + ", " + letzterTrefferY + ")");
                     if(spielfeldLinks.getWert(letzterTrefferX+1, letzterTrefferY).equals("Schiff_getroffen")) {
                         letzterTrefferX++;
@@ -89,7 +92,8 @@ public class Model {
                 }
                 else if (letzterTrefferY+1 <= 9 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("unmoeglich") && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("unmoeglich_getroffen") && (suchRichtung.equals("westen") || suchRichtung.equals("unbekannt"))) {
                     laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY+1);
-                    spielfeldRechts.getSpieler().zugErhoehen();
+//                    spielfeldRechts.getSpieler().zugErhoehen();
+//                    System.out.print("KI Zug erhöht auf: " + spielfeldRechts.getSpieler().getAnzahlZuege() + "\n");
                     System.out.println("KI Schuss bei: (" + letzterTrefferX + ", " + Integer.toString(letzterTrefferY+1) + ")");
                     if(spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY+1).equals("Schiff_getroffen")) {
                         letzterTrefferY++;
@@ -109,7 +113,8 @@ public class Model {
                 }
                 else if (letzterTrefferX-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("unmoeglich") && !spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("unmoeglich_getroffen") && (suchRichtung.equals("norden") || suchRichtung.equals("unbekannt"))) {
                     laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(letzterTrefferX-1, letzterTrefferY);
-                    spielfeldRechts.getSpieler().zugErhoehen();
+//                    spielfeldRechts.getSpieler().zugErhoehen();
+//                    System.out.print("KI Zug erhöht auf: " + spielfeldRechts.getSpieler().getAnzahlZuege() + "\n");
                     System.out.println("KI Schuss bei: (" + Integer.toString(letzterTrefferX-1) + ", " + letzterTrefferY + ")");
                     if(spielfeldLinks.getWert(letzterTrefferX-1, letzterTrefferY).equals("Schiff_getroffen")) {
                         letzterTrefferX--;
@@ -129,7 +134,8 @@ public class Model {
                 }
                 else if (letzterTrefferY-1 >= 0 && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("Wasser_getroffen") && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("unmoeglich") && !spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("unmoeglich_getroffen") && (suchRichtung.equals("osten") || suchRichtung.equals("unbekannt"))) {
                     laengeVomAbgeschossenenSchiff = spielfeldLinks.trefferMarkieren(letzterTrefferX, letzterTrefferY-1);
-                    spielfeldRechts.getSpieler().zugErhoehen();
+//                    spielfeldRechts.getSpieler().zugErhoehen();
+//                    System.out.print("KI Zug erhöht auf: " + spielfeldRechts.getSpieler().getAnzahlZuege() + "\n");
                     System.out.println("KI Schuss bei: (" + letzterTrefferX + ", " + Integer.toString(letzterTrefferY-1) + ")");
                     if(spielfeldLinks.getWert(letzterTrefferX, letzterTrefferY-1).equals("Schiff_getroffen")) {
                         letzterTrefferY--;
@@ -238,11 +244,15 @@ public class Model {
     }
 
     public int getZuegeKI(){
-        return spielfeldRechts.getSpieler().getAnzahlZuege();
-    }
-
-    public String getName() {
-        return spielfeldLinks.getSpieler().getName();
+        int anzahlZuege = 0;
+        for (int i=0; i<10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (spielfeldLinks.getWert(i, j).equals("Schiff_getroffen") || spielfeldLinks.getWert(i, j).equals("Wasser_getroffen") || spielfeldLinks.getWert(i, j).equals("unmoeglich_getroffen") || spielfeldLinks.getWert(i, j).equals("Komplettes_Schiff_getroffen")) {
+                    anzahlZuege++;
+                }
+            }
+        }
+        return anzahlZuege;
     }
 
     public void setSpielerNameEins(String name) {

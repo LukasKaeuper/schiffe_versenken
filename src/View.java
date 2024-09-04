@@ -393,11 +393,14 @@ public class View extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 container.removeAll();
-                if (controller.istBeendet()){
-                    setGewonnen(controller.getName());
+                if (controller.istBeendet() == 1){
+                    setGewonnen(controller.getSpielerNameZwei());
+                }
+                else if(controller.istBeendet() == 2){
+                    setGewonnen(controller.getSpielerNameEins());
                 }
                 else{
-                    nameAktualisieren(controller.getSpieler(), controller.getName());
+                    nameAktualisieren(controller.getSpieler(), controller.getSpielerNameEins());
                 }
                 containerFuellen();
             }
@@ -514,11 +517,11 @@ public class View extends JFrame {
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
+//            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
         }
         else if (spieler == 2) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
+//            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
         }
     }
 
@@ -1146,7 +1149,7 @@ public class View extends JFrame {
                     controller.setModus("sp");
                     controller.spielfelderInitialisieren();
                     controller.setSpielerNameEins(nameEins.getText());
-                    controller.setSpielerNameZwei(nameZwei.getText());
+                    controller.setSpielerNameZwei("Computergegner");
                     containerFuellen();
                     status.setText(nameEins.getText());
                     controller.feldAktualisieren("Gegner");
