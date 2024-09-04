@@ -1208,15 +1208,18 @@ public class View extends JFrame {
             setzteButtonGroesse();
             setContentPane(background);
             background.setLayout(new GridBagLayout());
+            buttonPanelZentrieren();
 
+            setVisible(true);
+        }
+
+        private void buttonPanelZentrieren(){
             gbc.gridx = 0;
             gbc.gridy = 1;
             gbc.gridwidth = 1;
             gbc.insets = new Insets(0, 0, 20, 0);
             gbc.anchor = GridBagConstraints.CENTER;
             background.add(buttonPanel, gbc);
-
-            setVisible(true);
         }
 
         private void setzteButtonGroesse() {
