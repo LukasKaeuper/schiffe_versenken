@@ -178,6 +178,11 @@ public class Controller {
         return model.getSpieler();
     }
 
+    /**
+     * Leitet eine Anfrage bezüglich der Beendigung des Spiels an das model weiter.
+     *
+     * @return Die Nummer des Siegers.
+     */
     public int istBeendet(){
         return model.beendet();
     }
