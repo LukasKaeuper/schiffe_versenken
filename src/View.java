@@ -12,51 +12,62 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 
+/**
+ * Die View-Klasse stellt die grafische Benutzeroberfläche für das "Schiffe Versenken"-Spiel bereit.
+ * Sie enthält die Spielfelder für den eigenen und gegnerischen Bereich, sowie Steuerungselemente
+ * wie Schaltflächen und Textfelder, um den Status und die Anzahl der Züge anzuzeigen.
+ */
 public class View extends JFrame {
-    private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];
-    private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];
-    private JTextField status;
-    private JTextField zuege;
-    private JTextField nameEins = new JTextField("Lukas", 15);;
-    private JTextField nameZwei = new JTextField("Marten", 15);;
-    private JPanel schiffanzeigeEigen;
-    private JPanel schiffanzeigeGegner;
-    private JPanel container;
-    private GamePanel panelSpielfeldEigen;
-    private GamePanel panelSpielfeldGegner;
-    private Controller controller;
-    private ImageIcon wasser;
-    private ImageIcon wasser_unmoeglich;
-    private ImageIcon uboot_einzel;
-    private ImageIcon uboot_horizontal_hinten;
-    private ImageIcon uboot_horizontal_mitte;
-    private ImageIcon uboot_horizontal_vorne;
-    private ImageIcon uboot_vertikal_hinten;
-    private ImageIcon uboot_vertikal_mitte;
-    private ImageIcon uboot_vertikal_vorne;
-    private ImageIcon uboot_horizontal_hinten_feuer;
-    private ImageIcon uboot_horizontal_mitte_feuer;
-    private ImageIcon uboot_horizontal_vorne_feuer;
-    private ImageIcon uboot_vertikal_hinten_feuer;
-    private ImageIcon uboot_vertikal_mitte_feuer;
-    private ImageIcon uboot_vertikal_vorne_feuer;
-    private ArrayList<ImageIcon> schiffGifs = new ArrayList<>();
-    private ArrayList<ImageIcon> andereGifs = new ArrayList<>();
-    Font font1 = new Font("SansSerif", Font.BOLD, 20);
-    Menu menu;
-    JButton zurueckHauptmenue = new JButton("Hauptmenü");
-    JButton bestenlistebutton = new JButton("Bestenliste");
+    private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];                       // Schaltflächen für das eigene Spielfeld
+    private final JButton[][] buttonSpielfeldGegner = new JButton[10][10];                      // Schaltflächen für das gegnerische Spielfeld
+    private JTextField status;                                                                  // Textfeld zur Anzeige des aktuellen Status
+    private JTextField zuege;                                                                   // Textfeld zur Anzeige der Anzahl der Züge
+    private JTextField nameEins = new JTextField("Lukas", 15);                     // Textfeld für den Namen des ersten Spielers
+    private JTextField nameZwei = new JTextField("Marten", 15);                    // Textfeld für den Namen des zweiten Spielers
+    private JPanel schiffanzeigeEigen;                                                          // Panel zur Anzeige von Schiffspositionen des eigenen Spielfelds
+    private JPanel schiffanzeigeGegner;                                                         // Panel zur Anzeige von Schiffspositionen des gegnerischen Spielfelds
+    private JPanel container;                                                                   // Container-Panel für die Spielfelder
+    private GamePanel panelSpielfeldEigen;                                                      // GamePanel für das eigene Spielfeld
+    private GamePanel panelSpielfeldGegner;                                                     // GamePanel für das gegnerische Spielfeld
+    private Controller controller;                                                              // Controller zur Steuerung der Spiellogik
+    private ImageIcon wasser;                                                                   // Icon für Wasser
+    private ImageIcon wasser_unmoeglich;                                                        // Icon für unzulässige Wasserbereiche
+    private ImageIcon uboot_einzel;                                                             // Icon für ein einzelnes U-Boot
+    private ImageIcon uboot_horizontal_hinten;                                                  // Icon für das hintere Ende eines horizontalen U-Boots
+    private ImageIcon uboot_horizontal_mitte;                                                   // Icon für die Mitte eines horizontalen U-Boots
+    private ImageIcon uboot_horizontal_vorne;                                                   // Icon für die vordere Seite eines horizontalen U-Boots
+    private ImageIcon uboot_vertikal_hinten;                                                    // Icon für das hintere Ende eines vertikalen U-Boots
+    private ImageIcon uboot_vertikal_mitte;                                                     // Icon für die Mitte eines vertikalen U-Boots
+    private ImageIcon uboot_vertikal_vorne;                                                     // Icon für die vordere Seite eines vertikalen U-Boots
+    private ImageIcon uboot_horizontal_hinten_feuer;                                            // Icon für das hintere Ende eines horizontalen U-Boots nach einem Treffer
+    private ImageIcon uboot_horizontal_mitte_feuer;                                             // Icon für die Mitte eines horizontalen U-Boots nach einem Treffer
+    private ImageIcon uboot_horizontal_vorne_feuer;                                             // Icon für die vordere Seite eines horizontalen U-Boots nach einem Treffer
+    private ImageIcon uboot_vertikal_hinten_feuer;                                              // Icon für das hintere Ende eines vertikalen U-Boots nach einem Treffer
+    private ImageIcon uboot_vertikal_mitte_feuer;                                               // Icon für die Mitte eines vertikalen U-Boots nach einem Treffer
+    private ImageIcon uboot_vertikal_vorne_feuer;                                               // Icon für die vordere Seite eines vertikalen U-Boots nach einem Treffer
+    private ArrayList<ImageIcon> schiffGifs = new ArrayList<>();                                // Liste der Schiff-Icons
+    private ArrayList<ImageIcon> andereGifs = new ArrayList<>();                                // Liste der anderen Icons
+    Font font1 = new Font("SansSerif", Font.BOLD, 20);                               // Schriftart für die Textfelder
+    Menu menu;                                                                                  // Hauptmenü
+    JButton zurueckHauptmenue = new JButton("Hauptmenü");                                  // Schaltfläche zum Zurückkehren zum Hauptmenü
+    JButton bestenlistebutton = new JButton("Bestenliste");                                // Schaltfläche zur Anzeige der Bestenliste
 
-    Bestenliste bestenliste = new Bestenliste();
+    Bestenliste bestenliste = new Bestenliste();                                                // Instanz der Bestenliste
 
-    AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);
+    AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);        // Border für abgeschossene Schiffe
 
+    /**
+     * Konstruktor für die View-Klasse.
+     * @param controller Der Controller, der die Spiellogik steuert.
+     */
     public View(Controller controller) {
-        super("Schiffe Versenken");
-        menu = new Menu();
-        this.controller = controller;
-        fensterGenerieren();
+        super("Schiffe Versenken");                                                          // Titel des Fensters
+        menu = new Menu();                                                                        // Initialisiert das Hauptmenü
+        this.controller = controller;                                                             // Setzt den Controller
+        fensterGenerieren();                                                                      // Generiert das Fenster
 
+
+        // Skaliert die Icons entsprechend der Größe der Schaltflächen im Spielfeld
         uboot_einzel = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_einzel.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
         uboot_horizontal_hinten = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_hinten.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
         uboot_horizontal_mitte = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_mitte.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
@@ -90,6 +101,9 @@ public class View extends JFrame {
         andereGifs.add(wasser_unmoeglich);
     }
 
+    /**
+     * Generiert das Fenster und fügt alle Komponenten hinzu.
+     */
     private void fensterGenerieren() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1600, 1000);
@@ -162,6 +176,9 @@ public class View extends JFrame {
         pack();
     }
 
+    /**
+     * Entfernt alle Icons von den Schaltflächen des Spielfelds.
+     */
     private void iconsEntfernen() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -171,6 +188,10 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Füllt die Panels für die Schiffsanzeige mit den Schiffen für den eigenen und den gegnerischen Bereich.
+     * Jedes Panel zeigt eine Liste von Schiffsarten in absteigender Reihenfolge der Größe.
+     */
     private void schiffanzeigenFuellen() {
         //eigeneSchiffe.add(new )
         schiffanzeigeEigen.add(new Schiffeintrag(5));
@@ -195,6 +216,13 @@ public class View extends JFrame {
         schiffanzeigeGegner.add(new Schiffeintrag(2));
     }
 
+    /**
+     * Aktualisiert die Anzeige eines Schiffes in der Schiffsanzeige für den angegebenen Spieler.
+     * Setzt den Status des Schiffes auf "abgeschossen", wenn das Schiff noch nicht als abgeschossen markiert ist.
+     *
+     * @param laenge Die Länge des Schiffes, das aktualisiert werden soll.
+     * @param spieler Der Name des Spielers ("Eigen" oder "Gegner"), dessen Schiffsanzeige aktualisiert wird.
+     */
     public void schiffanzeigeAktualisieren(int laenge, String spieler){
         if (spieler.equals("Eigen")){
             for (Component c: schiffanzeigeEigen.getComponents()){
@@ -216,17 +244,31 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Setzt die Schiffsanzeige zurück, indem alle bestehenden Einträge entfernt und dann neu gefüllt werden.
+     */
     public void schiffanzeigenZuruecksetzen(){
         schiffanzeigeEigen.removeAll();
         schiffanzeigeGegner.removeAll();
         schiffanzeigenFuellen();
     }
 
+    /**
+     * Repräsentiert einen Eintrag für ein Schiff in der Schiffsanzeige.
+     * Jedes Schiff wird als Reihe von Buttons dargestellt, die die Länge des Schiffes repräsentieren.
+     */
     private class Schiffeintrag extends JPanel{
-        private int laenge;
-        private boolean abgeschossen;
-        Dimension buttonSize = new Dimension(10, 10);
+        private int laenge;                                                      // Die Länge des Schiffes
+        private boolean abgeschossen;                                            // Status, ob das Schiff abgeschossen wurde
+        Dimension buttonSize = new Dimension(10, 10);               // Standardgröße der Buttons, die das Schiff darstellen
 
+        /**
+         * Konstruktor für die Schiffeintrag-Klasse.
+         * Initialisiert die Länge des Schiffes und den Status des Schiffes.
+         * Erstellt eine Reihe von Buttons, die das Schiff darstellen.
+         *
+         * @param laenge Die Länge des Schiffes.
+         */
         public Schiffeintrag(int laenge){
             this.laenge = laenge;
             this.abgeschossen = false;
@@ -241,64 +283,126 @@ public class View extends JFrame {
             }
         }
 
+        /**
+         * Färbt alle Buttons im Panel rot ein, um anzuzeigen, dass das Schiff abgeschossen wurde.
+         */
         public void einfaerben(){
             for (Component c: this.getComponents()){
                 c.setBackground(Color.RED);
             }
         }
 
+        /**
+         * Gibt zurück, ob das Schiff abgeschossen wurde.
+         *
+         * @return true, wenn das Schiff abgeschossen wurde, andernfalls false.
+         */
         public boolean istAbgeschossen(){
             return abgeschossen;
         }
 
+        /**
+         * Setzt den Status des Schiffes auf abgeschossen und färbt alle Buttons rot ein.
+         */
         public void setAbgeschossen(){
             this.abgeschossen = true;
             this.einfaerben();
         }
 
+        /**
+         * Gibt die Länge des Schiffes zurück.
+         *
+         * @return Die Länge des Schiffes.
+         */
         public int getLaenge(){
             return laenge;
         }
     }
 
+    /**
+     * Repräsentiert einen Eintrag in der Bestenliste.
+     * Jeder Eintrag enthält den Namen des Spielers, die Anzahl der Züge und das Datum/Zeit des Eintrags.
+     */
     public class Eintrag {
-        String name;
-        int anzahlZuege;
-        String datumZeit;
+        String name;              // Name des Spielers
+        int anzahlZuege;          // Anzahl der Züge des Spielers
+        String datumZeit;         // Datum und Zeit des Eintrags
 
+        /**
+         * Konstruktor für die Eintrag-Klasse.
+         *
+         * @param name Der Name des Spielers.
+         * @param anzahlZuege Die Anzahl der Züge des Spielers.
+         * @param datumZeit Datum und Zeit des Eintrags.
+         */
         public Eintrag(String name, int anzahlZuege, String datumZeit) {
             this.name = name;
             this.anzahlZuege = anzahlZuege;
             this.datumZeit = datumZeit;
         }
 
+        /**
+         * Gibt den Namen des Spielers zurück.
+         *
+         * @return Der Name des Spielers.
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         * Gibt die Anzahl der Züge zurück.
+         *
+         * @return Die Anzahl der Züge.
+         */
         public int getAnzahlZuege() {
             return anzahlZuege;
         }
 
+        /**
+         * Gibt das Datum und die Zeit des Eintrags zurück.
+         *
+         * @return Datum und Zeit des Eintrags.
+         */
         public String getDatumZeit() {
             return datumZeit;
         }
 
+        /**
+         * Gibt eine String-Darstellung des Eintrags zurück, die für die CSV-Datei verwendet werden kann.
+         *
+         * @return Die String-Darstellung des Eintrags.
+         */
         @Override
         public String toString() {
             return name + "," + anzahlZuege + "," + datumZeit;
         }
     }
 
+    /**
+     * Verwaltet eine Bestenliste, die Einträge in einer CSV-Datei speichert und lädt.
+     * Die Bestenliste wird nach der Anzahl der Züge sortiert.
+     */
     public class Bestenliste {
         private ArrayList<Eintrag> eintraege;
         private String dateiName = "bestenliste.csv";
 
+        /**
+         * Konstruktor für die Bestenliste-Klasse.
+         * Lädt bestehende Einträge aus der Datei, wenn vorhanden.
+         */
         public Bestenliste() {
             eintraege = new ArrayList<>();
             laden();
         }
 
+        /**
+         * Fügt einen neuen Eintrag zur Bestenliste hinzu und speichert die Liste in der Datei.
+         * Die Liste wird nach der Anzahl der Züge sortiert.
+         *
+         * @param name Der Name des Spielers.
+         * @param anzahlZuege Die Anzahl der Züge des Spielers.
+         */
         public void eintragHinzufuegen(String name, int anzahlZuege) {
             String datumZeit = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
             eintraege.add(new Eintrag(name, anzahlZuege, datumZeit));
@@ -306,26 +410,40 @@ public class View extends JFrame {
             speichern();
         }
 
+        /**
+         * Löscht alle Einträge aus der Bestenliste und speichert diese leere Liste in der Datei.
+         */
         public void alleEintraegeLoeschen() {
             eintraege.clear();
             speichern();
         }
 
+        /**
+         * Gibt die Liste der Einträge in der Bestenliste zurück.
+         *
+         * @return Die Liste der Einträge.
+         */
         public ArrayList<Eintrag> getEintraege() {
             return eintraege;
         }
 
+        /**
+         * Speichert die Einträge der Bestenliste in einer CSV-Datei.
+         */
         private void speichern() {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(dateiName))) {
                 for (Eintrag eintrag : eintraege) {
-                    writer.write(eintrag.toString());
-                    writer.newLine();
+                    writer.write(eintrag.toString());             // Schreibt jeden Eintrag als Zeile in die Datei
+                    writer.newLine();                             // Fügt einen Zeilenumbruch nach jedem Eintrag hinzu
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
+        /**
+         * Lädt die Einträge aus der CSV-Datei, wenn diese existiert.
+         */
         private void laden() {
             File file = new File(dateiName);
             if (!file.exists()) {
@@ -348,6 +466,10 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Generiert und zeigt die Bestenliste in einem Container an.
+     * Die bestehenden Panels werden ausgeblendet und eine Tabelle wird erstellt, um die Bestenliste darzustellen.
+     */
     public void bestenlisteGenerieren(){
         panelSpielfeldEigen.setVisible(false);
         panelSpielfeldGegner.setVisible(false);
@@ -442,6 +564,10 @@ public class View extends JFrame {
         container.add(zurueckHauptmenue, gbc);
     }
 
+    /**
+     * Generiert und zeigt die Bestenliste in einem Container an, wenn Sie über das Hauptmenü aufgerufen wurde.
+     * Die bestehenden Panels werden ausgeblendet und eine Tabelle wird erstellt, um die Bestenliste darzustellen.
+     */
     public void bestenlisteGenerierenImMenue(){
         panelSpielfeldEigen.setVisible(false);
         panelSpielfeldGegner.setVisible(false);
@@ -511,6 +637,13 @@ public class View extends JFrame {
     }
 
 
+    /**
+     * Aktualisiert die Anzeige der Anzahl der Züge für den angegebenen Spieler.
+     * Gibt außerdem eine Konsolennachricht aus, die den aktuellen Stand anzeigt.
+     *
+     * @param spieler Der Spieler, dessen Züge aktualisiert werden sollen (1 oder 2).
+     * @param anzahlZuege Die neue Anzahl der Züge des Spielers.
+     */
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
@@ -522,6 +655,12 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Aktualisiert den Namen des aktuellen Spielers im Statusbereich.
+     *
+     * @param spieler Der Spieler, dessen Name aktualisiert werden soll (1 oder 2).
+     * @param name Der neue Name des Spielers.
+     */
     public void nameAktualisieren(int spieler, String name){
         if (spieler == 1) {
             status.setText(name);
@@ -531,14 +670,27 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Fügt einen Eintrag zur Bestenliste hinzu.
+     *
+     * @param name Der Name des Spielers.
+     * @param anzahlZuege Die Anzahl der Züge des Spielers.
+     */
     public void bestenlisteEintragen(String name, int anzahlZuege){
         bestenliste.eintragHinzufuegen(name,anzahlZuege);
     }
 
+    /**
+     * Macht das Spiel-Fenster sichtbar.
+     */
     public void spielFensterSichtbar(){
         setVisible(true);
     }
 
+    /**
+     * Führt den Rundenwechsel durch und zeigt den Button zum Starten der neuen Runde an.
+     * Die Anzeigen für die Schiffe werden getauscht, und der Button zum Starten der neuen Runde wird erstellt.
+     */
     public void rundenwechselBestaetigen() {
         panelSpielfeldEigen.setVisible(false);
         panelSpielfeldGegner.setVisible(false);
@@ -601,6 +753,10 @@ public class View extends JFrame {
         });
     }
 
+    /**
+     * Füllt den Container mit den Panels und Buttons für das aktuelle Spiel.
+     * Positioniert die Panels und Buttons mithilfe des GridBagLayout.
+     */
     private void containerFuellen() {
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.CENTER;
@@ -649,6 +805,9 @@ public class View extends JFrame {
         zuege.setVisible(true);
     }
 
+    /**
+     * Entfernt alle ActionListener von den Buttons im Spielfeld des Gegners.
+     */
     public void listenerEntfernen() {
         for (ActionListener al: buttonSpielfeldGegner[1][1].getActionListeners()) {
             for (int i = 0; i < 10; i++) {
@@ -659,7 +818,20 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Die Klasse GamePanel ist eine benutzerdefinierte JPanel-Klasse, die ein
+     * Spielfeld in einem GridLayout für ein Spiel darstellt. Abhängig vom übergebenen
+     * Spieler wird entweder ein Spielfeld für den "Eigen"-Spieler oder den "Gegner"-Spieler erstellt.
+     */
     class GamePanel extends JPanel {
+
+        /**
+         * Konstruktor für die GamePanel-Klasse initialisiert das Panel mit einem GridLayout bestehend aus 10x10
+         * Buttons. Abhängig vom übergebenen Spieler wird entweder ein Array von Buttons
+         * für den Eigen-Spieler oder den Gegner-Spieler erstellt und dem Panel hinzugefügt.
+         *
+         * @param spieler Ein String, der angibt, für welchen Spieler das Spielfeld erstellt wird.
+         */
         public GamePanel(String spieler) {
             setLayout(new GridLayout(10, 10));
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -677,6 +849,11 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Erstellt ActionListener für das Spielfeld des Gegners.
+     *
+     * @param al Ein ActionListener, der für die Verarbeitung der Button-Klicks verwendet wird.
+     */
     public void erstelleSpielfeldListener(ActionListener al) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -686,6 +863,16 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Diese Methode konfiguriert das Aussehen und Verhalten eines Buttons im Spielfeld, abhängig davon,
+     * ob es sich um das Spielfeld des eigenen Spielers oder des Gegners handelt und welchen Zustand der
+     * Button darstellen soll.
+     *
+     * @param i Der Index der Reihe im 10x10 Raster, wo der Button gesetzt werden soll.
+     * @param j Der Index der Spalte im 10x10 Raster, wo der Button gesetzt werden soll.
+     * @param temp Ein String, der den Zustand des Buttons angibt.
+     * @param spieler Ein String, der angibt, für welchen Spieler das Spielfeld dargestellt wird.
+     */
     public void setButton(int i, int j, String temp, String spieler) {
         if (spieler.equals("Eigen") && temp.equals("Schiff")) {
             buttonSpielfeldEigen[i][j].setText(null);
@@ -816,6 +1003,14 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Fügt ein Bild für ein Schiff an eine bestimmte Position in einem 2D-Array von JButton-Objekten ein.
+     *
+     * @param i Die Reihe im Array, an der das Schiff eingefügt werden soll.
+     * @param j Die Spalte im Array, an der das Schiff eingefügt werden soll.
+     * @param spielfeldButtons Das 2D-Array von JButton-Objekten, das das Spielfeld darstellt.
+     * @param kaputt Ein boolescher Wert, der angibt, ob das Schiff beschädigt ist oder nicht.
+     */
     private void schiffGifEinfuegen(int i, int j, JButton[][] spielfeldButtons, boolean kaputt){
         if (j-1 < 0 && i-1 < 0){
             if (!schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
@@ -984,30 +1179,65 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Setzt den Text des Statusfeldes, welcher Spieler gewonnen hat.
+     *
+     * @param gewinner Der Name des Gewinners, der in der Nachricht angezeigt werden soll.
+     */
     public void setGewonnen(String gewinner) {
         status.setText(gewinner + " hat gewonnen!");
     }
 
+    /**
+     * Eine benutzerdefinierte Border-Klasse für Komponenten, die einen farbigen Rand mit einem bestimmten Radius darstellt.
+     */
     private static class AbgeschossenBorder implements Border {
 
         private final int radius;
         private final Color color;
 
+        /**
+         * Konstruktor für die AbgeschossenBorder-Klasse.
+         *
+         * @param color Die Farbe des Randes.
+         * @param radius Der Radius, der den Abstand des Rands von der Komponente definiert.
+         */
         private AbgeschossenBorder(Color color, int radius) {
             this.color = color;
             this.radius = radius;
         }
 
+        /**
+         * Gibt die Insets (Abstände) des Rands zurück.
+         *
+         * @param c Die Komponente, für die der Rand definiert ist.
+         * @return Ein Insets-Objekt, das den Abstand des Rands von der Komponente angibt.
+         */
         @Override
         public Insets getBorderInsets(Component c) {
             return new Insets(this.radius + 1, this.radius + 1, this.radius + 1, this.radius + 1);
         }
 
+        /**
+         * Gibt an, ob der Rand undurchsichtig ist.
+         *
+         * @return true, da der Rand immer undurchsichtig ist.
+         */
         @Override
         public boolean isBorderOpaque() {
             return true;
         }
 
+        /**
+         * Zeichnet den Rand um die Komponente.
+         *
+         * @param c Die Komponente, für die der Rand gezeichnet wird.
+         * @param g Das Graphics-Objekt, das zum Zeichnen verwendet wird.
+         * @param x Die x-Position der Komponente.
+         * @param y Die y-Position der Komponente.
+         * @param width Die Breite der Komponente.
+         * @param height Die Höhe der Komponente.
+         */
         @Override
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             g.setColor(color);
@@ -1015,6 +1245,9 @@ public class View extends JFrame {
         }
     }
 
+    /**
+     * Die Menü-Klasse erweitert das Spiel mit einem Menü.
+     */
     public class Menu extends JFrame {
 
         public Menu() {
@@ -1239,7 +1472,6 @@ public class View extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     buttonPanel.removeAll();
-
 
                     buttonPanel.setOpaque(true);  // Macht das Panel transparent
                     buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
