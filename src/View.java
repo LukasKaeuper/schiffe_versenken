@@ -1166,8 +1166,12 @@ public class View extends JFrame {
     }
 
     /**
-     * Die Klasse `Menu` erstellt das Hauptmenü für das Spiel "Schiffe Versenken".
-     * Sie enthält Buttons für die Auswahl des Spielmodus (Einzelspieler, Mehrspieler).
+     * Die Klasse Menu repräsentiert das Hauptmenü des Spiels "Schiffe Versenken".
+     * Sie erbt von JFrame und stellt das Hauptfenster der Anwendung dar.
+     * Das Menü enthält mehrere Buttons, um zwischen Einzelspieler-, Mehrspieler-,
+     * Einstellungen-, Hilfe- und der Bestenliste zu wechseln.
+     * Es gibt auch eine Hover-Funktionalität, die zusätzliche Informationen anzeigt, wenn der Benutzer
+     * über den Hilfe-Button fährt.
      */
     public class Menu extends JFrame {
 
@@ -1185,7 +1189,16 @@ public class View extends JFrame {
         private JButton loeschenButton = new JButton("OK");
         private JButton zurueckButtonEinstellungen = new JButton("zurück");
         private JFrame hoverFrame = new JFrame("Hilfe");
-        private JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/><br/><br/>Namen<br/><br/>Um die Namen für Spieler 1 und Spieler 2 zu ändern müssen Sie in die Einstellungen gehen<br/><br/><br/><br/>Regeln<br/><br/>Die Schiffe werden automatisch gesetzt und dürfen nicht aneinander liegen sondern haben<br> immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie schießen möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
+        private JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!" +
+                "<br/><br/><br/><br/>Namen<br/><br/>" +
+                "Um die Namen für Spieler 1 und Spieler 2 zu ändern müssen Sie in die Einstellungen gehen<br/><br/><br/>" +
+                "<br/>Regeln<br/><br/>Die Schiffe werden automatisch gesetzt und dürfen nicht aneinander liegen sondern haben<br>" +
+                "immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>" +
+                "Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>" +
+                "Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie schießen möchten<br/>" +
+                "Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>" +
+                "Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>" +
+                "Anzahl an Schiffen: 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
         private Dimension buttonSize = new Dimension(200, 50);
         private JPanel background = new JPanel();
         private JLabel labelSpielerEins = new JLabel("Name Spieler 1:");
@@ -1193,6 +1206,11 @@ public class View extends JFrame {
         private JLabel labelBestenliste = new JLabel("Bestenliste löschen");
         private GridBagConstraints gbc = new GridBagConstraints();
 
+        /**
+         * Der Konstruktor der Klasse Menu initialisiert das Hauptfenster des Spiels.
+         * Die Buttons bekommen ihre ActionListener hinzugefügt.
+         * Der Hintergrund und das Icon werden gesetzt.
+         */
         public Menu() {
             setTitle("Schiffe Versenken");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1213,6 +1231,9 @@ public class View extends JFrame {
             setVisible(true);
         }
 
+        /**
+         * Zentriert das ButtonPanel.
+         */
         private void buttonPanelZentrieren(){
             gbc.gridx = 0;
             gbc.gridy = 1;
@@ -1222,6 +1243,9 @@ public class View extends JFrame {
             background.add(buttonPanel, gbc);
         }
 
+        /**
+         * Setzt alle Buttons auf eine Größe.
+         */
         private void setzteButtonGroesse() {
             singlePlayerButton.setMaximumSize(buttonSize);
             multiPlayerButton.setMaximumSize(buttonSize);
@@ -1230,6 +1254,9 @@ public class View extends JFrame {
             bestenlisteButtonMenue.setMaximumSize(buttonSize);
         }
 
+        /**
+         * Erstellt ein neues JFrame, um den Hilfe Text anzuzeigen-
+         */
         private void hoverErstellen() {
             hoverFrame.setSize(600, 600);
             hoverFrame.setLayout(new FlowLayout());
@@ -1238,6 +1265,9 @@ public class View extends JFrame {
             hoverFrame.add(hoverTextLabel);
         }
 
+        /**
+         * Fügt den Buttons ihre Actionlistener hinzu.
+         */
         private void actionListenerHinzufuegen(){
             singlePlayerButton.addActionListener(singlePlayerButtonListener());
             bestenlisteButtonMenue.addActionListener(bestenlisteButtonListener());
@@ -1249,6 +1279,9 @@ public class View extends JFrame {
             localButton.addActionListener(lokalButtonListener());
         }
 
+        /**
+         * Erstellt den Actionlistener für den Einstellung-Button.
+         */
         private ActionListener settingsButtonListener(){
             return new ActionListener() {
                 @Override
@@ -1277,6 +1310,9 @@ public class View extends JFrame {
             };
         }
 
+        /**
+         * Erstellt den Actionlistener für den Zurück-Button in den Einstellungen.
+         */
         private ActionListener zurueckButtonEinstellungenListener() {
             return new ActionListener() {
                 @Override
@@ -1301,6 +1337,9 @@ public class View extends JFrame {
             };
         }
 
+        /**
+         * Erstellt den Actionlistener für den Löschen-Button.
+         */
         private ActionListener loeschenButtonListener() {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -1309,6 +1348,9 @@ public class View extends JFrame {
             };
         }
 
+        /**
+         * Erstellt den Actionlistener für den Multiplayer-Button.
+         */
         private ActionListener multiplayerButtonListener() {
             return new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -1335,6 +1377,9 @@ public class View extends JFrame {
             };
         }
 
+        /**
+         * Erstellt den Mouseadapter für den Hilfe-Button.
+         */
         private MouseAdapter hilfeButtonListener() {
             return new MouseAdapter() {
                 @Override
@@ -1349,6 +1394,9 @@ public class View extends JFrame {
             };
         }
 
+        /**
+         * Erstellt den Actionlistener für den Zurück-Button im Multiplayer Menü.
+         */
         private ActionListener zurueckButtonListener() {
             return new ActionListener() {
                 @Override
@@ -1371,6 +1419,9 @@ public class View extends JFrame {
             };
         }
 
+        /**
+         * Erstellt den Actionlistener für den Lokal-Button.
+         */
         private ActionListener lokalButtonListener() {
             return new ActionListener() {
                 @Override
@@ -1391,6 +1442,9 @@ public class View extends JFrame {
             };
         }
 
+        /**
+         * Erstellt den Actionlistener für den Bestenliste-Button.
+         */
         private ActionListener bestenlisteButtonListener() {
             return new ActionListener() {
                 @Override
@@ -1404,6 +1458,9 @@ public class View extends JFrame {
             };
         }
 
+        /**
+         * Erstellt den Actionlistener für den Einzelspieler-Button.
+         */
         private ActionListener singlePlayerButtonListener() {
             return new ActionListener() {
                 @Override
@@ -1424,6 +1481,9 @@ public class View extends JFrame {
             };
         }
 
+        /**
+         * Füllt das Button Panel mit den Buttons.
+         */
         private void buttonPanelFuellen() {
             buttonPanel = new JPanel();
             buttonPanel.setOpaque(false);
@@ -1449,6 +1509,9 @@ public class View extends JFrame {
             buttonPanel.add(bestenlisteButtonMenue);
         }
 
+        /**
+         * Setzt das Hintergrundbild.
+         */
         private void setzteHintergrund() {
             try {
                 hintergrundbild = ImageIO.read(new File("Bilder/Logo/SchiffeVersenkenLogo.png"));
