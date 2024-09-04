@@ -131,6 +131,7 @@ public class View extends JFrame {
                 setVisible(false);
                 menu.setVisible(true);
                 containerFuellen();
+                iconsEntfernen();
             }
         });
 
@@ -141,6 +142,15 @@ public class View extends JFrame {
 
         add(container, BorderLayout.CENTER);
         pack();
+    }
+
+    private void iconsEntfernen() {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                buttonSpielfeldEigen[i][j].setIcon(null);
+                buttonSpielfeldGegner[i][j].setIcon(null);
+            }
+        }
     }
 
     private void schiffanzeigenFuellen() {
@@ -552,6 +562,11 @@ public class View extends JFrame {
                 //System.out.println("neue Runde gedrückt");
 
                 buttonPanel.removeAll();
+                iconsEntfernen();
+                controller.feldAktualisieren("Eigen");
+                controller.feldAktualisieren("Eigen");
+                controller.feldAktualisieren("Gegner");
+                controller.feldAktualisieren("Gegner");
 
                 //container = new JPanel();
 
