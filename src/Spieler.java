@@ -14,7 +14,6 @@ public class Spieler {
      * @param name Der Name des Spielers.
      */
     public Spieler(String name){
-
         this.name = name;
     }
 
@@ -51,5 +50,4 @@ public class Spieler {
     public void zugErhoehen(){
         this.anzahlZuege++;
     }
-
 }

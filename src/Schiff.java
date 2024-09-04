@@ -60,7 +60,6 @@ public class Schiff {
      */
     public void setAbgeschossen() {
         abgeschossen = true;
-        //System.out.println("Schiff der Länge : " + this.laenge + " abgeschossen");
     }
 
     /**

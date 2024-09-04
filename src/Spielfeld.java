@@ -204,7 +204,6 @@ public class Spielfeld {
      * Zeigt das aktuelle Spielfeld in der Konsole an.
      */
     public void anzeigen(){
-        //System.out.println();
         for(int i = 0; i < reihe; i++){
             for(int j = 0; j < spalte; j++){
                 System.out.print(spielfeld[i][j] + " ");
@@ -241,7 +240,6 @@ public class Spielfeld {
         for (Schiff n : schiffe) {
             n.getKoordinaten().forEach((m) -> {
                 if (m.x.equals(x) && m.y.equals(y)) {
-                    //System.out.println("Schiff der Länge " + n.getLaenge() + " getroffen!");
                     n.getKoordinaten().forEach((k) -> {
                         if (!(spielfeld[k.getX()][k.getY()] == schiff_getroffen)) {
                             alleGetroffen.set(false);

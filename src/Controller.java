@@ -52,7 +52,6 @@ public class Controller {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            //System.out.println("Button gedrückt");
             // Index aus View holen
             String dummy = e.getActionCommand();
             int n = Integer.parseInt(dummy.substring(0, 1));

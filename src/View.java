@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -102,7 +101,7 @@ public class View extends JFrame {
     }
 
     /**
-     * Generiert das Fenster und fügt alle Komponenten hinzu.
+     * Generiert das Fenster und initialisiert die Komponenten.
      */
     private void fensterGenerieren() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -167,11 +166,6 @@ public class View extends JFrame {
             }
         });
 
-
-//        Dimension textFieldSize = new Dimension(50, 30);
-//        schiffanzeigeEigen.setPreferredSize(textFieldSize);
-//        schiffanzeigeGegner.setPreferredSize(textFieldSize);
-
         add(container, BorderLayout.CENTER);
         pack();
     }
@@ -193,7 +187,6 @@ public class View extends JFrame {
      * Jedes Panel zeigt eine Liste von Schiffsarten in absteigender Reihenfolge der Größe.
      */
     private void schiffanzeigenFuellen() {
-        //eigeneSchiffe.add(new )
         schiffanzeigeEigen.add(new Schiffeintrag(5));
         schiffanzeigeEigen.add(new Schiffeintrag(4));
         schiffanzeigeEigen.add(new Schiffeintrag(4));
@@ -639,7 +632,6 @@ public class View extends JFrame {
         container.add(zurueckHauptmenue, gbc);
     }
 
-
     /**
      * Aktualisiert die Anzeige der Anzahl der Züge für den angegebenen Spieler.
      * Gibt außerdem eine Konsolennachricht aus, die den aktuellen Stand anzeigt.
@@ -650,11 +642,9 @@ public class View extends JFrame {
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
         if (spieler == 1) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-//            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
         }
         else if (spieler == 2) {
             zuege.setText("Anzahl an Zügen: " + anzahlZuege);
-//            System.out.println("Spieler: " + controller.getSpielerNameEins() + " aktualisiert, Anzahl Zuege: " + anzahlZuege + "\n");
         }
     }
 
@@ -701,7 +691,6 @@ public class View extends JFrame {
         schiffanzeigeGegner.setVisible(false);
         zuege.setVisible(false);
         container.removeAll();
-//        container.setVisible(false);
 
         // Schiffanzeigen tauschen
         JPanel temp = new JPanel();
@@ -723,18 +712,14 @@ public class View extends JFrame {
 
         // Panel für die Buttons
         JPanel buttonPanel = new JPanel();
-//        buttonPanel.setOpaque(false);  // Macht das Panel transparent
-//        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setLayout(new BorderLayout());
         buttonPanel.add(neueRundeButton, BorderLayout.CENTER);
 
-        //container.setLayout(new GridBagLayout());
         container.add(buttonPanel);
 
         neueRundeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println("neue Runde gedrückt");
 
                 buttonPanel.removeAll();
                 iconsEntfernen();
@@ -743,15 +728,8 @@ public class View extends JFrame {
                 controller.feldAktualisieren("Gegner");
                 controller.feldAktualisieren("Gegner");
 
-                //container = new JPanel();
-
                 containerFuellen();
                 container.remove(buttonPanel);
-                //add(container, BorderLayout.CENTER);
-
-                // Panel neu validieren und neu zeichnen
-//                buttonPanel.revalidate();
-//                buttonPanel.repaint();
             }
         });
     }
@@ -878,126 +856,65 @@ public class View extends JFrame {
      */
     public void setButton(int i, int j, String temp, String spieler) {
         if (spieler.equals("Eigen") && temp.equals("Schiff")) {
-            buttonSpielfeldEigen[i][j].setText(null);
-//            buttonSpielfeldEigen[i][j].setText("X");
-//            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
-//            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-//            buttonSpielfeldEigen[i][j].setIcon(null);
             schiffGifEinfuegen(i, j, buttonSpielfeldEigen, false);
-        } else if (spieler.equals("Eigen") && temp.equals("Schiff_getroffen")) {
-            buttonSpielfeldEigen[i][j].setText(null);
-//            buttonSpielfeldEigen[i][j].setText("X");
-//            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
-//            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
+        }
+        else if (spieler.equals("Eigen") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
-//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-//            buttonSpielfeldEigen[i][j].setIcon(null);
             schiffGifEinfuegen(i, j, buttonSpielfeldEigen, false);
-        } else if (spieler.equals("Eigen") && temp.equals("Wasser")) {
-            buttonSpielfeldEigen[i][j].setText(null);
-//            buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
-//            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
+        }
+        else if (spieler.equals("Eigen") && temp.equals("Wasser")) {
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-              //buttonSpielfeldEigen[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
                 buttonSpielfeldEigen[i][j].setIcon(wasser);
             }
-        } else if (spieler.equals("Eigen") && temp.equals("Wasser_getroffen")) {
-            buttonSpielfeldEigen[i][j].setText(null);
-//            buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
-//            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
+        }
+        else if (spieler.equals("Eigen") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
-//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-//            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
                 buttonSpielfeldEigen[i][j].setIcon(wasser);
             }
-        } else if (spieler.equals("Eigen") && temp.equals("Komplettes_Schiff_getroffen")) {
-            buttonSpielfeldEigen[i][j].setText(null);
-//            buttonSpielfeldEigen[i][j].setText("X");
-//            buttonSpielfeldEigen[i][j].setBackground(Color.GRAY);
-//            buttonSpielfeldEigen[i][j].setForeground(Color.RED);
+        }
+        else if (spieler.equals("Eigen") && temp.equals("Komplettes_Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
-//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-//            buttonSpielfeldEigen[i][j].setIcon(null);
             schiffGifEinfuegen(i, j, buttonSpielfeldEigen, true);
-        } else if (spieler.equals("Eigen") && temp.equals("unmoeglich")) {
-            buttonSpielfeldEigen[i][j].setText(null);
-//            buttonSpielfeldEigen[i][j].setText("O");
-//            buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
-//            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
+        }
+        else if (spieler.equals("Eigen") && temp.equals("unmoeglich")) {
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            //buttonSpielfeldEigen[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
                 buttonSpielfeldEigen[i][j].setIcon(wasser);
             }
-        } else if (spieler.equals("Eigen") && temp.equals("unmoeglich_getroffen")) {
-            buttonSpielfeldEigen[i][j].setText(null);
-//            buttonSpielfeldEigen[i][j].setText("O");
-//            buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
-//            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
+        }
+        else if (spieler.equals("Eigen") && temp.equals("unmoeglich_getroffen")) {
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
-//            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            //buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
                 buttonSpielfeldEigen[i][j].setIcon(wasser);
             }
-        } else if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen")) {
-            buttonSpielfeldGegner[i][j].setText(null);
-            //buttonSpielfeldGegner[i][j].setText("X");
-            //buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
-            //buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
-            //buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
-            //buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
+        }
+        else if (spieler.equals("Gegner") && temp.equals("Schiff_getroffen")) {
             schiffGifEinfuegen(i, j, buttonSpielfeldGegner, false);
-        } else if (spieler.equals("Gegner") && temp.equals("Komplettes_Schiff_getroffen")) {
-            buttonSpielfeldGegner[i][j].setText(null);
-//            buttonSpielfeldGegner[i][j].setText("X");
-//            buttonSpielfeldGegner[i][j].setBackground(Color.GRAY);
-//            buttonSpielfeldGegner[i][j].setForeground(Color.RED);
-//            buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
-//            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-//            buttonSpielfeldGegner[i][j].setIcon(null);
+        }
+        else if (spieler.equals("Gegner") && temp.equals("Komplettes_Schiff_getroffen")) {
             schiffGifEinfuegen(i, j, buttonSpielfeldGegner, true);
-        } else if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen")) {
-            buttonSpielfeldGegner[i][j].setText(null);
-//            buttonSpielfeldGegner[i][j].setText("O");
-//            buttonSpielfeldGegner[i][j].setBackground(Color.BLUE);
-//            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
+        }
+        else if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-//            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-              //buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldGegner[i][j].getIcon() == null) {
                 buttonSpielfeldGegner[i][j].setIcon(wasser);
             }
-        } else if (spieler.equals("Gegner") && temp.equals("unmoeglich")) {
-            buttonSpielfeldGegner[i][j].setText(null);
-            //buttonSpielfeldGegner[i][j].setBackground(null);
-            //buttonSpielfeldGegner[i][j].setForeground(Color.RED);
-            //buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-            //buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 40));
-            //buttonSpielfeldGegner[i][j].setIcon(null);
-            //buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
+        }
+        else if (spieler.equals("Gegner") && temp.equals("unmoeglich")) {
             if (buttonSpielfeldGegner[i][j].getIcon() == null) {
                 buttonSpielfeldGegner[i][j].setIcon(wasser_unmoeglich);
             }
-            //buttonSpielfeldGegner[i][j].setBackground(Color.RED);
-        } else if (spieler.equals("Gegner") && temp.equals("unmoeglich_getroffen")) {
-            buttonSpielfeldGegner[i][j].setText(null);
-//            buttonSpielfeldGegner[i][j].setText("O");
-//            buttonSpielfeldGegner[i][j].setBackground(Color.BLUE);
-//            buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
+        }
+        else if (spieler.equals("Gegner") && temp.equals("unmoeglich_getroffen")) {
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
-//            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            //buttonSpielfeldGegner[i][j].setBackground(Color.decode("#4F84c9"));
             if (buttonSpielfeldGegner[i][j].getIcon() == null) {
                 buttonSpielfeldGegner[i][j].setIcon(wasser);
             }
-        } else {
+        }
+        else {
             buttonSpielfeldGegner[i][j].setText("");
             buttonSpielfeldGegner[i][j].setBackground(null);
             buttonSpielfeldGegner[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
@@ -1335,7 +1252,6 @@ public class View extends JFrame {
             hoverFrame.setLayout(new FlowLayout());
             hoverFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
-
             // Create the label for hover text
             JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/><br/><br/>Namen<br/><br/>Um die Namen für Spieler 1 und Spieler 2 zu ändern müssen Sie in die Einstellungen gehen<br/><br/><br/><br/>Regeln<br/><br/>Die Schiffe werden automatisch gesetzt und dürfen nicht aneinander liegen sondern haben<br> immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie schießen möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
             hoverTextLabel.setForeground(Color.BLACK);
@@ -1355,7 +1271,6 @@ public class View extends JFrame {
                     hoverFrame.setVisible(false);
                 }
             });
-
 
             // Alle Buttons gleich groß machen
             Dimension buttonSize = new Dimension(200, 50);
@@ -1536,6 +1451,5 @@ public class View extends JFrame {
             });
             setVisible(true);
         }
-
     }
 }
