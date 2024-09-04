@@ -47,13 +47,27 @@ public class Controller {
                     view.zuegeAktualisieren(model.getSpieler(), model.getZuege());
                 }
             }
-            if (model.beendet()) {
-                view.setGewonnen(model.getName());
-                view.listenerEntfernen();
-                view.bestenlisteEintragen(model.getName(),model.getZuege());
-                System.out.println("Bestenliste hinzugefügt");
-                //model.zuruecksetzen();
+            switch(model.beendet()){
+                case 1:
+                    view.setGewonnen("Computergegner");
+                    view.listenerEntfernen();
+                    view.bestenlisteEintragen("Computergegner",model.getZuegeKI());
+                    System.out.println("Bestenliste hinzugefügt");
+                    break;
+                case 2:
+                    view.setGewonnen(model.getName());
+                    view.listenerEntfernen();
+                    view.bestenlisteEintragen(model.getName(),model.getZuege());
+                    System.out.println("Bestenliste hinzugefügt");
+                    break;
             }
+//            if (model.beendet()) {
+//                view.setGewonnen(model.getName());
+//                view.listenerEntfernen();
+//                view.bestenlisteEintragen(model.getName(),model.getZuege());
+//                System.out.println("Bestenliste hinzugefügt");
+//                //model.zuruecksetzen();
+//            }
             feldAktualisieren("Eigen");
             feldAktualisieren("Gegner");
             feldAktualisieren("Gegner");
@@ -104,6 +118,6 @@ public class Controller {
     }
 
     public boolean istBeendet(){
-        return model.beendet();
+        return (model.beendet() == 1 || model.beendet() == 2);
     }
 }

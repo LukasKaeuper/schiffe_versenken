@@ -281,6 +281,18 @@ public class Spielfeld {
         }
     }
 
+    public boolean schiffUebrich(){
+        boolean schiffGefunden = false;
+        for (int i=0; i<10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (spielfeld[i][j] == schiff) {
+                    schiffGefunden = true;
+                }
+            }
+        }
+        return schiffGefunden;
+    }
+
     public Spieler getSpieler() {
         return spieler;
     }
