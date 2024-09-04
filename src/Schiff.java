@@ -8,24 +8,16 @@ import java.util.ArrayList;
 public class Schiff {
     private boolean horizontal;                                 // Gibt die Ausrichtung des Schiffs an (horizontal oder vertikal)
     private int laenge;                                         // Die Länge des Schiffs
-    private int reihe;                                          // Die Startreihe des Schiffs
-    private int spalte;                                         // Die Startspalte des Schiffs
     private ArrayList<Koordinatenpaar> koordinaten;             // Liste der Koordinaten, die das Schiff abdeckt
-    private boolean abgeschossen;                               // Status, ob das Schiff bereits abgeschossen wurde
 
     /**
      * Konstruktor zum Erstellen eines neuen Schiffs.
      * @param horizontal Gibt an, ob das Schiff horizontal ausgerichtet ist.
      * @param laenge Die Länge des Schiffs.
-     * @param reihe Die Startreihe des Schiffs.
-     * @param spalte Die Startspalte des Schiffs.
      */
-    public Schiff(boolean horizontal, int laenge, int reihe, int spalte){
+    public Schiff(boolean horizontal, int laenge){
         this.horizontal = horizontal;
         this.laenge = laenge;
-        this.reihe = reihe;
-        this.spalte = spalte;
-        this.abgeschossen = false;
         this.koordinaten = new ArrayList<>();
         System.out.println("neues Schiff \n");
     }
@@ -53,13 +45,6 @@ public class Schiff {
      */
     public ArrayList<Koordinatenpaar> getKoordinaten() {
         return koordinaten;
-    }
-
-    /**
-     * Setzt den Status des Schiffs auf "abgeschossen".
-     */
-    public void setAbgeschossen() {
-        abgeschossen = true;
     }
 
     /**

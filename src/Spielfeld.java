@@ -73,7 +73,7 @@ public class Spielfeld {
             int y = random.nextInt(reihe);
 
             if (checkPlatzierung(x, y, laenge, horizontal) && checkAbstand(x, y, laenge, horizontal)) {
-                Schiff neuesSchiff = new Schiff(horizontal, laenge, x, y);
+                Schiff neuesSchiff = new Schiff(horizontal, laenge);
 
                 if (horizontal) {
                     for (int i = 0; i < laenge; i++) {
@@ -249,7 +249,7 @@ public class Spielfeld {
                         n.getKoordinaten().forEach((l) -> {
                             spielfeld[l.getX()][l.getY()] = komplettes_schiff_getroffen;
                         });
-                        n.setAbgeschossen();
+                        //n.setAbgeschossen();
                         laengeVomAbgeschossenenSchiff.set(n.getLaenge());
                     }
                 }
