@@ -1183,6 +1183,7 @@ public class View extends JFrame {
         private JButton onlineButton = new JButton("Online");
         private JButton zurueckButton = new JButton("zurück");
         private JButton loeschenButton = new JButton("OK");
+        private JButton zurueckButtonEinstellungen = new JButton("zurück");
         private JFrame hoverFrame = new JFrame("Hilfe");
         private JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/><br/><br/>Namen<br/><br/>Um die Namen für Spieler 1 und Spieler 2 zu ändern müssen Sie in die Einstellungen gehen<br/><br/><br/><br/>Regeln<br/><br/>Die Schiffe werden automatisch gesetzt und dürfen nicht aneinander liegen sondern haben<br> immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie schießen möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
         private Dimension buttonSize = new Dimension(200, 50);
@@ -1241,7 +1242,6 @@ public class View extends JFrame {
             multiPlayerButton.addActionListener(multiplayerButtonListener());
             loeschenButton.addActionListener(loeschenButtonListener());
             zurueckButton.addActionListener(zurueckButtonListener());
-            bestenlisteButtonMenue.addActionListener(bestenlisteButtonListener());
             settingsButton.addActionListener(settingsButtonListener());
             localButton.addActionListener(lokalButtonListener());
         }
@@ -1262,14 +1262,23 @@ public class View extends JFrame {
                     buttonPanel.add(labelBestenliste);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
                     buttonPanel.add(loeschenButton);
-                    zurueckButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+                    zurueckButtonEinstellungen.setAlignmentY(Component.CENTER_ALIGNMENT);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0,30)));
-                    buttonPanel.add(zurueckButton);
+                    buttonPanel.add(zurueckButtonEinstellungen);
                     buttonPanel.add(Box.createRigidArea(new Dimension(0,10)));
-                    zurueckButton.addActionListener(zurueckButtonListener());
+                    zurueckButtonEinstellungen.addActionListener(zurueckButtonListener());
 
                     buttonPanel.revalidate();
                     buttonPanel.repaint();
+                }
+            };
+        }
+
+        private ActionListener zurueckButtonEinstellungenListener() {
+            return new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
                 }
             };
         }
