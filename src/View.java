@@ -26,7 +26,7 @@ public class View extends JFrame {
     private GamePanel panelSpielfeldGegner;
     private Controller controller;
     private ImageIcon wasser;
-    private ImageIcon wasser_unmoeglich = new ImageIcon("Bilder/Wasser/wasser_unmöglich_kreis.gif");
+    private ImageIcon wasser_unmoeglich;
     private ImageIcon uboot_einzel;
     private ImageIcon uboot_horizontal_hinten;
     private ImageIcon uboot_horizontal_mitte;
@@ -34,6 +34,12 @@ public class View extends JFrame {
     private ImageIcon uboot_vertikal_hinten;
     private ImageIcon uboot_vertikal_mitte;
     private ImageIcon uboot_vertikal_vorne;
+    private ImageIcon uboot_horizontal_hinten_feuer;
+    private ImageIcon uboot_horizontal_mitte_feuer;
+    private ImageIcon uboot_horizontal_vorne_feuer;
+    private ImageIcon uboot_vertikal_hinten_feuer;
+    private ImageIcon uboot_vertikal_mitte_feuer;
+    private ImageIcon uboot_vertikal_vorne_feuer;
     private ArrayList<ImageIcon> schiffGifs = new ArrayList<>();
     private ArrayList<ImageIcon> andereGifs = new ArrayList<>();
     Font font1 = new Font("SansSerif", Font.BOLD, 20);
@@ -58,6 +64,12 @@ public class View extends JFrame {
         uboot_vertikal_hinten = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_hinten.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
         uboot_vertikal_mitte = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_mitte.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
         uboot_vertikal_vorne = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_vorne.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_horizontal_hinten_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_hinten_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_horizontal_mitte_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_mitte_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_horizontal_vorne_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_horizontal_vorne_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_vertikal_hinten_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_hinten_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_vertikal_mitte_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_mitte_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
+        uboot_vertikal_vorne_feuer = new ImageIcon(new ImageIcon("Bilder/Wasser/uboot_vertikal_vorne_feuer.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
         wasser = new ImageIcon(new ImageIcon("Bilder/Wasser/wasser.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
         wasser_unmoeglich = new ImageIcon(new ImageIcon("Bilder/Wasser/wasser_unmöglich_kreis.gif").getImage().getScaledInstance(buttonSpielfeldGegner[1][1].getWidth(), buttonSpielfeldGegner[1][1].getHeight(), Image.SCALE_DEFAULT));
 
@@ -68,6 +80,12 @@ public class View extends JFrame {
         schiffGifs.add(uboot_vertikal_hinten);
         schiffGifs.add(uboot_vertikal_mitte);
         schiffGifs.add(uboot_vertikal_vorne);
+        schiffGifs.add(uboot_horizontal_hinten_feuer);
+        schiffGifs.add(uboot_horizontal_mitte_feuer);
+        schiffGifs.add(uboot_horizontal_vorne_feuer);
+        schiffGifs.add(uboot_vertikal_hinten_feuer);
+        schiffGifs.add(uboot_vertikal_mitte_feuer);
+        schiffGifs.add(uboot_vertikal_vorne_feuer);
         andereGifs.add(wasser);
         andereGifs.add(wasser_unmoeglich);
     }
@@ -675,7 +693,7 @@ public class View extends JFrame {
             buttonSpielfeldEigen[i][j].setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("Button.border"));
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
 //            buttonSpielfeldEigen[i][j].setIcon(null);
-            schiffGifEinfuegen(i, j, buttonSpielfeldEigen);
+            schiffGifEinfuegen(i, j, buttonSpielfeldEigen, false);
         } else if (spieler.equals("Eigen") && temp.equals("Schiff_getroffen")) {
             buttonSpielfeldEigen[i][j].setText(null);
 //            buttonSpielfeldEigen[i][j].setText("X");
@@ -684,7 +702,7 @@ public class View extends JFrame {
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
 //            buttonSpielfeldEigen[i][j].setIcon(null);
-            schiffGifEinfuegen(i, j, buttonSpielfeldEigen);
+            schiffGifEinfuegen(i, j, buttonSpielfeldEigen, false);
         } else if (spieler.equals("Eigen") && temp.equals("Wasser")) {
             buttonSpielfeldEigen[i][j].setText(null);
 //            buttonSpielfeldEigen[i][j].setBackground(Color.BLUE);
@@ -713,7 +731,7 @@ public class View extends JFrame {
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
 //            buttonSpielfeldEigen[i][j].setIcon(null);
-            schiffGifEinfuegen(i, j, buttonSpielfeldEigen);
+            schiffGifEinfuegen(i, j, buttonSpielfeldEigen, true);
         } else if (spieler.equals("Eigen") && temp.equals("unmoeglich")) {
             buttonSpielfeldEigen[i][j].setText(null);
 //            buttonSpielfeldEigen[i][j].setText("O");
@@ -743,7 +761,7 @@ public class View extends JFrame {
             //buttonSpielfeldGegner[i][j].setForeground(Color.BLACK);
             //buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
             //buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            schiffGifEinfuegen(i, j, buttonSpielfeldGegner);
+            schiffGifEinfuegen(i, j, buttonSpielfeldGegner, false);
         } else if (spieler.equals("Gegner") && temp.equals("Komplettes_Schiff_getroffen")) {
             buttonSpielfeldGegner[i][j].setText(null);
 //            buttonSpielfeldGegner[i][j].setText("X");
@@ -752,7 +770,7 @@ public class View extends JFrame {
 //            buttonSpielfeldGegner[i][j].setBorder(abgeschossenBorder);
 //            buttonSpielfeldGegner[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
 //            buttonSpielfeldGegner[i][j].setIcon(null);
-            schiffGifEinfuegen(i, j, buttonSpielfeldGegner);
+            schiffGifEinfuegen(i, j, buttonSpielfeldGegner, true);
         } else if (spieler.equals("Gegner") && temp.equals("Wasser_getroffen")) {
             buttonSpielfeldGegner[i][j].setText(null);
 //            buttonSpielfeldGegner[i][j].setText("O");
@@ -796,16 +814,18 @@ public class View extends JFrame {
         }
     }
 
-    private void schiffGifEinfuegen(int i, int j, JButton[][] spielfeldButtons){
+    private void schiffGifEinfuegen(int i, int j, JButton[][] spielfeldButtons, boolean kaputt){
         if (j-1 < 0 && i-1 < 0){
             if (!schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) && !schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
                 spielfeldButtons[i][j].setIcon(uboot_einzel);
             }
             else if (schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
             }
         }
         else if (j+1 > 9 && i-1 < 0){
@@ -813,10 +833,12 @@ public class View extends JFrame {
                 spielfeldButtons[i][j].setIcon(uboot_einzel);
             }
             else if (schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
             }
         }
         else if (j+1 > 9 && i+1 > 9){
@@ -824,10 +846,12 @@ public class View extends JFrame {
                 spielfeldButtons[i][j].setIcon(uboot_einzel);
             }
             else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
             }
         }
         else if (j-1 < 0 && i+1 > 9){
@@ -835,10 +859,12 @@ public class View extends JFrame {
                 spielfeldButtons[i][j].setIcon(uboot_einzel);
             }
             else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
             }
         }
         else if (i+1 > 9){
@@ -846,16 +872,20 @@ public class View extends JFrame {
                 spielfeldButtons[i][j].setIcon(uboot_einzel);
             }
             else if (andereGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon()) || spielfeldButtons[i][j+1].getIcon() == null || spielfeldButtons[i][j-1].getIcon() == null){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && andereGifs.contains(spielfeldButtons[i][j+1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
             }
             else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
             }
         }
         else if (j+1 > 9){
@@ -863,16 +893,20 @@ public class View extends JFrame {
                 spielfeldButtons[i][j].setIcon(uboot_einzel);
             }
             else if (andereGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
             }
             else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) || spielfeldButtons[i-1][j].getIcon() == null || spielfeldButtons[i+1][j].getIcon() == null){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte);
             }
             else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && andereGifs.contains(spielfeldButtons[i+1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
             }
         }
         else if (i-1 < 0){
@@ -880,16 +914,20 @@ public class View extends JFrame {
                 spielfeldButtons[i][j].setIcon(uboot_einzel);
             }
             else if (andereGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon()) || spielfeldButtons[i][j+1].getIcon() == null || spielfeldButtons[i][j-1].getIcon() == null){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && andereGifs.contains(spielfeldButtons[i][j+1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
             }
             else if (schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
             }
         }
         else if (j-1 < 0){
@@ -897,16 +935,20 @@ public class View extends JFrame {
                 spielfeldButtons[i][j].setIcon(uboot_einzel);
             }
             else if (andereGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
             }
             else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) || spielfeldButtons[i-1][j].getIcon() == null || spielfeldButtons[i+1][j].getIcon() == null){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte);
             }
             else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && andereGifs.contains(spielfeldButtons[i+1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
             }
         }
         else{
@@ -914,22 +956,28 @@ public class View extends JFrame {
                 spielfeldButtons[i][j].setIcon(uboot_einzel);
             }
             else if (andereGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_vorne);
             }
             else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && schiffGifs.contains(spielfeldButtons[i+1][j].getIcon()) || spielfeldButtons[i-1][j].getIcon() == null || spielfeldButtons[i+1][j].getIcon() == null){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_mitte);
             }
             else if (schiffGifs.contains(spielfeldButtons[i-1][j].getIcon()) && andereGifs.contains(spielfeldButtons[i+1][j].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_vertikal_hinten);
             }
             else if (andereGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_vorne);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && schiffGifs.contains(spielfeldButtons[i][j+1].getIcon()) || spielfeldButtons[i][j+1].getIcon() == null || spielfeldButtons[i][j-1].getIcon() == null){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_mitte);
             }
             else if (schiffGifs.contains(spielfeldButtons[i][j-1].getIcon()) && andereGifs.contains(spielfeldButtons[i][j+1].getIcon())){
-                spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
+                if (kaputt) spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten_feuer);
+                else spielfeldButtons[i][j].setIcon(uboot_horizontal_hinten);
             }
         }
     }
