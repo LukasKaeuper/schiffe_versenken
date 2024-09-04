@@ -407,9 +407,11 @@ public class View extends JFrame {
         zurueckHauptmenue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                listenerEntfernen();
                 setVisible(false);
                 container.removeAll();
                 menu.setVisible(true);
+                iconsEntfernen();
             }
         });
 
@@ -719,7 +721,7 @@ public class View extends JFrame {
 //            buttonSpielfeldEigen[i][j].setForeground(Color.BLACK);
             buttonSpielfeldEigen[i][j].setBorder(abgeschossenBorder);
 //            buttonSpielfeldEigen[i][j].setFont(new Font("Arial", Font.PLAIN, 15));
-            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
+//            buttonSpielfeldEigen[i][j].setBackground(Color.decode("#0277bd"));
             if (buttonSpielfeldEigen[i][j].getIcon() == null) {
                 buttonSpielfeldEigen[i][j].setIcon(wasser);
             }
