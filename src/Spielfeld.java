@@ -5,22 +5,29 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Die Klasse Spielfeld repräsentiert ein 10x10 Spielfeld
+ * Sie verwaltet die Platzierung der Schiffe, die Markierung von Treffern
+ */
 public class Spielfeld {
-    private final int reihe = 10;
-    private final int spalte = 10;
-    private final int wasser = 0;
-    private final int schiff = 1;
-    private final int wasser_getroffen = 2;
-    private final int schiff_getroffen = 3;
-    private final int komplettes_schiff_getroffen = 4;
-    private final int unmoeglich = 5;
-    private final int unmoeglich_getroffen = 6;
-    private Spieler spieler;
+    private final int reihe = 10;                         // Anzahl der Reihen des Spielfelds
+    private final int spalte = 10;                        // Anzahl der Spalten des Spielfelds
+    private final int wasser = 0;                         // Wert für Wasserfelder
+    private final int schiff = 1;                         // Wert für Schiffe
+    private final int wasser_getroffen = 2;               // Wert für Wasser, das getroffen wurde
+    private final int schiff_getroffen = 3;               // Wert für ein Schiff, das getroffen wurde
+    private final int komplettes_schiff_getroffen = 4;    // Wert für ein komplett getroffenes Schiff
+    private final int unmoeglich = 5;                     // Wert für Felder, auf denen keine Schiffe platziert werden können
+    private final int unmoeglich_getroffen = 6;           // Wert für "unmögliche" Felder, die getroffen wurden
+    private Spieler spieler;                              // Spieler, dem das Spielfeld gehört
 
-    private final int[][] spielfeld;
-    private final ArrayList<Schiff> schiffe;
+    private final int[][] spielfeld;                      // Das Spielfeld als 2D-Array
+    private final ArrayList<Schiff> schiffe;              // Liste der Schiffe auf dem Spielfeld
 
 
+    /**
+     * Konstruktor, der das Spielfeld initialisiert und die Schiffe platziert.
+     */
     public Spielfeld() {
         spielfeld = new int[reihe][spalte];
         schiffe = new ArrayList<Schiff>();
@@ -39,6 +46,9 @@ public class Spielfeld {
         anzeigen();
     }
 
+    /**
+     * Initialisiert das Spielfeld, indem alle Felder auf Wasser 0 gesetzt werden.
+     */
     public void initialisiereSpielfeld() {
         for (int i = 0; i < reihe; i++) {
             for (int j = 0; j < spalte; j++) {
@@ -47,6 +57,10 @@ public class Spielfeld {
         }
     }
 
+    /**
+     * Platziert ein Schiff einer bestimmten Länge zufällig auf dem Spielfeld.
+     * @param laenge Die Länge des zu platzierenden Schiffs.
+     */
     public void schiffePlatzieren(int laenge){
         Random random = new Random();
         boolean platziert = false;
@@ -77,6 +91,7 @@ public class Spielfeld {
                 platziert = true;
             }
 
+            // Timeout nach 2 Sekunden, Neustart der Platzierung
             if (ChronoUnit.SECONDS.between(start, LocalDateTime.now()) >= 2){
                 System.out.println("Timeout bei Initialisierung, Neustart\n");
                 schiffe.clear();
@@ -97,6 +112,14 @@ public class Spielfeld {
         }
     }
 
+    /**
+     * Überprüft, ob ein Schiff an einer bestimmten Position platziert werden kann.
+     * @param x Die x-Koordinate der Startposition.
+     * @param y Die y-Koordinate der Startposition.
+     * @param laenge Die Länge des Schiffs.
+     * @param horizontal Ob das Schiff horizontal true oder vertikal false platziert werden soll.
+     * @return true, wenn das Schiff platziert werden kann, sonst false.
+     */
     private boolean checkPlatzierung(int x, int y, int laenge, boolean horizontal){
         if(horizontal){
             if (x + laenge > spalte){
@@ -120,6 +143,14 @@ public class Spielfeld {
         return true;
     }
 
+    /**
+     * Überprüft, ob um die gewählte Platzierung eines Schiffs genügend Abstand zu anderen Schiffen eingehalten wird.
+     * @param x Die x-Koordinate der Startposition.
+     * @param y Die y-Koordinate der Startposition.
+     * @param laenge Die Länge des Schiffs.
+     * @param horizontal Ob das Schiff horizontal (true) oder vertikal (false) platziert werden soll.
+     * @return true, wenn der Abstand eingehalten wird, sonst false.
+     */
     private boolean checkAbstand(int x, int y, int laenge, boolean horizontal) {
         int startReihe = Math.max(0, y - 1);
         int endReihe = horizontal ? Math.min(reihe - 1, y + 1) : Math.min(reihe - 1, y + laenge);
@@ -136,6 +167,12 @@ public class Spielfeld {
         return true;
     }
 
+    /**
+     * Gibt den aktuellen Wert an einer bestimmten Position auf dem Spielfeld zurück.
+     * @param x Die x-Koordinate der Position.
+     * @param y Die y-Koordinate der Position.
+     * @return Eine Zeichenkette, die den Zustand der Position beschreibt (z.B. "Schiff", "Wasser").
+     */
     public String getWert(int x, int y) {
         if (spielfeld[x][y] == schiff) {
             return "Schiff";
@@ -163,6 +200,9 @@ public class Spielfeld {
         }
     }
 
+    /**
+     * Zeigt das aktuelle Spielfeld in der Konsole an.
+     */
     public void anzeigen(){
         //System.out.println();
         for(int i = 0; i < reihe; i++){
@@ -174,6 +214,12 @@ public class Spielfeld {
         System.out.println();
     }
 
+    /**
+     * Markiert einen Treffer auf dem Spielfeld.
+     * @param x Die x-Koordinate der getroffenen Position.
+     * @param y Die y-Koordinate der getroffenen Position.
+     * @return true, wenn ein Schiff getroffen wurde, sonst false.
+     */
     public int trefferMarkieren(int x, int y) {
         if (spielfeld[x][y] == wasser) {
             spielfeld[x][y] = wasser_getroffen;
@@ -184,6 +230,11 @@ public class Spielfeld {
         return ganzesSchiffGetroffen(x, y);
     }
 
+    /**
+     * Prüft, ob ein Schiff komplett versenkt wurde und markiert es entsprechend.
+     * @param x Die x-Koordinate einer getroffenen Position.
+     * @param y Die y-Koordinate einer getroffenen Position.
+     */
     public int ganzesSchiffGetroffen(int x, int y) {
         AtomicInteger laengeVomAbgeschossenenSchiff = new AtomicInteger(0);
         AtomicBoolean alleGetroffen = new AtomicBoolean(true);
@@ -210,6 +261,13 @@ public class Spielfeld {
         return laengeVomAbgeschossenenSchiff.get();
     }
 
+    /**
+     * Diese Methode markiert Felder rund um ein getroffenes oder versenktes Schiff als "unmöglich",
+     * um anzuzeigen, dass an diesen Positionen keine Schiffe platziert werden können.
+     *
+     * @param x Die x-Koordinate des getroffenen Feldes.
+     * @param y Die y-Koordinate des getroffenen Feldes.
+     */
     public void unmoeglicheFelderMarkieren(int x, int y) {
         if (spielfeld[x][y] == schiff_getroffen || spielfeld[x][y] == komplettes_schiff_getroffen) {
 
@@ -250,6 +308,13 @@ public class Spielfeld {
         }
     }
 
+    /**
+     * Diese Methode markiert die Felder direkt in den Himmelsrichtungen (oben, unten, links, rechts)
+     * um das gegebene Feld als "unmöglich".
+     *
+     * @param x Die x-Koordinate des Feldes.
+     * @param y Die y-Koordinate des Feldes.
+     */
     private void himmelsrichtungenAlsUnmoeglichMarkieren(int x, int y) {
         if (x-1 >= 0 && spielfeld[x-1][y] != schiff_getroffen && spielfeld[x-1][y] != komplettes_schiff_getroffen) {
             if (spielfeld[x-1][y] == wasser_getroffen || spielfeld[x-1][y] == unmoeglich_getroffen){
@@ -281,6 +346,11 @@ public class Spielfeld {
         }
     }
 
+    /**
+     * Prüft, ob im Spielfeld noch mindestens ein Platz mit einem Schiff belegt ist.
+     *
+     * @return true, wenn ein Schiff gefunden wird, sonst false.
+     */
     public boolean schiffUebrich(){
         boolean schiffGefunden = false;
         for (int i=0; i<10; i++) {
@@ -293,6 +363,11 @@ public class Spielfeld {
         return schiffGefunden;
     }
 
+    /**
+     * Gibt den Spieler des Spielfelds zurück.
+     *
+     * @return Der Spieler, dem das Spielfeld gehört.
+     */
     public Spieler getSpieler() {
         return spieler;
     }

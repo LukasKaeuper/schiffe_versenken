@@ -4,21 +4,32 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Die Model-Klasse verwaltet den Zustand und das Verhalten des Spiels, einschließlich des Spielfelds, der Spieler
+ * und der KI. Sie ermöglicht es, Schüsse zu tätigen, die KI zu steuern und den Spielstatus zu überprüfen.
+ */
 public class Model {
-    private Spielfeld spielfeldLinks;
-    private Spielfeld spielfeldRechts;
-    private int spieler = 1;
-    private int kiSchussX;
-    private int kiSchussY;
-    private boolean neuesSchiffSuchen = true;
-    private String suchRichtung = "unbekannt";
-    private Controller controller;
+    private Spielfeld spielfeldLinks;                   // Das Spielfeld des aktuellen Spielers
+    private Spielfeld spielfeldRechts;                  // Das Spielfeld des Gegners
+    private int spieler = 1;                            // Gibt an, welcher Spieler gerade an der Reihe ist (1 oder 2)
+    private int kiSchussX;                              // Die X-Position des nächsten KI-Schusses
+    private int kiSchussY;                              // Die Y-Position des nächsten KI-Schusses
+    private boolean neuesSchiffSuchen = true;           // Flag, ob nach einem neuen Schiff gesucht wird
+    private String suchRichtung = "unbekannt";          // Die Richtung, in die die KI sucht
+    private Controller controller;                      // Der Controller, der das Model steuert
 
+    /**
+     * Konstruktor, der das Model initialisiert und den Controller setzt.
+     * @param controller Der Controller, der das Model steuert.
+     */
     public Model(Controller controller) {
         playSound("ambience.wav", true, -10f);
         this.controller = controller;
     }
 
+    /**
+     * Initialisiert die Spielfelder für beide Spieler.
+     */
     public void spielfeldInitialisieren(){
         this.kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
         this.kiSchussY = ThreadLocalRandom.current().nextInt(0, 10);
@@ -27,6 +38,11 @@ public class Model {
         spielfeldRechts = new Spielfeld();
     }
 
+    /**
+     * Führt einen Schuss auf das gegnerische Spielfeld aus und spielt den entsprechenden Sound.
+     * @param n Die X-Koordinate des Schusses.
+     * @param m Die Y-Koordinate des Schusses.
+     */
     public void schiessen(int n, int m) {
         //markiert das Stück vom Schiff was getroffen wurde
         int laengeVomAbgeschossenenSchiff = spielfeldRechts.trefferMarkieren(n, m);
@@ -48,6 +64,9 @@ public class Model {
         spielfeldLinks.getSpieler().zugErhoehen();
     }
 
+    /**
+     * Lässt die KI einen Schuss abgeben und verfolgt den Fortschritt der Suche nach einem Schiff.
+     */
     public void ki_schiessen() {
         int laengeVomAbgeschossenenSchiff = 0;
         if (neuesSchiffSuchen) {
@@ -179,6 +198,12 @@ public class Model {
         System.out.println("Suche nach neuem Schiff: " + neuesSchiffSuchen + "\n");
     }
 
+    /**
+     * Spielt den angegebenen Sound ab.
+     * @param url Der Name der Sounddatei.
+     * @param loop Gibt an, ob der Sound wiederholt werden soll.
+     * @param volume Die Lautstärke des Sounds.
+     */
     public static synchronized void playSound(final String url, boolean loop, float volume) {
         new Thread(new Runnable() {
             public void run() {
@@ -201,6 +226,10 @@ public class Model {
         }).start();
     }
 
+    /**
+     * Überprüft, ob das Spiel beendet ist, ob keine Schiffe mehr übrig sind, die nicht getroffen wurden.
+     * @return true, wenn das Spiel beendet ist, andernfalls false.
+     */
     public int beendet() {
         //return 0, wenn Spiel nicht beendet ist. 1, wenn auf dem linken Feld alle Schiffe getroffen wurden. 2, wenn auf dem rechten Feld alle Schiffe getroffen wurden.
         int ende = 0;
@@ -213,6 +242,13 @@ public class Model {
         return ende;
     }
 
+    /**
+     * Gibt den Wert eines bestimmten Feldes auf dem Spielfeld des angegebenen Spielers zurück.
+     * @param i Die X-Koordinate des Feldes.
+     * @param j Die Y-Koordinate des Feldes.
+     * @param spieler Der Spieler, dessen Spielfeld überprüft werden soll.
+     * @return Der Wert des Feldes als String.
+     */
     public String getWert(int i, int j, String spieler) {
         if (spieler.equals("Eigen")) {
             return spielfeldLinks.getWert(i, j);
@@ -221,6 +257,10 @@ public class Model {
         }
     }
 
+    /**
+     * Gibt die Nummer des aktuellen Spielers zurück.
+     * @return 1 für Spieler 1 oder 2 für Spieler 2.
+     */
     public int getSpieler() {
         return switch (spieler) {
             case 1 -> 1;
@@ -229,6 +269,10 @@ public class Model {
         };
     }
 
+    /**
+     * Wechselt den aktuellen Spieler und, falls nötig, die Seiten der Spielfelder.
+     * @param modus Gibt an, ob der Seitenwechsel durchgeführt werden soll oder nicht.
+     */
     public void spielerWechseln(String modus) {
         if (!modus.equals("sp")) {
             Spielfeld temp = spielfeldLinks;
@@ -242,6 +286,10 @@ public class Model {
         spieler %= 2;
     }
 
+    /**
+     * Gibt die Anzahl der Züge des aktuellen Spielers zurück.
+     * @return Die Anzahl der Züge des aktuellen Spielers.
+     */
     public int getZuege() {
         return spielfeldLinks.getSpieler().getAnzahlZuege();
     }
@@ -258,18 +306,34 @@ public class Model {
         return anzahlZuege;
     }
 
+    /**
+     * Setzt den Namen des ersten Spielers.
+     * @param name Der Name des ersten Spielers.
+     */
     public void setSpielerNameEins(String name) {
         spielfeldLinks.getSpieler().setName(name);
     }
 
+    /**
+     * Gibt den Namen des ersten Spielers zurück.
+     * @return Der Name des ersten Spielers.
+     */
     public String getSpielerNameEins() {
         return spielfeldLinks.getSpieler().getName();
     }
 
+    /**
+     * Setzt den Namen des zweiten Spielers.
+     * @param name Der Name des zweiten Spielers.
+     */
     public void setSpielerNameZwei(String name) {
         spielfeldRechts.getSpieler().setName(name);
     }
 
+    /**
+     * Gibt den Namen des zweiten Spielers zurück.
+     * @return Der Name des zweiten Spielers.
+     */
     public String getSpielerNameZwei() {
         return spielfeldRechts.getSpieler().getName();
     }
