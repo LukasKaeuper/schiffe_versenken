@@ -59,6 +59,7 @@ public class Spielfeld {
 
     /**
      * Platziert ein Schiff einer bestimmten Länge zufällig auf dem Spielfeld.
+     *
      * @param laenge Die Länge des zu platzierenden Schiffs.
      */
     public void schiffePlatzieren(int laenge){
@@ -114,6 +115,7 @@ public class Spielfeld {
 
     /**
      * Überprüft, ob ein Schiff an einer bestimmten Position platziert werden kann.
+     *
      * @param x Die x-Koordinate der Startposition.
      * @param y Die y-Koordinate der Startposition.
      * @param laenge Die Länge des Schiffs.
@@ -145,6 +147,7 @@ public class Spielfeld {
 
     /**
      * Überprüft, ob um die gewählte Platzierung eines Schiffs genügend Abstand zu anderen Schiffen eingehalten wird.
+     *
      * @param x Die x-Koordinate der Startposition.
      * @param y Die y-Koordinate der Startposition.
      * @param laenge Die Länge des Schiffs.
@@ -169,6 +172,7 @@ public class Spielfeld {
 
     /**
      * Gibt den aktuellen Wert an einer bestimmten Position auf dem Spielfeld zurück.
+     *
      * @param x Die x-Koordinate der Position.
      * @param y Die y-Koordinate der Position.
      * @return Eine Zeichenkette, die den Zustand der Position beschreibt (z.B. "Schiff", "Wasser").
@@ -215,6 +219,7 @@ public class Spielfeld {
 
     /**
      * Markiert einen Treffer auf dem Spielfeld.
+     *
      * @param x Die x-Koordinate der getroffenen Position.
      * @param y Die y-Koordinate der getroffenen Position.
      * @return true, wenn ein Schiff getroffen wurde, sonst false.
@@ -231,6 +236,7 @@ public class Spielfeld {
 
     /**
      * Prüft, ob ein Schiff komplett versenkt wurde und markiert es entsprechend.
+     *
      * @param x Die x-Koordinate einer getroffenen Position.
      * @param y Die y-Koordinate einer getroffenen Position.
      */

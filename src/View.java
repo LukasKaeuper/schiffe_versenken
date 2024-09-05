@@ -1152,7 +1152,7 @@ public class View extends JFrame {
          * Zeichnet den Rand um die Komponente.
          *
          * @param c Die Komponente, für die der Rand gezeichnet wird.
-         * @param g Das Graphics-Objekt, das zum Zeichnen verwendet wird.
+         * @param g Das Grafik-Objekt, das zum Zeichnen verwendet wird.
          * @param x Die x-Position der Komponente.
          * @param y Die y-Position der Komponente.
          * @param width Die Breite der Komponente.

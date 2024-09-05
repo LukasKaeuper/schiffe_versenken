@@ -20,6 +20,7 @@ public class Model {
 
     /**
      * Konstruktor, der das Model initialisiert und den Controller setzt.
+     *
      * @param controller Der Controller, der das Model steuert.
      */
     public Model(Controller controller) {
@@ -40,6 +41,7 @@ public class Model {
 
     /**
      * Führt einen Schuss auf das gegnerische Spielfeld aus und spielt den entsprechenden Sound.
+     *
      * @param n Die X-Koordinate des Schusses.
      * @param m Die Y-Koordinate des Schusses.
      */
@@ -186,6 +188,7 @@ public class Model {
 
     /**
      * Spielt den angegebenen Sound ab.
+     *
      * @param url Der Name der Sounddatei.
      * @param loop Gibt an, ob der Sound wiederholt werden soll.
      * @param volume Die Lautstärke des Sounds.
@@ -214,6 +217,7 @@ public class Model {
 
     /**
      * Überprüft, ob das Spiel beendet ist, und gibt den Sieger zurück.
+     *
      * @return 0, wenn Spiel nicht beendet ist. 1, wenn auf dem linken Feld alle Schiffe getroffen wurden. 2, wenn auf dem rechten Feld alle Schiffe getroffen wurden.
      */
     public int beendet() {
@@ -229,6 +233,7 @@ public class Model {
 
     /**
      * Gibt den Wert eines bestimmten Feldes auf dem Spielfeld des angegebenen Spielers zurück.
+     *
      * @param i Die X-Koordinate des Feldes.
      * @param j Die Y-Koordinate des Feldes.
      * @param spieler Der Spieler, dessen Spielfeld überprüft werden soll.
@@ -244,6 +249,7 @@ public class Model {
 
     /**
      * Gibt die Nummer des aktuellen Spielers zurück.
+     *
      * @return 1 für Spieler 1 oder 2 für Spieler 2.
      */
     public int getSpieler() {
@@ -256,6 +262,7 @@ public class Model {
 
     /**
      * Wechselt den aktuellen Spieler und, falls nötig, die Seiten der Spielfelder.
+     *
      * @param modus Gibt an, ob der Seitenwechsel durchgeführt werden soll oder nicht.
      */
     public void spielerWechseln(String modus) {
@@ -273,6 +280,7 @@ public class Model {
 
     /**
      * Gibt die Anzahl der Züge des aktuellen Spielers zurück.
+     *
      * @return Die Anzahl der Züge des aktuellen Spielers.
      */
     public int getZuege() {
@@ -281,6 +289,7 @@ public class Model {
 
     /**
      * Gibt die Anzahl der Züge des Computergegners zurück.
+     *
      * @return Die Anzahl der Züge des Computergegners.
      */
     public int getZuegeKI(){
@@ -297,6 +306,7 @@ public class Model {
 
     /**
      * Setzt den Namen des ersten Spielers.
+     *
      * @param name Der Name des ersten Spielers.
      */
     public void setSpielerNameEins(String name) {
@@ -305,6 +315,7 @@ public class Model {
 
     /**
      * Gibt den Namen des ersten Spielers zurück.
+     *
      * @return Der Name des ersten Spielers.
      */
     public String getSpielerNameEins() {
@@ -313,6 +324,7 @@ public class Model {
 
     /**
      * Setzt den Namen des zweiten Spielers.
+     *
      * @param name Der Name des zweiten Spielers.
      */
     public void setSpielerNameZwei(String name) {
@@ -321,6 +333,7 @@ public class Model {
 
     /**
      * Gibt den Namen des zweiten Spielers zurück.
+     *
      * @return Der Name des zweiten Spielers.
      */
     public String getSpielerNameZwei() {
