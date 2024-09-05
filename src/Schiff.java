@@ -64,7 +64,7 @@ public class Schiff {
      * @param <X> Der Typ der X-Koordinate.
      * @param <Y> Der Typ der Y-Koordinate.
      */
-    public static class Koordinatenpaar<X, Y> {
+    public class Koordinatenpaar<X, Y> {
         public final X x;
         public final Y y;
 
