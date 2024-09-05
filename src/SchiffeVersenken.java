@@ -1,6 +1,9 @@
 
 /**
  * Die Klasse SchiffeVersenken startet das Spiel "Schiffe Versenken".
+ *
+ * @author Lukas Käuper, Marten Ahmann
+ * @version 05.09.2024
  */
 public class SchiffeVersenken {
 
