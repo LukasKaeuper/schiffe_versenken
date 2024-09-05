@@ -12,6 +12,7 @@ public class Schiff {
 
     /**
      * Konstruktor zum Erstellen eines neuen Schiffs.
+     *
      * @param horizontal Gibt an, ob das Schiff horizontal ausgerichtet ist.
      * @param laenge Die Länge des Schiffs.
      */
@@ -24,6 +25,7 @@ public class Schiff {
 
     /**
      * Fügt dem Schiff eine neue Koordinate hinzu.
+     *
      * @param x Die X-Koordinate der neuen Position.
      * @param y Die Y-Koordinate der neuen Position.
      */
@@ -49,6 +51,7 @@ public class Schiff {
 
     /**
      * Gibt die Länge des Schiffs zurück.
+     *
      * @return Die Länge des Schiffs.
      */
     public int getLaenge(){
@@ -57,6 +60,7 @@ public class Schiff {
 
     /**
      * Die Koordinatenpaar-Klasse repräsentiert ein Paar von Koordinaten (X und Y).
+     *
      * @param <X> Der Typ der X-Koordinate.
      * @param <Y> Der Typ der Y-Koordinate.
      */
@@ -71,6 +75,7 @@ public class Schiff {
 
         /**
          * Gibt den Wert der X-Koordinate als Integer zurück.
+         *
          * @return Die X-Koordinate als Integer.
          */
         public int getX() {
@@ -79,6 +84,7 @@ public class Schiff {
 
         /**
          * Gibt den Wert der Y-Koordinate als Integer zurück.
+         *
          * @return Die Y-Koordinate als Integer.
          */
         public int getY() {
@@ -87,6 +93,7 @@ public class Schiff {
 
         /**
          * Gibt die Koordinaten als String im Format "(x, y)" aus.
+         *
          * @return Die Koordinaten als String.
          */
         public String ausgabe() {

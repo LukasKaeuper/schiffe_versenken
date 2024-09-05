@@ -1,8 +1,7 @@
 /**
- * Klasse Spieler
- *
- * @author (Lukas Käuper)
- * @version 03.09.2024
+ * Die Klasse Spieler repräsentiert einen Spieler mit einem Namen und der Anzahl der Züge,
+ * die er gemacht hat. Sie enthält Methoden zum Abrufen und
+ * Ändern des Namens sowie zum Erhöhen der Zuganzahl.
  */
 public class Spieler {
     private String name;            // Name des Spielers

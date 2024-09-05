@@ -46,10 +46,10 @@ public class View extends JFrame {
     private ImageIcon uboot_vertikal_vorne_feuer;                                               // Icon für die vordere Seite eines vertikalen U-Boots nach einem Treffer
     private ArrayList<ImageIcon> schiffGifs = new ArrayList<>();                                // Liste der Schiff-Icons
     private ArrayList<ImageIcon> andereGifs = new ArrayList<>();                                // Liste der anderen Icons
-    Font font1 = new Font("SansSerif", Font.BOLD, 20);                               // Schriftart für die Textfelder
-    Menu menu;                                                                                  // Hauptmenü
-    JButton zurueckHauptmenue = new JButton("Hauptmenü");                                  // Schaltfläche zum Zurückkehren zum Hauptmenü
-    JButton bestenlistebutton = new JButton("Bestenliste");                                // Schaltfläche zur Anzeige der Bestenliste
+    private Font font1 = new Font("SansSerif", Font.BOLD, 20);                               // Schriftart für die Textfelder
+    private Menu menu;                                                                                  // Hauptmenü
+    private JButton zurueckHauptmenueImSpiel = new JButton("Hauptmenü");                                  // Schaltfläche zum Zurückkehren zum Hauptmenü
+    private JButton bestenlistebuttonImSpiel = new JButton("Bestenliste");                                // Schaltfläche zur Anzeige der Bestenliste
 
     Bestenliste bestenliste = new Bestenliste();                                                // Instanz der Bestenliste
 
@@ -148,14 +148,14 @@ public class View extends JFrame {
         container.setLayout(new GridBagLayout());
 
         containerFuellen();
-        bestenlistebutton.addActionListener(new ActionListener() {
+        bestenlistebuttonImSpiel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bestenlisteGenerieren();
             }
         });
 
-        zurueckHauptmenue.addActionListener(new ActionListener() {
+        zurueckHauptmenueImSpiel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 listenerEntfernen();
@@ -769,7 +769,7 @@ public class View extends JFrame {
         c.anchor = GridBagConstraints.WEST;
         c.insets = new Insets(0, 5, 10, 0); // Abstände um den Button herum
         c.fill = GridBagConstraints.NONE;
-        container.add(bestenlistebutton, c);
+        container.add(bestenlistebuttonImSpiel, c);
         c.gridx = 1;
         c.gridy = 1;
         c.weightx = 1;
@@ -777,7 +777,7 @@ public class View extends JFrame {
         c.anchor = GridBagConstraints.EAST;
         c.insets = new Insets(0, 0, 10, 5); // Abstände um den Button herum
         c.fill = GridBagConstraints.NONE;
-        container.add(zurueckHauptmenue, c);
+        container.add(zurueckHauptmenueImSpiel, c);
 
         panelSpielfeldEigen.setVisible(true);
         panelSpielfeldGegner.setVisible(true);
@@ -1152,7 +1152,7 @@ public class View extends JFrame {
          * Zeichnet den Rand um die Komponente.
          *
          * @param c Die Komponente, für die der Rand gezeichnet wird.
-         * @param g Das Graphics-Objekt, das zum Zeichnen verwendet wird.
+         * @param g Das Grafik-Objekt, das zum Zeichnen verwendet wird.
          * @param x Die x-Position der Komponente.
          * @param y Die y-Position der Komponente.
          * @param width Die Breite der Komponente.
@@ -1166,101 +1166,222 @@ public class View extends JFrame {
     }
 
     /**
-     * Die Menü-Klasse erweitert das Spiel mit einem Menü.
+     * Die Klasse Menu repräsentiert das Hauptmenü des Spiels "Schiffe Versenken".
+     * Sie erbt von JFrame und stellt das Hauptfenster der Anwendung dar.
+     * Das Menü enthält mehrere Buttons, um zwischen Einzelspieler-, Mehrspieler-,
+     * Einstellungen-, Hilfe- und der Bestenliste zu wechseln.
+     * Es gibt auch eine Hover-Funktionalität, die zusätzliche Informationen anzeigt, wenn der Benutzer
+     * über den Hilfe-Button fährt.
      */
     public class Menu extends JFrame {
 
+        private BufferedImage hintergrundbild;
+        private JPanel buttonPanel;
+        private ImageIcon icon = new ImageIcon("Bilder/Logo/SchiffeVersenkenLogo.png");
+        private JButton singlePlayerButton = new JButton("Einzelspieler");
+        private JButton multiPlayerButton = new JButton("Mehrspieler");
+        private JButton settingsButton = new JButton("Einstellungen");
+        private JButton hilfeButton = new JButton("Hilfe");
+        private JButton bestenlisteButtonMenue = new JButton("Bestenliste");
+        private JButton localButton = new JButton("Lokal");
+        private JButton onlineButton = new JButton("Online");
+        private JButton zurueckButton = new JButton("zurück");
+        private JButton loeschenButton = new JButton("OK");
+        private JButton zurueckButtonEinstellungen = new JButton("zurück");
+        private JFrame hoverFrame = new JFrame("Hilfe");
+        private JLabel hoverTextLabel = new JLabel("<html>Herzlich willkommen beim Spiel Schiffe Versenken!" +
+                "<br/><br/><br/><br/>Namen<br/><br/>" +
+                "Um die Namen für Spieler 1 und Spieler 2 zu ändern, müssen Sie in die Einstellungen gehen.<br/><br/><br/>" +
+                "<br/>Regeln<br/><br/>Die Schiffe werden automatisch gesetzt und dürfen nicht aneinander liegen, sondern haben<br>" +
+                "immer mindestens ein Feld Abstand.<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig platzierte Schiffe<br/>" +
+                "Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>" +
+                "Spielablauf: Die Spieler können abwechselnd ein Feld auswählen, auf das Sie schießen möchten.<br/>" +
+                "Trifft ein Spieler ein Feld, wo sich ein Schiff befindet, darf dieser nochmal feuern.<br/><br/>" +
+                "Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>" +
+                "Anzahl an Schiffen: 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
+        private Dimension buttonSize = new Dimension(200, 50);
+        private JPanel background = new JPanel();
+        private JLabel labelSpielerEins = new JLabel("Name Spieler 1:");
+        private JLabel labelSpielerZwei = new JLabel("Name Spieler 2:");
+        private JLabel labelBestenliste = new JLabel("Bestenliste löschen");
+        private GridBagConstraints gbc = new GridBagConstraints();
+
+        /**
+         * Der Konstruktor der Klasse Menu initialisiert das Hauptfenster des Spiels.
+         * Die Buttons bekommen ihre ActionListener hinzugefügt.
+         * Der Hintergrund und das Icon werden gesetzt.
+         */
         public Menu() {
-            // Fenster initialisieren
             setTitle("Schiffe Versenken");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setSize(800, 600);
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
-
-            // Hintergrundbild
-            BufferedImage backgroundImage;
-            try {
-                backgroundImage = ImageIO.read(new File("Bilder/Logo/SchiffeVersenkenLogo.png"));
-            } catch (IOException e) {
-                throw new RuntimeException("Background image not found", e);
-            }
-
-            JPanel background = new JPanel() {
-                @Override
-                protected void paintComponent(Graphics g) {
-                    super.paintComponent(g);
-                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-                }
-            };
-
+            setzteHintergrund();
+            setIconImage(icon.getImage());
+            buttonPanel = new JPanel();
+            buttonPanelFuellen();
+            actionListenerHinzufuegen();
+            hoverErstellen();
+            setzteButtonGroesse();
             setContentPane(background);
             background.setLayout(new GridBagLayout());
-            GridBagConstraints gbc = new GridBagConstraints();
+            buttonPanelZentrieren();
 
-            // Logo/Icon hinzufügen
-            ImageIcon icon = new ImageIcon("Bilder/Logo/SchiffeVersenkenLogo.png");
-            setIconImage(icon.getImage());
+            setVisible(true);
+        }
 
-            // Panel für die Buttons
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.setOpaque(false);  // Macht das Panel transparent
-            buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        /**
+         * Zentriert das ButtonPanel.
+         */
+        private void buttonPanelZentrieren(){
+            gbc.gridx = 0;
+            gbc.gridy = 1;
+            gbc.gridwidth = 1;
+            gbc.insets = new Insets(0, 0, 20, 0);
+            gbc.anchor = GridBagConstraints.CENTER;
+            background.add(buttonPanel, gbc);
+        }
 
-            // Einzelspieler Button
-            JButton singlePlayerButton = new JButton("Einzelspieler");
-            singlePlayerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            buttonPanel.add(singlePlayerButton);
-            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
+        /**
+         * Setzt alle Buttons auf eine Größe.
+         */
+        private void setzteButtonGroesse() {
+            singlePlayerButton.setMaximumSize(buttonSize);
+            multiPlayerButton.setMaximumSize(buttonSize);
+            settingsButton.setMaximumSize(buttonSize);
+            hilfeButton.setMaximumSize(buttonSize);
+            bestenlisteButtonMenue.setMaximumSize(buttonSize);
+        }
 
-            // Mehrspieler Button
-            JButton multiPlayerButton = new JButton("Mehrspieler");
-            multiPlayerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            buttonPanel.add(multiPlayerButton);
-            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
-
-            // Einstellungen Button
-            JButton settingsButton = new JButton("Einstellungen");
-            settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            buttonPanel.add(settingsButton);
-            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-
-            // Regel Button
-            JButton regelButton = new JButton("Hilfe");
-            regelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            buttonPanel.add(regelButton);
-            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-
-            JButton bestenlisteMenue = new JButton("Bestenliste");
-            bestenlisteMenue.setAlignmentX(Component.CENTER_ALIGNMENT);
-            buttonPanel.add(bestenlisteMenue);
-
-            bestenlisteMenue.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    spielFensterSichtbar();
-                    containerFuellen();
-                    schiffanzeigenZuruecksetzen();
-                    setVisible(false);
-                    bestenlisteGenerierenImMenue();
-                }
-            });
-
-            // Create the hover window
-            JFrame hoverFrame = new JFrame("Hilfe");
+        /**
+         * Erstellt ein neues JFrame, um den Hilfe Text anzuzeigen-
+         */
+        private void hoverErstellen() {
             hoverFrame.setSize(600, 600);
             hoverFrame.setLayout(new FlowLayout());
             hoverFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-
-            // Create the label for hover text
-            JLabel hoverTextLabel = new JLabel("<html>Herzlich Willkommen beim Spiel Schiffe Versenken!<br/><br/><br/><br/>Namen<br/><br/>Um die Namen für Spieler 1 und Spieler 2 zu ändern müssen Sie in die Einstellungen gehen<br/><br/><br/><br/>Regeln<br/><br/>Die Schiffe werden automatisch gesetzt und dürfen nicht aneinander liegen sondern haben<br> immer mindestens ein Feld Abstand<br/><br/>Vorbereitung : Jeder Spieler bekommt zufällig plazierte Schiffe<br/>Das Spielfeld besteht aus einer Größe von 10x10<br/><br/>Spielablauf: Die Spieler können abwechselnd ein Feld auswählen auf das Sie schießen möchten<br/>Trifft ein Spieler ein Feld wo sich ein Schiff befindet darf dieser nochmal feuern<br/><br/>Gewonnen: Der Spieler, der zuerst alle Schiffe des Gegners versenkt, gewinnt das Spiel<br/><br/>Anzahl an Schiffen: 10<br/> 1x5<br/>2x4<br/>3x3<br/>4x2</html>");
             hoverTextLabel.setForeground(Color.BLACK);
-
-            // Add the label to the hover window
             hoverFrame.add(hoverTextLabel);
+        }
 
-            // Add mouse listener to handle hover effect
-            regelButton.addMouseListener(new MouseAdapter() {
+        /**
+         * Fügt den Buttons ihre Actionlistener hinzu.
+         */
+        private void actionListenerHinzufuegen(){
+            singlePlayerButton.addActionListener(singlePlayerButtonListener());
+            bestenlisteButtonMenue.addActionListener(bestenlisteButtonListener());
+            hilfeButton.addMouseListener(hilfeButtonListener());
+            multiPlayerButton.addActionListener(multiplayerButtonListener());
+            loeschenButton.addActionListener(loeschenButtonListener());
+            zurueckButton.addActionListener(zurueckButtonListener());
+            settingsButton.addActionListener(settingsButtonListener());
+            localButton.addActionListener(lokalButtonListener());
+        }
+
+        /**
+         * Erstellt den Actionlistener für den Einstellung-Button.
+         */
+        private ActionListener settingsButtonListener(){
+            return new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    buttonPanel.removeAll();
+
+                    buttonPanel.setOpaque(true);  // Macht das Panel transparent
+                    buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+                    buttonPanel.add(labelSpielerEins);
+                    buttonPanel.add(nameEins);
+                    buttonPanel.add(labelSpielerZwei);
+                    buttonPanel.add(nameZwei);
+                    buttonPanel.add(labelBestenliste);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(loeschenButton);
+                    zurueckButtonEinstellungen.setAlignmentY(Component.CENTER_ALIGNMENT);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0,30)));
+                    buttonPanel.add(zurueckButtonEinstellungen);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0,10)));
+                    zurueckButtonEinstellungen.addActionListener(zurueckButtonEinstellungenListener());
+
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
+                }
+            };
+        }
+
+        /**
+         * Erstellt den Actionlistener für den Zurück-Button in den Einstellungen.
+         */
+        private ActionListener zurueckButtonEinstellungenListener() {
+            return new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    buttonPanel.removeAll();
+
+                    buttonPanel.setOpaque(false);
+
+                    buttonPanel.add(singlePlayerButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(multiPlayerButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(settingsButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(hilfeButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(bestenlisteButtonMenue);
+
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
+                }
+            };
+        }
+
+        /**
+         * Erstellt den Actionlistener für den Löschen-Button.
+         */
+        private ActionListener loeschenButtonListener() {
+            return new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    bestenliste.alleEintraegeLoeschen();
+                }
+            };
+        }
+
+        /**
+         * Erstellt den Actionlistener für den Multiplayer-Button.
+         */
+        private ActionListener multiplayerButtonListener() {
+            return new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    buttonPanel.removeAll();
+
+                    localButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    localButton.setMaximumSize(buttonSize);
+
+                    onlineButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    onlineButton.setMaximumSize(buttonSize);
+
+                    zurueckButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    zurueckButton.setMaximumSize(buttonSize);
+
+                    buttonPanel.add(localButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
+                    buttonPanel.add(onlineButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
+                    buttonPanel.add(zurueckButton);
+
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
+                }
+            };
+        }
+
+        /**
+         * Erstellt den Mouseadapter für den Hilfe-Button.
+         */
+        private MouseAdapter hilfeButtonListener() {
+            return new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     hoverFrame.setVisible(true);
@@ -1270,27 +1391,78 @@ public class View extends JFrame {
                 public void mouseExited(MouseEvent e) {
                     hoverFrame.setVisible(false);
                 }
-            });
+            };
+        }
 
-            // Alle Buttons gleich groß machen
-            Dimension buttonSize = new Dimension(200, 50);
-            singlePlayerButton.setMaximumSize(buttonSize);
-            multiPlayerButton.setMaximumSize(buttonSize);
-            settingsButton.setMaximumSize(buttonSize);
-            regelButton.setMaximumSize(buttonSize);
-            bestenlisteMenue.setMaximumSize(buttonSize);
+        /**
+         * Erstellt den Actionlistener für den Zurück-Button im Multiplayer Menü.
+         */
+        private ActionListener zurueckButtonListener() {
+            return new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    buttonPanel.removeAll();
 
-            // Button Panel in die Mitte setzen
-            gbc.gridx = 0;
-            gbc.gridy = 1;
-            gbc.gridwidth = 1;
-            gbc.insets = new Insets(0, 0, 20, 0);
-            gbc.anchor = GridBagConstraints.CENTER;
-            background.add(buttonPanel, gbc);
+                    buttonPanel.add(singlePlayerButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(multiPlayerButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(settingsButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(hilfeButton);
+                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    buttonPanel.add(bestenlisteButtonMenue);
 
-            // ActionListener für die Buttons
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
+                }
+            };
+        }
 
-            singlePlayerButton.addActionListener(new ActionListener() {
+        /**
+         * Erstellt den Actionlistener für den Lokal-Button.
+         */
+        private ActionListener lokalButtonListener() {
+            return new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Lokaler Multiplayer\n");
+                    controller.setModus("lokal_mp");
+                    controller.spielfelderInitialisieren();
+                    controller.setSpielerNameEins(nameEins.getText());
+                    controller.setSpielerNameZwei(nameZwei.getText());
+                    containerFuellen();
+                    status.setText(nameEins.getText());
+                    controller.feldAktualisieren("Gegner");
+                    schiffanzeigenZuruecksetzen();
+                    zuege.setText("Anzahl an Zügen: 0");
+                    setVisible(false);
+                    spielFensterSichtbar();
+                }
+            };
+        }
+
+        /**
+         * Erstellt den Actionlistener für den Bestenliste-Button.
+         */
+        private ActionListener bestenlisteButtonListener() {
+            return new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    spielFensterSichtbar();
+                    containerFuellen();
+                    schiffanzeigenZuruecksetzen();
+                    setVisible(false);
+                    bestenlisteGenerierenImMenue();
+                }
+            };
+        }
+
+        /**
+         * Erstellt den Actionlistener für den Einzelspieler-Button.
+         */
+        private ActionListener singlePlayerButtonListener() {
+            return new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Singleplayer\n");
@@ -1306,150 +1478,54 @@ public class View extends JFrame {
                     setVisible(false);
                     spielFensterSichtbar();
                 }
-            });
+            };
+        }
 
-            multiPlayerButton.addActionListener(new ActionListener() {
+        /**
+         * Füllt das Button Panel mit den Buttons.
+         */
+        private void buttonPanelFuellen() {
+            buttonPanel = new JPanel();
+            buttonPanel.setOpaque(false);
+            buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+            singlePlayerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(singlePlayerButton);
+            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+            multiPlayerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(multiPlayerButton);
+            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+            settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(settingsButton);
+            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+            hilfeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(hilfeButton);
+            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+            bestenlisteButtonMenue.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(bestenlisteButtonMenue);
+        }
+
+        /**
+         * Setzt das Hintergrundbild.
+         */
+        private void setzteHintergrund() {
+            try {
+                hintergrundbild = ImageIO.read(new File("Bilder/Logo/SchiffeVersenkenLogo.png"));
+            } catch (IOException e) {
+                throw new RuntimeException("Background image not found", e);
+            }
+
+            background = new JPanel() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("Mehrspieler Button gedrückt");
-
-                    // Entferne alle Buttons außer dem Mehrspieler-Button
-                    buttonPanel.removeAll();
-
-                    // Neue Buttons für "Lokal" und "Online" hinzufügen
-                    JButton localButton = new JButton("Lokal");
-                    localButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-                    localButton.setMaximumSize(buttonSize);
-                    localButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            System.out.println("Lokaler Multiplayer\n");
-                            controller.setModus("lokal_mp");
-                            controller.spielfelderInitialisieren();
-                            controller.setSpielerNameEins(nameEins.getText());
-                            controller.setSpielerNameZwei(nameZwei.getText());
-                            containerFuellen();
-                            status.setText(nameEins.getText());
-                            controller.feldAktualisieren("Gegner");
-                            schiffanzeigenZuruecksetzen();
-                            zuege.setText("Anzahl an Zügen: 0");
-                            setVisible(false);
-                            spielFensterSichtbar();
-                        }
-                    });
-
-                    JButton onlineButton = new JButton("Online");
-                    onlineButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-                    onlineButton.setMaximumSize(buttonSize);
-                onlineButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        System.out.println("Online Button gedrückt");
-                    }
-                });
-
-                    JButton zurueckButton = new JButton("zurück");
-                    zurueckButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-                    zurueckButton.setMaximumSize(buttonSize);
-
-                zurueckButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        buttonPanel.removeAll();
-
-                        buttonPanel.add(singlePlayerButton);
-                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                        buttonPanel.add(multiPlayerButton);
-                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                        buttonPanel.add(settingsButton);
-                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                        buttonPanel.add(regelButton);
-                        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                        buttonPanel.add(bestenlisteMenue);
-
-                        buttonPanel.revalidate();
-                        buttonPanel.repaint();
-
-                    }
-                });
-
-
-                    buttonPanel.add(localButton);
-                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
-                    buttonPanel.add(onlineButton);
-                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Platz zwischen den Buttons
-                    buttonPanel.add(zurueckButton);
-
-                    // Panel neu validieren und neu zeichnen
-                    buttonPanel.revalidate();
-                    buttonPanel.repaint();
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    g.drawImage(hintergrundbild, 0, 0, getWidth(), getHeight(), this);
                 }
-            });
-
-            settingsButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    buttonPanel.removeAll();
-
-                    buttonPanel.setOpaque(true);  // Macht das Panel transparent
-                    buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-
-                    JLabel labelSpielerEins = new JLabel("Name Spieler 1:");
-                    buttonPanel.add(labelSpielerEins);
-
-                    buttonPanel.add(nameEins);
-
-                    JLabel labelSpielerZwei = new JLabel("Name Spieler 2:");
-                    buttonPanel.add(labelSpielerZwei);
-
-                    buttonPanel.add(nameZwei);
-
-                    JLabel labelBestenliste = new JLabel("Bestenliste löschen");
-                    buttonPanel.add(labelBestenliste);
-                    buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-
-                    JButton loeschen = new JButton("OK");
-
-                    loeschen.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            bestenliste.alleEintraegeLoeschen();
-                        }
-                    });
-
-                    buttonPanel.add(loeschen);
-                    JButton zurueckButton = new JButton("zurück");
-                    zurueckButton.setAlignmentY(Component.CENTER_ALIGNMENT);
-                    buttonPanel.add(Box.createRigidArea(new Dimension(0,30)));
-                    buttonPanel.add(zurueckButton);
-                    buttonPanel.add(Box.createRigidArea(new Dimension(0,10)));
-
-                    zurueckButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            buttonPanel.removeAll();
-
-                            buttonPanel.setOpaque(false);
-
-                            buttonPanel.add(singlePlayerButton);
-                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                            buttonPanel.add(multiPlayerButton);
-                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                            buttonPanel.add(settingsButton);
-                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                            buttonPanel.add(regelButton);
-                            buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                            buttonPanel.add(bestenlisteMenue);
-
-                            buttonPanel.revalidate();
-                            buttonPanel.repaint();
-                        }
-                    });
-                    buttonPanel.revalidate();
-                    buttonPanel.repaint();
-                }
-            });
-            setVisible(true);
+            };
         }
     }
 }
