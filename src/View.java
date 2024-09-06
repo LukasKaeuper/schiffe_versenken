@@ -15,6 +15,9 @@ import javax.swing.table.DefaultTableCellRenderer;
  * Die View-Klasse stellt die grafische Benutzeroberfläche für das "Schiffe Versenken"-Spiel bereit.
  * Sie enthält die Spielfelder für den eigenen und gegnerischen Bereich, sowie Steuerungselemente
  * wie Schaltflächen und Textfelder, um den Status und die Anzahl der Züge anzuzeigen.
+ *
+ * @author Lukas Käuper, Marten Ahmann
+ * @version 05.09.2024
  */
 public class View extends JFrame {
     private final JButton[][] buttonSpielfeldEigen = new JButton[10][10];                       // Schaltflächen für das eigene Spielfeld

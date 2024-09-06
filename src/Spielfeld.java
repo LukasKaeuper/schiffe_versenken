@@ -8,6 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Die Klasse Spielfeld repräsentiert ein 10x10 Spielfeld
  * Sie verwaltet die Platzierung der Schiffe, die Markierung von Treffern
+ *
+ * @author Lukas Käuper, Marten Ahmann
+ * @version 05.09.2024
  */
 public class Spielfeld {
     private final int reihe = 10;                         // Anzahl der Reihen des Spielfelds

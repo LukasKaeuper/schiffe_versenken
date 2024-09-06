@@ -4,6 +4,9 @@ import java.util.ArrayList;
  * Die Schiff-Klasse repräsentiert ein Schiff im Spiel. Sie enthält Informationen über die Position, Ausrichtung,
  * Länge und Koordinaten des Schiffs. Sie bietet Methoden zum Hinzufügen von Koordinaten, zur Ausgabe der
  * Schiffsinformationen und zur Überprüfung, ob das Schiff bereits abgeschossen wurde.
+ *
+ * @author Lukas Käuper, Marten Ahmann
+ * @version 05.09.2024
  */
 public class Schiff {
     private boolean horizontal;                                 // Gibt die Ausrichtung des Schiffs an (horizontal oder vertikal)

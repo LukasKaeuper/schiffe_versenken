@@ -7,6 +7,9 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Die Model-Klasse verwaltet den Zustand und das Verhalten des Spiels, einschließlich des Spielfelds, der Spieler
  * und der KI. Sie ermöglicht es, Schüsse zu tätigen, die KI zu steuern und den Spielstatus zu überprüfen.
+ *
+ * @author Lukas Käuper, Marten Ahmann
+ * @version 05.09.2024
  */
 public class Model {
     private Spielfeld spielfeldLinks;                   // Das Spielfeld des aktuellen Spielers
