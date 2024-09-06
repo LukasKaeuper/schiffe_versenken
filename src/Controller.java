@@ -40,7 +40,7 @@ public class Controller {
     class SpielfeldListener implements ActionListener {
 
         /**
-         * Konstruktor: Aktualisiert das Spielfeld
+         * Konstruktor: Aufrufe zur Aktualisierung des linken Spielfeldes.
          */
         public SpielfeldListener() {
             feldAktualisieren("Eigen");
@@ -49,7 +49,8 @@ public class Controller {
 
         /**
          * Diese Methode wird aufgerufen, wenn ein Spielfeld-Button geklickt wird.
-         * Sie verarbeitet den Klick, führt den Schuss aus und aktualisiert die Spielfelder.
+         * Sie verarbeitet den Klick, startet den Aufruf zum Schießen,
+         * erfragt beim Model den aktuellen Spielstatus und benachrichtigt die View über Aktualisierungen.
          *
          * @param e Das ActionEvent, das den Klick auf den Button beschreibt.
          */
@@ -101,8 +102,7 @@ public class Controller {
     }
 
     /**
-     * Aktualisiert die Darstellung des Spielfelds für den angegebenen Spieler.
-     * Diese Methode holt die aktuellen Spielfeldwerte vom Model und setzt sie in der View.
+     * Schickt die neuen Werte zur Aktualisierung der Darstellung an die View.
      *
      * @param spieler Der Spieler, dessen Spielfeld aktualisiert werden soll.
      */
@@ -182,7 +182,7 @@ public class Controller {
     }
 
     /**
-     * Leitet eine Anfrage bezüglich der Beendigung des Spiels an das model weiter.
+     * Leitet eine Anfrage bezüglich der Beendigung des Spiels an das Model weiter.
      *
      * @return Die Nummer des Siegers.
      */

@@ -14,10 +14,10 @@ public class Schiff {
     private ArrayList<Koordinatenpaar> koordinaten;             // Liste der Koordinaten, die das Schiff abdeckt
 
     /**
-     * Konstruktor zum Erstellen eines neuen Schiffs.
+     * Konstruktor zum Erstellen eines neuen Schiffes.
      *
      * @param horizontal Gibt an, ob das Schiff horizontal ausgerichtet ist.
-     * @param laenge Die Länge des Schiffs.
+     * @param laenge Die Länge des Schiffes.
      */
     public Schiff(boolean horizontal, int laenge){
         this.horizontal = horizontal;
@@ -27,7 +27,7 @@ public class Schiff {
     }
 
     /**
-     * Fügt dem Schiff eine neue Koordinate hinzu.
+     * Fügt dem Schiff ein neues Koordinatenpaar hinzu.
      *
      * @param x Die X-Koordinate der neuen Position.
      * @param y Die Y-Koordinate der neuen Position.
@@ -37,7 +37,7 @@ public class Schiff {
     }
 
     /**
-     * Gibt die Koordinaten des Schiffs aus, sowie die Ausrichtung.
+     * Gibt die Koordinaten sowie die Ausrichtung des Schiffs aus.
      */
     public void ausgabe() {
         koordinaten.forEach((n) -> System.out.println(this.horizontal ? "horizontal " + n.ausgabe() : "vertikal " + n.ausgabe()));

@@ -59,7 +59,8 @@ public class View extends JFrame {
     AbgeschossenBorder abgeschossenBorder = new AbgeschossenBorder(Color.RED, 10);        // Border für abgeschossene Schiffe
 
     /**
-     * Konstruktor für die View-Klasse.
+     * Konstruktor für die View-Klasse. Initialisiert das Hauptmenü, weist den übergebenen Controller zu, startet die Fenstergenerierung,
+     * initialisiert die GIFS und fügt sie eigenen Listen zu.
      *
      * @param controller Der Controller, der die Spiellogik steuert.
      */
@@ -175,7 +176,7 @@ public class View extends JFrame {
     }
 
     /**
-     * Entfernt alle Icons von den Schaltflächen des Spielfelds.
+     * Entfernt alle Icons von den Schaltflächen der Spielfelder.
      */
     private void iconsEntfernen() {
         for (int i = 0; i < 10; i++) {
@@ -261,10 +262,9 @@ public class View extends JFrame {
 
         /**
          * Konstruktor für die Schiffeintrag-Klasse.
-         * Initialisiert die Länge des Schiffes und den Status des Schiffes.
          * Erstellt eine Reihe von Buttons, die das Schiff darstellen.
          *
-         * @param laenge Die Länge des Schiffes.
+         * @param laenge Die Länge des Eintrags.
          */
         public Schiffeintrag(int laenge){
             this.laenge = laenge;
@@ -290,16 +290,16 @@ public class View extends JFrame {
         }
 
         /**
-         * Gibt zurück, ob das Schiff abgeschossen wurde.
+         * Gibt zurück, ob der Eintrag als abgeschossen markiert wurde.
          *
-         * @return true, wenn das Schiff abgeschossen wurde, andernfalls false.
+         * @return true, wenn der Eintrag als abgeschossen markiert wurde, andernfalls false.
          */
         public boolean istAbgeschossen(){
             return abgeschossen;
         }
 
         /**
-         * Setzt den Status des Schiffes auf abgeschossen und färbt alle Buttons rot ein.
+         * Setzt den Status des Eintrags auf abgeschossen und startet die Einfärbung der Buttons.
          */
         public void setAbgeschossen(){
             this.abgeschossen = true;
@@ -307,9 +307,9 @@ public class View extends JFrame {
         }
 
         /**
-         * Gibt die Länge des Schiffes zurück.
+         * Gibt die Länge des Eintrags zurück.
          *
-         * @return Die Länge des Schiffes.
+         * @return Die Länge des Eintrags.
          */
         public int getLaenge(){
             return laenge;
@@ -318,7 +318,7 @@ public class View extends JFrame {
 
     /**
      * Repräsentiert einen Eintrag in der Bestenliste.
-     * Jeder Eintrag enthält den Namen des Spielers, die Anzahl der Züge und das Datum/Zeit des Eintrags.
+     * Jeder Eintrag enthält den Namen des Spielers, die Anzahl der Züge und das Datum/ die Zeit des Eintrags.
      */
     public class Eintrag {
         String name;              // Name des Spielers
@@ -686,7 +686,7 @@ public class View extends JFrame {
 
     /**
      * Führt den Rundenwechsel durch und zeigt den Button zum Starten der neuen Runde an.
-     * Die Anzeigen für die Schiffe werden getauscht, und der Button zum Starten der neuen Runde wird erstellt.
+     * Die Anzeigen für die Schiffe werden getauscht.
      */
     public void rundenwechselBestaetigen() {
         panelSpielfeldEigen.setVisible(false);
@@ -804,9 +804,7 @@ public class View extends JFrame {
     }
 
     /**
-     * Die Klasse GamePanel ist eine benutzerdefinierte JPanel-Klasse, die ein
-     * Spielfeld in einem GridLayout für ein Spiel darstellt. Abhängig vom übergebenen
-     * Spieler wird entweder ein Spielfeld für den "Eigen"-Spieler oder den "Gegner"-Spieler erstellt.
+     * Angepasste JPanel, die beide Spielfelder darstellt und die buttons in einem zweidimensionalen Array speichert.
      */
     class GamePanel extends JPanel {
 
@@ -849,7 +847,7 @@ public class View extends JFrame {
     }
 
     /**
-     * Diese Methode konfiguriert das Aussehen und Verhalten eines Buttons im Spielfeld, abhängig davon,
+     * Diese Methode konfiguriert das Aussehen eines Buttons im Spielfeld, abhängig davon,
      * ob es sich um das Spielfeld des eigenen Spielers oder des Gegners handelt und welchen Zustand der
      * Button darstellen soll.
      *
@@ -929,11 +927,12 @@ public class View extends JFrame {
 
     /**
      * Fügt ein Bild für ein Schiff an eine bestimmte Position in einem 2D-Array von JButton-Objekten ein.
+     * Das GIF wird anhand der Nachbar GIFS in den Himmelsrichtungen gewählt.
      *
      * @param i Die Reihe im Array, an der das Schiff eingefügt werden soll.
      * @param j Die Spalte im Array, an der das Schiff eingefügt werden soll.
      * @param spielfeldButtons Das 2D-Array von JButton-Objekten, das das Spielfeld darstellt.
-     * @param kaputt Ein boolescher Wert, der angibt, ob das Schiff beschädigt ist oder nicht.
+     * @param kaputt Ein boolescher Wert, der angibt, ob das Schiff komplett abgeschossen wurde oder nicht.
      */
     private void schiffGifEinfuegen(int i, int j, JButton[][] spielfeldButtons, boolean kaputt){
         if (j-1 < 0 && i-1 < 0){
@@ -1113,7 +1112,7 @@ public class View extends JFrame {
     }
 
     /**
-     * Eine benutzerdefinierte Border-Klasse für Komponenten, die einen farbigen Rand mit einem bestimmten Radius darstellt.
+     * Ein angepasster Rand für getroffene Felder.
      */
     private static class AbgeschossenBorder implements Border {
 
@@ -1122,6 +1121,7 @@ public class View extends JFrame {
 
         /**
          * Konstruktor für die AbgeschossenBorder-Klasse.
+         * Weist die Farbe und den Radius zu.
          *
          * @param color Die Farbe des Randes.
          * @param radius Der Radius, der den Abstand des Rands von der Komponente definiert.
@@ -1259,7 +1259,7 @@ public class View extends JFrame {
         }
 
         /**
-         * Erstellt ein neues JFrame, um den Hilfe Text anzuzeigen.
+         * Erstellt ein neues JFrame, um den Hilfetext anzuzeigen.
          */
         private void hoverErstellen() {
             hoverFrame.setSize(600, 600);

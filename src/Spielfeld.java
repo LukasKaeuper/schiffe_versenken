@@ -6,8 +6,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Die Klasse Spielfeld repräsentiert ein 10x10 Spielfeld
- * Sie verwaltet die Platzierung der Schiffe, die Markierung von Treffern
+ * Die Klasse Spielfeld repräsentiert ein 10x10 Spielfeld.
+ * Sie verwaltet die Platzierung der Schiffe, die Markierung von Treffern und der umliegenden Felder.
  *
  * @author Lukas Käuper, Marten Ahmann
  * @version 05.09.2024
@@ -149,7 +149,7 @@ public class Spielfeld {
     }
 
     /**
-     * Überprüft, ob um die gewählte Platzierung eines Schiffs genügend Abstand zu anderen Schiffen eingehalten wird.
+     * Überprüft, ob zwischen den gegebenen Koordinaten und den anderen Schiffen genug Platz ist.
      *
      * @param x Die x-Koordinate der Startposition.
      * @param y Die y-Koordinate der Startposition.
@@ -242,6 +242,7 @@ public class Spielfeld {
      *
      * @param x Die x-Koordinate einer getroffenen Position.
      * @param y Die y-Koordinate einer getroffenen Position.
+     * @return Länge des abgeschossenen Schiffes.
      */
     public int ganzesSchiffGetroffen(int x, int y) {
         AtomicInteger laengeVomAbgeschossenenSchiff = new AtomicInteger(0);
@@ -270,7 +271,7 @@ public class Spielfeld {
 
     /**
      * Diese Methode markiert Felder rund um ein getroffenes oder versenktes Schiff als "unmöglich",
-     * um anzuzeigen, dass an diesen Positionen keine Schiffe platziert werden können.
+     * um anzuzeigen, dass sich an diesen Feldern keine Schiffe befinden können.
      *
      * @param x Die x-Koordinate des getroffenen Feldes.
      * @param y Die y-Koordinate des getroffenen Feldes.
@@ -371,9 +372,9 @@ public class Spielfeld {
     }
 
     /**
-     * Gibt den Spieler des Spielfelds zurück.
+     * Gibt den Spieler des Spielfeldes zurück.
      *
-     * @return Der Spieler, dem das Spielfeld gehört.
+     * @return Der Spieler, der dem Spielfeld gehört.
      */
     public Spieler getSpieler() {
         return spieler;

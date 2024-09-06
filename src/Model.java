@@ -21,7 +21,7 @@ public class Model {
     private Controller controller;                      // Der Controller, der das Model steuert
 
     /**
-     * Konstruktor, der das Model initialisiert und den Controller setzt.
+     * Konstruktor, der das Model initialisiert, den Controller zuweist und das Hintergrundrauschen startet.
      *
      * @param controller Der Controller, der das Model steuert.
      */
@@ -31,7 +31,7 @@ public class Model {
     }
 
     /**
-     * Initialisiert die Spielfelder für beide Spieler.
+     * Initialisiert die Spielfelder für beide Spieler und sucht erste Koordinaten für den KI-Schuss.
      */
     public void spielfeldInitialisieren(){
         this.kiSchussX = ThreadLocalRandom.current().nextInt(0, 10);
@@ -43,6 +43,7 @@ public class Model {
 
     /**
      * Führt einen Schuss auf das gegnerische Spielfeld aus und spielt den entsprechenden Sound.
+     * Benachrichtigt den Controller über die Länge des abgeschossenen Schiffes.
      *
      * @param n Die X-Koordinate des Schusses.
      * @param m Die Y-Koordinate des Schusses.
@@ -70,6 +71,7 @@ public class Model {
 
     /**
      * Lässt die KI einen Schuss abgeben und verfolgt den Fortschritt der Suche nach einem Schiff.
+     * Benachrichtigt den Controller, falls ein Schiff komplett abgeschossen wurde.
      */
     public void ki_schiessen() {
         int laengeVomAbgeschossenenSchiff = 0;
@@ -189,7 +191,7 @@ public class Model {
     }
 
     /**
-     * Spielt den angegebenen Sound ab.
+     * Startet einen neuen Thread und spielt den angegebenen Sound ab.
      *
      * @param url Der Name der Sounddatei.
      * @param loop Gibt an, ob der Sound wiederholt werden soll.
@@ -220,7 +222,8 @@ public class Model {
     /**
      * Überprüft, ob das Spiel beendet ist, und gibt den Sieger zurück.
      *
-     * @return 0, wenn Spiel nicht beendet ist. 1, wenn auf dem linken Feld alle Schiffe getroffen wurden. 2, wenn auf dem rechten Feld alle Schiffe getroffen wurden.
+     * @return 0, wenn Spiel nicht beendet ist. 1, wenn auf dem linken Feld alle Schiffe getroffen wurden.
+     * 2, wenn auf dem rechten Feld alle Schiffe getroffen wurden.
      */
     public int beendet() {
         int ende = 0;
@@ -263,7 +266,7 @@ public class Model {
     }
 
     /**
-     * Wechselt den aktuellen Spieler und, falls nötig, die Seiten der Spielfelder.
+     * Wechselt den aktuellen Spieler und, falls man Mehrspieler spielt, die Seiten der Spielfelder.
      *
      * @param modus Gibt an, ob der Seitenwechsel durchgeführt werden soll oder nicht.
      */
@@ -291,6 +294,7 @@ public class Model {
 
     /**
      * Gibt die Anzahl der Züge des Computergegners zurück.
+     * Zur Ermittlung werden getroffene Felder auf dem linken Spielfeld gezählt.
      *
      * @return Die Anzahl der Züge des Computergegners.
      */
