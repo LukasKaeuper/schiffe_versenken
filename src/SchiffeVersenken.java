@@ -1,6 +1,6 @@
 
 /**
- * Die Klasse SchiffeVersenken startet das Spiel "Schiffe Versenken".
+ * Die Klasse SchiffeVersenken startet das Spiel.
  *
  * @author Lukas Käuper, Marten Ahmann
  * @version 05.09.2024

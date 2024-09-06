@@ -2,7 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Die Klasse Controller ist das Bindeglied zwischen der Benutzeroberfläche View und den zugrunde liegenden Daten Model.
+ * Die Klasse Controller ist das Bindeglied zwischen der Benutzeroberfläche View und dem Model.
  * Sie verarbeitet Benutzereingaben und aktualisiert die Darstellung entsprechend den Änderungen im Model.
  *
  * @author Lukas Käuper, Marten Ahmann

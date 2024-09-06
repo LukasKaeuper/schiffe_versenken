@@ -12,9 +12,9 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- * Die View-Klasse stellt die grafische Benutzeroberfläche für das "Schiffe Versenken"-Spiel bereit.
- * Sie enthält die Spielfelder für den eigenen und gegnerischen Bereich, sowie Steuerungselemente
- * wie Schaltflächen und Textfelder, um den Status und die Anzahl der Züge anzuzeigen.
+ * Die View-Klasse stellt die grafische Benutzeroberfläche für das Spiel bereit.
+ * Sie enthält die Buttons für das eigene und gegnerische Spielfeld, sowie Steuerungselemente
+ * und Textfelder, um den Status und die Anzahl der Züge anzuzeigen.
  *
  * @author Lukas Käuper, Marten Ahmann
  * @version 05.09.2024
@@ -60,6 +60,7 @@ public class View extends JFrame {
 
     /**
      * Konstruktor für die View-Klasse.
+     *
      * @param controller Der Controller, der die Spiellogik steuert.
      */
     public View(Controller controller) {
@@ -217,7 +218,7 @@ public class View extends JFrame {
      * Setzt den Status des Schiffes auf "abgeschossen", wenn das Schiff noch nicht als abgeschossen markiert ist.
      *
      * @param laenge Die Länge des Schiffes, das aktualisiert werden soll.
-     * @param spieler Der Name des Spielers ("Eigen" oder "Gegner"), dessen Schiffsanzeige aktualisiert wird.
+     * @param spieler Der Name des Spielers, dessen Schiffsanzeige aktualisiert wird.
      */
     public void schiffanzeigeAktualisieren(int laenge, String spieler){
         if (spieler.equals("Eigen")){
@@ -639,7 +640,7 @@ public class View extends JFrame {
      * Aktualisiert die Anzeige der Anzahl der Züge für den angegebenen Spieler.
      * Gibt außerdem eine Konsolennachricht aus, die den aktuellen Stand anzeigt.
      *
-     * @param spieler Der Spieler, dessen Züge aktualisiert werden sollen (1 oder 2).
+     * @param spieler Der Spieler, dessen Züge aktualisiert werden sollen.
      * @param anzahlZuege Die neue Anzahl der Züge des Spielers.
      */
     public void zuegeAktualisieren(int spieler, int anzahlZuege) {
@@ -654,7 +655,7 @@ public class View extends JFrame {
     /**
      * Aktualisiert den Namen des aktuellen Spielers im Statusbereich.
      *
-     * @param spieler Der Spieler, dessen Name aktualisiert werden soll (1 oder 2).
+     * @param spieler Der Spieler, dessen Name aktualisiert werden soll.
      * @param name Der neue Name des Spielers.
      */
     public void nameAktualisieren(int spieler, String name){
@@ -1169,7 +1170,7 @@ public class View extends JFrame {
     }
 
     /**
-     * Die Klasse Menu repräsentiert das Hauptmenü des Spiels "Schiffe Versenken".
+     * Die Klasse Menu repräsentiert das Hauptmenü des Spiels.
      * Sie erbt von JFrame und stellt das Hauptfenster der Anwendung dar.
      * Das Menü enthält mehrere Buttons, um zwischen Einzelspieler-, Mehrspieler-,
      * Einstellungen-, Hilfe- und der Bestenliste zu wechseln.
@@ -1258,7 +1259,7 @@ public class View extends JFrame {
         }
 
         /**
-         * Erstellt ein neues JFrame, um den Hilfe Text anzuzeigen-
+         * Erstellt ein neues JFrame, um den Hilfe Text anzuzeigen.
          */
         private void hoverErstellen() {
             hoverFrame.setSize(600, 600);
