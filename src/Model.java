@@ -5,9 +5,8 @@ import java.nio.file.Path;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Die Model-Klasse verwaltet den Zustand und das Verhalten des Spiels, einschließlich des Spielfelds, der Spieler
- * und der KI. Sie ermöglicht es, Schüsse zu tätigen, die KI zu steuern und den Spielstatus zu überprüfen.
- *
+ * Das Model überprüft den Spielstatus, verwaltet sowohl die Spielfelder als auch die Spieler, und beinhaltet die
+ * Hintergrundlogik des schießens, der KI, und dem Sound.
  * @author Lukas Käuper, Marten Ahmann
  * @version 05.09.2024
  */
