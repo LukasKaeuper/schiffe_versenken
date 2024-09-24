@@ -128,21 +128,21 @@ public class Spielfeld {
     private boolean checkPlatzierung(int x, int y, int laenge, boolean horizontal){
         if(horizontal){
             if (x + laenge > spalte){
-                for (int i = 0; i < laenge; i++){
-                    if(x + i >= spalte || spielfeld[y][x + i] != wasser) {
-                        return false;
-                    }
-                }
                 return false;
+            }
+            for (int i = 0; i < laenge; i++){
+                if(spielfeld[y][x + i] != wasser) {
+                    return false;
+                }
             }
         } else {
             if (y + laenge > reihe){
-                for(int i = 0; i < laenge; i++){
-                    if(y + i >= reihe || spielfeld[y + i][x] != wasser){
-                        return false;
-                    }
-                }
                 return false;
+            }
+            for(int i = 0; i < laenge; i++){
+                if(spielfeld[y + i][x] != wasser){
+                    return false;
+                }
             }
         }
         return true;
